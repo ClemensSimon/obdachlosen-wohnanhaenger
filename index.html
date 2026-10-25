@@ -82,14 +82,18 @@ h4{font-size:16px;margin:16px 0 6px}
 .skip:focus{top:8px}
 @media (max-width:640px){nav{order:3;flex-basis:100%}.thema{margin-left:auto}}
 </style>
-<script type="module">
-// three.js liegt im Repo (lib/), kein fremder Server nötig. Fehler werden sichtbar gemeldet.
-import('./modell3d.js?v=3').catch(function (e) {
+<script>
+// 3D-Modell als ein gebündeltes Skript (modell3d.js + three.js, gebaut mit esbuild),
+// damit es auch lokal über file:// läuft. Fehler werden im Modellfeld angezeigt.
+function d3Fehler(text) {
   var h = document.getElementById('d3-hinweis');
-  if (h) { h.hidden = false; h.textContent = '3D-Modell konnte nicht starten: ' + e.message; }
+  if (h) { h.hidden = false; h.textContent = '3D-Modell konnte nicht starten: ' + text; }
+}
+window.addEventListener('error', function (e) {
+  if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script nomodule>document.addEventListener('DOMContentLoaded',function(){var h=document.getElementById('d3-hinweis');if(h)h.textContent='Dieser Browser ist zu alt für das 3D-Modell. Die Schnittmuster unten gehen trotzdem.';});</script>
+<script src="modell3d.bundle.js?v=4" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>

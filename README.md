@@ -11,6 +11,9 @@ Webseite: https://clemenssimon.github.io/obdachlosen-wohnanhaenger/
 - [BEFUND_huellformen_stufe1_2026-10-25.md](BEFUND_huellformen_stufe1_2026-10-25.md): sechs Hüllformen im Vergleich
 - [BEFUND_oeffnungsprinzipien_stufe2_2026-10-25.md](BEFUND_oeffnungsprinzipien_stufe2_2026-10-25.md): sieben Öffnungsprinzipien
 - [rechnung/](rechnung/): Rechenskripte (`python rechnung/huellformen_stufe1.py`)
+- [modell/](modell/): Bastelbögen 1:5 und Prüfliste
+- `modell3d.js`: 3D-Modell der Webseite. Nach jeder Änderung neu bündeln, damit es auch lokal (file://) läuft:
+  `npx esbuild@0.24.0 modell3d.js --bundle --format=iife --minify --legal-comments=eof --outfile=modell3d.bundle.js`
 
 ## Mitmachen
 Gesucht sind Erfahrung aus der Wohnungslosenhilfe und von Betroffenen, Anhängerbau, Bauphysik und Recht. Hinweise und Widerspruch bitte als Issue.

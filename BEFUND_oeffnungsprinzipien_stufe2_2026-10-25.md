@@ -85,4 +85,22 @@ Statt einer Dichtung, die beim Schieben schleift, dichtet der Auszug **nur in de
 
 **Ergebnis:** Der Abstand zur festen Kiste schrumpft von bis zu 3 K auf ca. 1,5 K. Vor allem verschwindet das größte Risiko des Auszugs, die undichte Schiebefuge nach einem Winter Straße. Der Preis sind 12 Handgriffe beim Umbau, ca. 1–2 Minuten. Das passt in die Vorgabe, in 5 Minuten abfahrbereit zu sein.
 
-Was am Modell und später am Prototyp zu prüfen ist: Verkantet der Fußteil beim Anziehen der Schrauben (Reihenfolge über Kreuz)? Friert der Moosgummi am Ring fest? Lassen sich die Schrauben bei Dunkelheit finden (Markierung, Leuchtfarbe)? Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.
+Was am Modell und später am Prototyp zu prüfen ist: Verkantet der Fußteil beim Anziehen der Schrauben (Reihenfolge über Kreuz)? Friert der Moosgummi am Ring fest? Lassen sich die Schrauben bei Dunkelheit finden (Markierung, Leuchtfarbe)?
+
+### Maschinenbau-Kritik zu den Dichtflanschen (25.10.2026)
+Ergebnis: **so nur als Modell 1:5 freigegeben, nicht für den Prototyp.** Das Prinzip trägt, die Ausführung braucht Auflagen.
+
+| # | Schwere | Befund | Auflage |
+|---|---|---|---|
+| 1 | hoch | Seitlich bleiben nur 18 mm Auflage für den Innenflansch, die Schrauben sitzen auf der Kante, der Sterngriff streift den Fußteil | Öffnung schmaler (Fußteil außen ca. 0,57 m) oder Schrauben nur oben und unten |
+| 2 | hoch | Ein Loch kann nicht in der einen Lage Durchgang und in der anderen Mutter sein | Zwei versetzte Lochbilder (12 Bohrungen) |
+| 3 | hoch | 6 Schrauben mit 0,6 m Abstand: Der Flansch biegt sich zwischen ihnen um mehrere mm durch, dort wird es undicht | mindestens 10 Spannpunkte, Flansch als Alu-Winkelrahmen oder Sperrholz 12 mm |
+| 4 | hoch | Einschlagmuttern im PIR-Schaum reißen aus. Von Hand entstehen ca. 900 N, der Schaum hält ca. 50 N | Sperrholzeinlagen 12 mm, große Scheiben, Distanzhülse als Anschlag |
+| 5 | hoch | Alle Schrauben außen: Jemand kann sie lösen und den Fußteil verschieben, während jemand schläft | Spannen und Verriegeln von **innen**, außen nur abschließen |
+| 6 | hoch | Der Ring führt nur auf 45 mm Länge, die Kantenlast liegt bei ca. 950 N | Teleskop-Kugelschienen (Kaufteil), Stützfüße mit Kurbel |
+| 7 | mittel | Waagerechte Fuge oben am Ring: Wasser steht, Schnee bleibt liegen | Tropfkante und Abdeckkappe, Dach auf dem Fußteil (siehe Frage 27) |
+| 8 | mittel | Stahlschrauben in nasser Fuge frieren fest, die Dichtung friert an | Edelstahl, Fett, Gummimanschetten; Talkum oder Silikon auf die Dichtung |
+| 9 | mittel | Schrauben und Flansch sind Wärmebrücken | realistisch +12,3 bis +12,6 K statt +13,2 K |
+| 10 | niedrig | Gewicht mit Rahmen und Einlagen | eher 3–4 kg statt 1,8 kg |
+
+Folge für die Wärme: Der Abstand zur festen Kiste liegt realistisch bei ca. 2 K, nicht 1,5 K. Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.

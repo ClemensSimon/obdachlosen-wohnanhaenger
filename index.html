@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schlafanhänger Winter</title>
+<meta name="description" content="Offenes Projekt: kompakter, winterfester Fahrradanhänger zum Schlafen für obdachlose Menschen. Entscheidungen, Rechnungen, Vorbilder.">
+<style>
+:root{
+  --bg:#f7f6f2;--fl:#ffffff;--tx:#1d1f22;--tx2:#55595f;--li:#d9d6cc;
+  --ak:#9a3b12;--ak2:#f3e3d8;--ok:#1f6b3a;--ok2:#dcefe2;--wa:#8a5a00;--wa2:#f6ebcf;
+  --form:#9a3b12;--kopf:#efece4;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16181b;--fl:#1f2226;--tx:#e9e7e2;--tx2:#a9adb3;--li:#363a40;
+  --ak:#f0a07a;--ak2:#3a2419;--ok:#7fd19b;--ok2:#1b3324;--wa:#e6c06a;--wa2:#3a3018;
+  --form:#f0a07a;--kopf:#262a2f;}}
+:root[data-theme="dark"]{
+  --bg:#16181b;--fl:#1f2226;--tx:#e9e7e2;--tx2:#a9adb3;--li:#363a40;
+  --ak:#f0a07a;--ak2:#3a2419;--ok:#7fd19b;--ok2:#1b3324;--wa:#e6c06a;--wa2:#3a3018;
+  --form:#f0a07a;--kopf:#262a2f;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--ak)}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,.rahmen:focus-visible{outline:3px solid var(--ak);outline-offset:2px}
+.kopf{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--li)}
+.kopf .in{max-width:1080px;margin:0 auto;padding:8px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.marke{font-weight:700;text-decoration:none;color:var(--tx);white-space:nowrap}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+nav a{padding:6px 10px;border-radius:6px;text-decoration:none;color:var(--tx2);white-space:nowrap;font-size:15px}
+nav a:hover{background:var(--kopf);color:var(--tx)}
+main{max-width:1080px;margin:0 auto;padding:0 16px 48px}
+section{padding-top:28px}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.15;margin:20px 0 8px}
+h2{font-size:24px;margin:0 0 8px}
+h3{font-size:18px;margin:20px 0 6px}
+p{max-width:72ch}
+.leise{color:var(--tx2)}
+.hinweis{border-left:4px solid var(--wa);background:var(--wa2);padding:10px 14px;border-radius:0 8px 8px 0;max-width:72ch}
+.kacheln{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.kachel{background:var(--fl);border:1px solid var(--li);border-radius:10px;padding:12px}
+.kachel b{display:block;font-size:26px;line-height:1.1}
+.kachel span{color:var(--tx2);font-size:14px}
+.rahmen{max-height:70vh;overflow:auto;border:1px solid var(--li);border-radius:10px;background:var(--fl)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--li);text-align:left;vertical-align:top}
+thead th{position:sticky;top:0;background:var(--kopf);z-index:1}
+thead tr.filter th{top:37px;padding:4px 6px}
+thead input{width:100%;min-width:70px;padding:4px 6px;font:inherit;font-size:14px;border:1px solid var(--tx2);border-radius:6px;background:var(--fl);color:var(--tx)}
+thead input::placeholder{color:var(--tx2);opacity:1}
+td.z,th.z{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.raus td{color:var(--tx2)}
+.marke-ok{background:var(--ok2);color:var(--ok);padding:1px 8px;border-radius:99px;font-size:13px;white-space:nowrap}
+.marke-aus{background:var(--kopf);color:var(--tx2);padding:1px 8px;border-radius:99px;font-size:13px;white-space:nowrap}
+.formen{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.form{background:var(--fl);border:1px solid var(--li);border-radius:10px;padding:10px;text-align:center}
+.form svg{width:100%;max-width:120px;height:auto}
+.form svg .h{fill:var(--ak2);stroke:var(--form);stroke-width:3}
+.form svg .m{fill:var(--tx2)}
+.form b{display:block}
+.form small{color:var(--tx2)}
+details{background:var(--fl);border:1px solid var(--li);border-radius:10px;padding:8px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:600}
+ul{padding-left:20px}
+li{margin:3px 0}
+footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:center;color:var(--tx2);font-size:14px}
+.thema{margin-left:auto;background:none;border:1px solid var(--tx2);color:var(--tx);border-radius:6px;padding:4px 8px;cursor:pointer;font:inherit;font-size:14px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.skip{position:absolute;left:8px;top:-60px;z-index:20;background:var(--fl);color:var(--tx);padding:8px 12px;border:2px solid var(--ak);border-radius:6px}
+.skip:focus{top:8px}
+@media (max-width:640px){nav{order:3;flex-basis:100%}.thema{margin-left:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<header class="kopf"><div class="in">
+  <a class="marke" href="#ueberblick">Schlafanhänger</a>
+  <nav aria-label="Abschnitte">
+    <a href="#ueberblick">Überblick</a>
+    <a href="#entscheidungen">Entscheidungen</a>
+    <a href="#rechnungen">Rechnungen</a>
+    <a href="#vorbilder">Vorbilder</a>
+    <a href="#offen">Offen</a>
+    <a href="#mitmachen">Mitmachen</a>
+  </nav>
+  <button class="thema" type="button" id="thema" aria-label="Hell oder dunkel umschalten">Hell/Dunkel</button>
+</div></header>
+
+<main id="inhalt">
+<section id="ueberblick" aria-labelledby="t-ueb">
+  <h1 id="t-ueb">Ein Bett auf Rädern, das durch den Winter trägt</h1>
+  <p>Ein kompakter Anhänger für Menschen ohne Wohnung: Nachts ist er ein gedämmter Schlafplatz, der auch bei Frost schützt. Am Tag dient er als Sitzbank mit Sonnen- und Regendach. Er passt durch Türen, hängt am Fahrrad oder lässt sich von Hand schieben.</p>
+  <p class="hinweis"><b>Stand: Konzept, kein Bauplan.</b> Nichts davon ist gebaut oder getestet. Bitte nicht nachbauen und darin schlafen. Ein Bauplan erscheint erst, wenn ein Prototyp den Test mit einem thermischen Dummy bei Frost bestanden hat.</p>
+  <div class="kacheln">
+    <div class="kachel"><b>78 cm</b><span>Breite gesamt, passt durch Türen</span></div>
+    <div class="kachel"><b>2,0 m</b><span>Liegelänge</span></div>
+    <div class="kachel"><b>≤ 85 kg</b><span>leer, mit eigener Bremse</span></div>
+    <div class="kachel"><b>+14 K</b><span>wärmer als draußen, nur durch Körperwärme</span></div>
+    <div class="kachel"><b>0</b><span>Flammen an Bord, CO-Melder Pflicht</span></div>
+    <div class="kachel"><b>≈ 2.200 €</b><span>Material, geschätzt</span></div>
+  </div>
+  <p class="leise">Die Lücke, die das Projekt füllen will: Was es heute gibt, ist entweder mobil und ein Zelt (EDAR, WheelLY, Kälte-Iglu) oder winterfest und ortsfest (Ulmer Nest, Little Home). Mobil <em>und</em> frostsicher gibt es so noch nicht.</p>
+</section>
+
+<section id="entscheidungen" aria-labelledby="t-ent">
+  <h2 id="t-ent">Entscheidungen</h2>
+  <p class="leise">Festgelegt am 25.10.2026. Ausführlich mit Begründungen und verworfenen Alternativen: <a href="ENTSCHEIDUNGEN.md">ENTSCHEIDUNGEN.md</a>.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Entscheidungen"><table id="tab-ent">
+    <thead><tr><th>#</th><th>Thema</th><th>Entscheidung</th><th>Verworfen</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Ziel</td><td>Offener Bauplan, zuerst ein Prototyp</td><td>Einzelstück, Kleinserie</td></tr>
+      <tr><td>2</td><td>Antrieb</td><td>Fahrradanhänger, auch von Hand schiebbar, steht meist</td><td>Eigenes Lastenrad</td></tr>
+      <tr><td>3</td><td>Varianten</td><td>Gemeinsame Plattform; Basis zuerst, Reisevariante mit E-Hilfsantrieb später</td><td>Zwei getrennte Konstruktionen</td></tr>
+      <tr><td>4</td><td>Frost</td><td>Passiv: Hülle und Schlafsack (−20 °C); keine Verbrennung; CO-Melder Pflicht</td><td>Gas- oder Dieselheizung</td></tr>
+      <tr><td>5</td><td>Bauform</td><td>Vergleich in zwei Stufen: 6 Hüllformen, dann 7 Öffnungsprinzipien</td><td>Alles gegen alles (42)</td></tr>
+      <tr><td>6</td><td>Breite</td><td>Gesamt höchstens 78 cm, an den Schultern Vakuumpaneel (innen ca. 74 cm)</td><td>85 cm breit</td></tr>
+      <tr><td>7</td><td>Dämmung</td><td>PIR-Sandwich 45 mm, Lüftung mit Wärmerückgewinnung</td><td>Vakuumpaneele überall</td></tr>
+      <tr><td>8</td><td>Strom</td><td>Vorrangstufen, Akku im Warmen, zweiter Ladeeingang (USB-C, Steckdose)</td><td>Nur Solar mit großem Akku</td></tr>
+      <tr><td>9</td><td>Gewicht</td><td>Leer höchstens 85 kg, Bremse Pflicht, Rampe bis 12 %</td><td>60 kg (nicht erreichbar)</td></tr>
+      <tr><td>10</td><td>Fahrwerk</td><td>Zwei 16"-Räder in Radkästen unter dem Bett, 4 Stützfüße, Bugrad</td><td>Vier kleine Räder</td></tr>
+      <tr><td>11</td><td>Einstieg</td><td>Dach als Deckel, Notausstieg an der Stirnseite, Panikfunktion</td><td>Tür am Fußende</td></tr>
+      <tr><td>13</td><td>Stellplatz</td><td>Gilt als Fahrzeug; in 5 Minuten abfahrbereit</td><td>Feste Plätze als Bedingung</td></tr>
+      <tr><td>14</td><td>Hund</td><td>Eigene gedämmte Box als Modul</td><td>Hund im Schlafraum</td></tr>
+      <tr><td>15</td><td>Feuchte</td><td>Pendellüfter mit Speicher, innen dampfdicht, Dampfsperre im Schlafsack</td><td>Kreuzstromtauscher</td></tr>
+      <tr><td>16</td><td>Brand</td><td>PIR B1, Deckschicht innen, vernetzter Rauch- und CO-Melder, Akkukiste</td><td>Mineralwolle</td></tr>
+      <tr><td>18</td><td>Test</td><td>Thermischer Dummy (65 W, 30 g/h), dann Selbsttest mit Begleitung</td><td>Gleich mit Nutzer</td></tr>
+      <tr><td>19</td><td>Budget</td><td>Ca. 2.200 € Material</td><td>1.500 € mit weniger Ausstattung</td></tr>
+      <tr><td>20</td><td>Fach</td><td>Ca. 240 l, innen und außen zugänglich, Fach für Papiere mit Zahlenschloss</td><td>Zugang nur von einer Seite</td></tr>
+      <tr><td>21</td><td>Tagbetrieb</td><td>2 Sitzplätze, 1,5 m² Schatten, Umbau in 1 Minute, Dämmung bleibt trocken</td><td>Kein Tagbetrieb</td></tr>
+      <tr><td>22</td><td>Lizenz</td><td>CERN-OHL-S (Hardware), CC BY-SA (Texte); Bauplan erst nach Test</td><td>Nicht kommerziell</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="rechnungen" aria-labelledby="t-rech">
+  <h2 id="t-rech">Rechnungen</h2>
+  <h3>Wie warm wird es?</h3>
+  <p>Ein schlafender Mensch gibt rund 90 W ab, davon ca. 65 W als Wärme, der Rest geht als Feuchte. Die Hülle verliert ca. 3,8 W/K, die Lüftung mit Wärmerückgewinnung ca. 0,6 W/K. Daraus ergibt sich innen ein Plus von <b>ca. 14–15 K</b>. Bei −15 °C draußen sind es innen also etwa 0 °C. Das Überleben sichert der Schlafsack. Die Box sorgt dafür, dass er trocken bleibt und kein Wind durchgeht.</p>
+  <p>Mit Solarstrom heizen geht nicht. Im Dezember liefert das Dach 0,1–0,4 kWh am Tag, gebraucht würden ca. 1,2 kWh pro Nacht. Strom ist für Lüftung, Melder, Licht und eine kleine Heizunterlage da.</p>
+
+  <h3>Stufe 1: sechs Hüllformen</h3>
+  <p class="leise">Querschnitte innen im gleichen Maßstab. Alle erfüllen dieselben Mindestmaße für einen liegenden Menschen. Rechnung: <a href="rechnung/huellformen_stufe1.py">huellformen_stufe1.py</a>, Befund: <a href="BEFUND_huellformen_stufe1_2026-10-25.md">Stufe 1</a>.</p>
+  <div class="formen" role="list">
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><rect class="h" x="10" y="84" width="138" height="116"/></svg><b>Rechteck</b><small>Schnee bleibt liegen</small></div>
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><polygon class="h" points="10,200 10,128 79,84 148,128 148,200"/></svg><b>Fünfeck</b><small>leichteste ebene Hülle</small></div>
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><polygon class="h" points="10,200 79,18 148,200"/></svg><b>A-Frame</b><small>zu hoch, kippt zuerst</small></div>
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><path class="h" d="M10,200 V153 A69,69 0 0 1 148,153 V200 Z"/></svg><b>Tonne</b><small>Bogen schwer zu bauen</small></div>
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><polygon class="h" points="10,200 10,114 40,84 118,84 148,114 148,200"/></svg><b>Sechseck</b><small>am meisten Raum</small></div>
+    <div class="form" role="listitem"><svg viewBox="0 0 158 210" aria-hidden="true"><path class="h" d="M10,200 V153 A69,69 0 0 1 148,153 V200 Z"/><text class="m" x="79" y="185" text-anchor="middle" font-size="16">längs verjüngt</text></svg><b>Tropfen</b><small>nur aus GFK-Form</small></div>
+  </div>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Hüllformen"><table id="tab-huelle">
+    <thead><tr><th>Form</th><th class="z">Höhe außen m</th><th class="z">Hülle m²</th><th class="z">Hülle kg</th><th class="z">+K innen</th><th class="z">Raum m³</th><th>Ergebnis</th></tr></thead>
+    <tbody>
+      <tr><td>Fünfeck</td><td class="z">1,07</td><td class="z">5,59</td><td class="z">36,4</td><td class="z">14,7</td><td class="z">0,75</td><td><span class="marke-ok">weiter</span></td></tr>
+      <tr><td>Sechseck</td><td class="z">1,07</td><td class="z">6,02</td><td class="z">39,1</td><td class="z">13,8</td><td class="z">0,87</td><td><span class="marke-ok">weiter</span></td></tr>
+      <tr class="raus"><td>Tonne</td><td class="z">1,07</td><td class="z">5,68</td><td class="z">40,6</td><td class="z">14,5</td><td class="z">0,80</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Tropfen</td><td class="z">1,07</td><td class="z">5,48</td><td class="z">39,2</td><td class="z">14,9</td><td class="z">0,74</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Rechteck</td><td class="z">1,07</td><td class="z">6,40</td><td class="z">41,6</td><td class="z">13,1</td><td class="z">0,91</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>A-Frame</td><td class="z">1,40</td><td class="z">6,42</td><td class="z">41,7</td><td class="z">13,0</td><td class="z">0,74</td><td><span class="marke-aus">raus</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Stufe 2: sieben Öffnungsprinzipien</h3>
+  <p class="leise">Fugenlängen geschätzt, noch keine CAD-Maße. Befund: <a href="BEFUND_oeffnungsprinzipien_stufe2_2026-10-25.md">Stufe 2</a>.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Öffnungsprinzipien"><table id="tab-oeff">
+    <thead><tr><th>Prinzip</th><th class="z">Fuge m</th><th class="z">+K</th><th class="z">Höhe am Tag m</th><th>Schwachstelle</th><th>Ergebnis</th></tr></thead>
+    <tbody>
+      <tr><td>Feste Kiste, Deckel geteilt</td><td class="z">6,8</td><td class="z">14,7</td><td class="z">1,07</td><td>Immer voll hoch; Hälfte unter Schnee ca. 380 N</td><td><span class="marke-ok">vorne</span></td></tr>
+      <tr><td>Auszug in der Länge</td><td class="z">2,3 + Einstieg</td><td class="z">13,7</td><td class="z">1,07 (1,25 m lang)</td><td>Schiebefuge im Winter, noch unbelegt</td><td><span class="marke-ok">nachrechnen</span></td></tr>
+      <tr class="raus"><td>Muschel, Gelenk am Fußende</td><td class="z">≈ 9</td><td class="z">14,1</td><td class="z">1,07</td><td>Unter Schnee ca. 800 N am Kopfende; nur 0,8 m² Schatten</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Möwenflügel</td><td class="z">≈ 7,5</td><td class="z">14,5</td><td class="z">1,07</td><td>Fuge im First, Schmelzwasser</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Hubdach mit Faltwänden</td><td class="z">≈ 12</td><td class="z">13,4</td><td class="z">≈ 0,80</td><td>Viele Fugen, Notausstieg schwierig</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Faltwagen (Widepath)</td><td class="z">≈ 10</td><td class="z">13,9</td><td class="z">≈ 1,07</td><td>Hohe Windfläche, viele Gelenke</td><td><span class="marke-aus">raus</span></td></tr>
+      <tr class="raus"><td>Origami-Faltwerk</td><td class="z">&gt; 15</td><td class="z">12,6</td><td class="z">≈ 0,80</td><td>Falten frieren fest</td><td><span class="marke-aus">raus</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Was die Prüfung korrigiert hat</h3>
+  <ul>
+    <li><b>Kälter als zuerst gedacht:</b> +14–15 K statt +21 K. Gerechnet sind jetzt 65 W Wärme vom Körper statt 90 W und 40 % Zuschlag für die Fugen.</li>
+    <li><b>Schwerer:</b> 78–88 kg statt 60 kg. Die Hülle allein wiegt 36–39 kg.</li>
+    <li><b>Kippt und rutscht:</b> Leer kippt der Wagen bei Böen schon ab Windstärke 5–6, vorher rutscht er weg. Ein Gurt oder Anker ist Pflicht.</li>
+    <li><b>Eigener Rahmen:</b> Die Sandwichbox ist nicht tragend. Achse, Deichsel und Stützfüße brauchen einen Rahmen.</li>
+    <li><b>Kein Einstieg durchs Dach bei Schnee:</b> Ein Deckel mit 30 cm Nassschnee ist von innen im Liegen nicht zu heben (380–800 N, man schafft etwa 100 N). Im Winter wird die Stirnklappe zur Tür, mindestens 0,45 × 0,50 m groß.</li>
+    <li><b>Dicht schlägt kurz:</b> 5 m³/h Leckluft kosten mehr Wärme als jeder Unterschied in der Fugenlänge.</li>
+  </ul>
+</section>
+
+<section id="vorbilder" aria-labelledby="t-vor">
+  <h2 id="t-vor">Vorbilder weltweit</h2>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Vorbilder"><table id="tab-vor">
+    <thead><tr><th>Projekt</th><th>Land</th><th>Mobil</th><th>Winterfest</th><th>Lehre</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://ulmernest.de/ziele">Ulmer Nest</a></td><td>DE</td><td>nur per Lkw</td><td>gedämmt, Sensoren</td><td>Von innen verriegeln ist den Nutzern am wichtigsten; die erste Fassung wirkte wie ein Sarg</td></tr>
+      <tr><td><a href="https://taz.de/Obdachlosigkeit/!5977610/">Little Home</a></td><td>DE</td><td>auf Rollen</td><td>wenig</td><td>Auf städtischem Grund abgeräumt; Streit auch auf privatem Grund</td></tr>
+      <tr><td><a href="https://www.caritas-regensburg.de/aktuelles/presse/neue-kaelte-iglous-mobile-notschlafplaet">Kälte-Iglous</a></td><td>DE</td><td>Zelt</td><td>5 cm Schaum</td><td>Billig, aber kein Schutz vor Übergriffen</td></tr>
+      <tr><td><a href="https://tinyhouseblog.com/tiny-house/everyone-deserves-a-roof/">EDAR</a></td><td>US</td><td>Wagen</td><td>Plane</td><td>In 30 s vom Tag- in den Nachtbetrieb; zwei Bremsen; neun Prototypen bis zur Reife</td></tr>
+      <tr><td><a href="https://www.goodgoodgood.co/articles/homeless-solutions-emergency-tent-wheelly">WheelLY</a></td><td>IT</td><td>Einrad</td><td>Zelt</td><td>40 cm breit; am Tag Sitz mit Schatten; Platz für den Hund</td></tr>
+      <tr><td><a href="https://www.huffpost.com/entry/shopping-cart-homeless-shelter_n_7646942">Rolling Shelter</a></td><td>AR</td><td>Wagen</td><td>GFK mit Luftwaben</td><td>Bett klappt seitlich ab</td></tr>
+      <tr><td><a href="https://www.designboom.com/design/mobile-homeless-shelter/">Paul Elkins</a></td><td>US</td><td>ja</td><td>gedämmt</td><td>102 kg leer: Dämmung plus Küche ist zu schwer</td></tr>
+      <tr><td><a href="https://endless-sphere.com/sphere/threads/widepath-camper-trailer.64586/">Widepath</a></td><td>DK</td><td>Fahrradanhänger</td><td>feste Schale</td><td>40 kg; Bett und Sitzbank in einem</td></tr>
+      <tr><td><a href="https://www.communitysupportedshelters.org/conestoga-huts">Conestoga Hut</a></td><td>US</td><td>zerlegbar</td><td>gedämmt</td><td>Tonnenform, Bausatz aus Werkstatt</td></tr>
+      <tr><td><a href="https://en.wikipedia.org/wiki/Hexayurt">Hexayurt</a></td><td>weltweit</td><td>zerlegbar</td><td>mit PIR möglich</td><td>Null Verschnitt aus Standardplatten</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="offen" aria-labelledby="t-off">
+  <h2 id="t-off">Offen</h2>
+  <ul>
+    <li>Auszug in der Länge fair nachrechnen; danach Modell (CAD und Pappmodell 1:5)</li>
+    <li>Stirnklappe als Wintertür: Maß, Öffnung nach innen oder außen, Schnee</li>
+    <li>Wer testet nach dem Dummy und dem Selbsttest? Gesucht wird ein Träger aus der Wohnungslosenhilfe</li>
+    <li>Urinflasche mit Halterung, Fenster in der Notklappe</li>
+    <li>Rechtslage: Abstellen im öffentlichen Raum, Beleuchtung nach StVZO, Anhänger mit eigenem Motor</li>
+    <li>Haftung für einen frei veröffentlichten Bauplan</li>
+    <li>Idee: Biomeiler als feste Wärmestation an Stellplätzen (im Wagen selbst nicht: zu wenig Leistung, schlechte Luft)</li>
+  </ul>
+</section>
+
+<section id="mitmachen" aria-labelledby="t-mit">
+  <h2 id="t-mit">Mitmachen</h2>
+  <p>Gesucht sind vor allem: Erfahrung aus der Wohnungslosenhilfe und von Betroffenen, Fahrzeug- und Anhängerbau, Bauphysik und Recht. Hinweise, Korrekturen und Widerspruch bitte als <a href="https://github.com/ClemensSimon/obdachlosen-wohnanhaenger/issues">Issue auf GitHub</a>.</p>
+  <details><summary>Lizenzen</summary>
+    <p>Hardware-Entwürfe: CERN-OHL-S 2.0. Texte und Bilder: CC BY-SA 4.0. Rechenskripte: MIT. Siehe <a href="LICENSE.md">LICENSE.md</a>. Ohne jede Gewährleistung: Das ist ein Konzept, kein geprüfter Bauplan.</p>
+  </details>
+</section>
+</main>
+
+<footer>Offenes Projekt · Stand 25.10.2026 · <a href="https://github.com/ClemensSimon/obdachlosen-wohnanhaenger">Quellen auf GitHub</a></footer>
+
+<script>
+(function(){
+  var b=document.getElementById('thema'),r=document.documentElement;
+  try{var t=localStorage.getItem('thema');if(t)r.dataset.theme=t;}catch(e){}
+  b.addEventListener('click',function(){
+    var dunkel=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    r.dataset.theme=dunkel?'light':'dark';
+    try{localStorage.setItem('thema',r.dataset.theme);}catch(e){}
+  });
+  // Autofilter: je Spalte ein Feld, Zeilen werden nach allen Feldern gefiltert
+  document.querySelectorAll('table').forEach(function(tab){
+    var kopf=tab.tHead.rows[0],zeile=tab.tHead.insertRow(),felder=[];
+    zeile.className='filter';
+    Array.prototype.forEach.call(kopf.cells,function(c,i){
+      var th=document.createElement('th'),f=document.createElement('input');
+      f.type='search';f.placeholder='Filter';f.setAttribute('aria-label','Filter '+c.textContent);
+      f.addEventListener('input',anwenden);th.appendChild(f);zeile.appendChild(th);felder.push(f);
+    });
+    function anwenden(){
+      Array.prototype.forEach.call(tab.tBodies[0].rows,function(z){
+        var sicht=felder.every(function(f,i){var w=f.value.trim().toLowerCase();return !w||z.cells[i].textContent.toLowerCase().indexOf(w)>=0;});
+        z.hidden=!sicht;
+      });
+    }
+  });
+})();
+</script>
+</body>
+</html>

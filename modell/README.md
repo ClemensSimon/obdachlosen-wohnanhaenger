@@ -16,13 +16,15 @@ Mit `python bastelbogen.py` neu erzeugen. Drucken in **100 %** (nicht „an Seit
 | A, feste Kiste | [bogen_A_1](bogen_A_1.svg) · [2](bogen_A_2.svg) · [3](bogen_A_3.svg) · [4](bogen_A_4.svg) · [5](bogen_A_5.svg) |
 | B, Auszug | [bogen_B_1](bogen_B_1.svg) · [2](bogen_B_2.svg) · [3](bogen_B_3.svg) · [4](bogen_B_4.svg) |
 
+Hinweis: Die Wände sind im Modell dünner als maßstäblich (5 mm statt 9 mm). Innenteile wie der Innenflansch sind deshalb im Modell etwas größer als im 3D-Modell, damit sie in das Modell passen.
+
 ## Bauen
 1. Seitenwände an den Boden kleben, Boden liegt zwischen den Wänden. Bei A die Hälften mittig stoßen.
 2. Giebel vorne und hinten davor kleben.
 3. Dachplatten an der Traufe und am First anschrägen, bis sie aufliegen. Je eine linke und rechte Platte am First fest zu einer Deckelhälfte verkleben (Kopf und Fuß). Jede Hälfte bekommt an einer Traufe ein Gelenk aus Gewebeband und klappt zur Seite auf. Aufgeklappt bildet sie das Vordach über der Bank.
 4. Den Ausschnitt im Kopfgiebel als Stirnklappe wieder einsetzen, unten mit Gewebeband angeschlagen.
-5. Nur B: Fußteil als Kasten aus Boden, Seiten und Decke bauen. Am Fußende den **Außenflansch** (Stirnplatte) aufkleben, er steht ringsum über. Den Kasten durch den Ring schieben und erst dann von innen den **Innenflansch** (Fünfeck mit Fenster) an das Kopfende des Kastens kleben. Er muss leicht durch den Ring gleiten.
-6. Nur B, Dichtung und Schrauben: Auf die Innen- und Außenseite des Rings rund um die Öffnung einen Streifen Filz oder Moosgummi (3 mm) kleben. Sechs Löcher durch Ring und Flansche stechen (Lage siehe 3D-Modell, gelbe Griffe). Als Schrauben im Modell genügen Musterbeutelklammern oder M3-Schrauben mit Flügelmutter.
+5. Nur B: Fußteil als fünfeckige Röhre aus Boden, zwei Seiten und zwei Dachplatten bauen (eigenes Satteldach, am First anschrägen). Am Fußende den **Außenflansch** (fünfeckige Stirnplatte) aufkleben, er steht ringsum über. Die Röhre durch die fünfeckige Öffnung im Ring schieben und erst dann von innen den **Innenflansch** (Fünfeck mit Fenster) an das Kopfende kleben. Sie muss leicht durch den Ring gleiten.
+6. Nur B, Dichtung und Spannen: Auf die Innen- und Außenseite des Rings rund um die Öffnung einen Streifen Filz oder Moosgummi (3 mm) kleben. Innen spannen nachts 10 Kniehebel den Innenflansch an den Ring; im Modell genügen 10 Wäscheklammern oder kleine Klemmen. Außen sichern am Tag 5 Schrauben die Stirnplatte; im Modell M3-Schrauben mit Flügelmutter (Lage siehe 3D-Modell, gelb).
 
 ## Was am Modell zu prüfen ist
 Jeweils für A und B notieren:

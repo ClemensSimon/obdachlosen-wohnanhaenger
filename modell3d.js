@@ -1,15 +1,22 @@
 // Drehbares 3D-Modell der beiden Varianten (Maße in Metern, wie im Konzept).
 // A: feste Kiste (Fünfeck), Deckel in zwei Hälften, Stirnklappe am Kopfende
-// B: Auszug, Kopfteil 1,25 m, Fußteil 0,95 m schiebt hinein
+// B: Auszug, Kopfteil 1,25 m, Fußteil mit eigenem Satteldach schiebt hinein;
+//    gedichtet axial in den Endlagen (innen Kniehebel, außen Sicherungsschrauben)
+// Solarmodule liegen auf beiden Dachseiten (Entscheidung Frage 27).
 import * as THREE from './lib/three.module.js';
 import { OrbitControls } from './lib/OrbitControls.js';
 
 const B = 0.78, TR = 0.46, FI = 0.68, T = 0.045;   // Traufe und First über Unterkante Box
 const BODEN = 0.40;            // Unterkante Schlafbox über Grund
-// Fußteil außen 0,61 × 0,40 m: so bleibt am Ring ringsum Platz für die Dichtfläche.
+// Fußteil-Querschnitt (Fünfeck, y über Unterkante Box): halbe Breite, Traufe, First.
+// So bleibt am Ring ringsum ca. 4 cm Dichtfläche für den Innenflansch.
+const FUSS = { hb: 0.285, unten: T + 0.04, traufe: 0.43, first: 0.55 };   // 4 cm über dem Boden: Dichtfläche auch unten
+const LOCH = { hb: FUSS.hb + 0.01, unten: T + 0.03, traufe: FUSS.traufe + 0.01, first: FUSS.first + 0.01 };
+const STIRN = { hb: FUSS.hb + 0.06, unten: 0.005, traufe: FUSS.traufe + 0.05, first: FUSS.first + 0.065 };
+const FUSS_INNEN = { hb: FUSS.hb - T, unten: FUSS.unten + T, traufe: FUSS.traufe - T, first: FUSS.first - 0.05 };
+const FLANSCH = 0.02;
 // Länge so, dass ausgezogen (Innenflansch am Ring) genau 2,09 m herauskommen.
-const L_KOPF = 1.25, FUSS_B = 0.61, FUSS_H = 0.40, FLANSCH = 0.02;
-const L_A = 2.09, L_FUSS = L_A - L_KOPF + 0.045 + FLANSCH;
+const L_KOPF = 1.25, L_A = 2.09, L_FUSS = L_A - L_KOPF + 0.045 + FLANSCH;
 const KLAPPE_B = 0.45, KLAPPE_H = 0.48;
 
 const flaeche = document.getElementById('d3-flaeche');
@@ -22,7 +29,8 @@ function farben() {
   return {
     hg: dunkel ? 0x1f2226 : 0xffffff,
     huelle: 0xd9cbb8, dach: 0x9a3b12, rahmen: 0x4a4f57, rad: 0x222222,
-    klappe: 0xc8783f, fuss: 0xbfae98, dichtung: 0x2f6f8f, griff: 0xe0b020, mensch: 0x3d7a5a, boden: dunkel ? 0x2a2e33 : 0xeeeae2,
+    klappe: 0xc8783f, fuss: 0xbfae98, dichtung: 0x2f6f8f, griff: 0xe0b020,
+    modul: 0x1b2a4a, knie: 0xc0392b, mensch: 0x3d7a5a, boden: dunkel ? 0x2a2e33 : 0xeeeae2,
   };
 }
 
@@ -65,6 +73,29 @@ szene.add(grund);
 
 const mat = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8, ...o });
 
+// Fünfeck als Umriss (Shape) oder Loch (Path), Maße wie FUSS/LOCH/STIRN
+function fuenfeck(f, alsLoch = false) {
+  const p = alsLoch ? new THREE.Path() : new THREE.Shape();
+  p.moveTo(-f.hb, f.unten); p.lineTo(f.hb, f.unten); p.lineTo(f.hb, f.traufe);
+  p.lineTo(0, f.first); p.lineTo(-f.hb, f.traufe); p.closePath();
+  return p;
+}
+
+// Zwei Solarmodule auf den Dachflächen von (±hb, traufe) zum First (0, first);
+// Koordinaten wie die Dachfläche, auf der sie liegen
+function module(hb, traufe, first, laenge, xVersatz = 0) {
+  const g = new THREE.Group();
+  const breite = Math.hypot(hb, first - traufe), winkel = Math.atan2(first - traufe, hb);
+  const geo = new THREE.BoxGeometry(breite * 0.82, 0.008, laenge * 0.88);
+  for (const seite of [-1, 1]) {
+    const m = new THREE.Mesh(geo, mat(F.modul, { roughness: 0.35, metalness: 0.3 }));
+    m.position.set(xVersatz + seite * hb / 2, (traufe + first) / 2 + 0.006, 0);
+    m.rotation.z = -seite * winkel;
+    g.add(m);
+  }
+  return g;
+}
+
 // Unterteil der Schlafbox (Wanne bis zur Traufe) und Deckel getrennt
 function wanne(laenge) {
   const g = new THREE.Group();
@@ -78,17 +109,19 @@ function wanne(laenge) {
   return g;
 }
 
-// Giebel, optional mit Öffnung [Breite, Höhe] unten mittig über dem Boden
+// Giebel, optional mit Öffnung: [Breite, Höhe] (Rechteck unten mittig) oder Fünfeck-Maße
 function giebel(z, loch) {
   const s = new THREE.Shape();
   s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, TR);
   s.lineTo(0, FI); s.lineTo(-B / 2, TR); s.closePath();
-  if (loch) {
+  if (Array.isArray(loch)) {
     const [lb, lh] = loch;
     const h = new THREE.Path();
     h.moveTo(-lb / 2, T); h.lineTo(lb / 2, T); h.lineTo(lb / 2, T + lh); h.lineTo(-lb / 2, T + lh);
     h.closePath();
     s.holes.push(h);
+  } else if (loch) {
+    s.holes.push(fuenfeck(loch, true));
   }
   const geo = new THREE.ExtrudeGeometry(s, { depth: T, bevelEnabled: false });
   geo.translate(0, BODEN, z - T / 2);
@@ -105,7 +138,7 @@ function deckel(laenge, zMitte) {
   const m = new THREE.Mesh(geo, mat(F.dach));
   const gelenk = new THREE.Group();
   gelenk.position.set(B / 2, BODEN + TR, zMitte);
-  gelenk.add(m);
+  gelenk.add(m, module(B / 2, 0, FI - TR, laenge, -B / 2));   // Module klappen mit
   return gelenk;
 }
 
@@ -184,47 +217,72 @@ const menschen = [];
   const kopfMitte = zKopf + L_KOPF / 2;
   const w = wanne(L_KOPF - 2 * T); w.position.z = kopfMitte;
   g.add(w, giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]));
-  const ring = giebel(zEndeKopf - T / 2, [FUSS_B + 0.02, FUSS_H + 0.01]); g.add(ring);
+  const ring = giebel(zEndeKopf - T / 2, LOCH); g.add(ring);
   const d1 = deckel(L_KOPF / 2, zKopf + L_KOPF / 4), d2 = deckel(L_KOPF / 2, zKopf + 3 * L_KOPF / 4);
   const kl = klappe(zKopf - 0.001, -1);
-  const fuss = new THREE.Mesh(new THREE.BoxGeometry(FUSS_B, FUSS_H, L_FUSS), mat(F.fuss));
-  fuss.position.set(0, BODEN + T + FUSS_H / 2, 0);
-  // Stützfüße am Fußende des Auszugs
-  for (const x of [-FUSS_B / 2 + 0.04, FUSS_B / 2 - 0.04]) {
-    const f = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, BODEN + T, 12), mat(F.rahmen));
-    f.position.set(x, (BODEN + T) / 2, L_FUSS / 2 - 0.06);
-    const halter = new THREE.Group(); halter.add(f);
-    halter.position.y = -(BODEN + T + FUSS_H / 2);   // Ursprung auf dem Grund
-    fuss.add(halter);
+
+  // Fußteil: Fünfeck-Röhre mit eigenem Satteldach, Ursprung in der Längsmitte, y absolut
+  const fussGruppe = new THREE.Group();
+  const roehre = fuenfeck(FUSS);
+  roehre.holes.push(fuenfeck(FUSS_INNEN, true));
+  const roehreGeo = new THREE.ExtrudeGeometry(roehre, { depth: L_FUSS - 2 * FLANSCH, bevelEnabled: false });
+  roehreGeo.translate(0, BODEN, -(L_FUSS - 2 * FLANSCH) / 2);
+  fussGruppe.add(new THREE.Mesh(roehreGeo, mat(F.fuss)));
+  const fussModule = module(FUSS.hb, FUSS.traufe, FUSS.first, L_FUSS - 0.1);
+  fussModule.position.y = BODEN;
+  fussGruppe.add(fussModule);
+  // Stützfüße mit Kurbel am Fußende, eingeschoben hochgekurbelt (ausgeblendet)
+  const stuetzen = new THREE.Group();
+  for (const x of [-FUSS.hb + 0.04, FUSS.hb - 0.04]) {
+    const h = BODEN + FUSS.unten;
+    const f = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, h, 12), mat(F.rahmen));
+    f.position.set(x, h / 2, L_FUSS / 2 - 0.08);
+    stuetzen.add(f);
   }
-  // Axiale Dichtflansche: innen (ausgezogen gegen den Ring von innen),
-  // außen = Stirnplatte (eingeschoben gegen den Ring von außen)
-  // Innenflansch folgt dem Innenquerschnitt des Kopfteils (y ab Unterkante Box)
-  const innen = new THREE.Shape();
-  const sp = 0.012, wf = B / 2 - T - sp;              // Luft zur Innenwand des Kopfteils
-  innen.moveTo(-wf, T); innen.lineTo(wf, T); innen.lineTo(wf, TR);
-  innen.lineTo(0, FI - T - sp - 0.02); innen.lineTo(-wf, TR); innen.closePath();
-  const fensterInnen = new THREE.Path();               // Durchgang für die Beine
-  const ib = FUSS_B - 2 * T, ih = FUSS_H - 2 * T;
-  fensterInnen.moveTo(-ib / 2, 2 * T); fensterInnen.lineTo(ib / 2, 2 * T);
-  fensterInnen.lineTo(ib / 2, 2 * T + ih); fensterInnen.lineTo(-ib / 2, 2 * T + ih); fensterInnen.closePath();
-  innen.holes.push(fensterInnen);
-  const flanschInnenGeo = new THREE.ExtrudeGeometry(innen, { depth: FLANSCH, bevelEnabled: false });
-  flanschInnenGeo.translate(0, -FUSS_H / 2 - T, -L_FUSS / 2);
-  const flanschInnen = new THREE.Mesh(flanschInnenGeo, mat(F.dichtung));
-  const flanschAussen = new THREE.Mesh(
-    new THREE.BoxGeometry(FUSS_B + 0.10, FUSS_H + 0.06, FLANSCH), mat(F.dichtung));
-  flanschAussen.position.set(0, 0.01, L_FUSS / 2 - FLANSCH / 2);
-  fuss.add(flanschInnen, flanschAussen);
-  const fussGruppe = new THREE.Group(); fussGruppe.add(fuss);
-  // 6 Sterngriffschrauben am Ring, immer von außen bedient
+  fussGruppe.add(stuetzen);
+  // Axiale Dichtflansche: Innenflansch (folgt dem Innenquerschnitt des Kopfteils,
+  // Fenster für die Beine) dichtet ausgezogen innen am Ring; Stirnplatte dichtet
+  // eingeschoben außen am Ring
+  const sp = 0.012, wf = B / 2 - T - sp;
+  const innen = fuenfeck({ hb: wf, unten: T, traufe: TR, first: FI - T - sp - 0.02 });
+  innen.holes.push(fuenfeck(FUSS_INNEN, true));
+  const innenGeo = new THREE.ExtrudeGeometry(innen, { depth: FLANSCH, bevelEnabled: false });
+  innenGeo.translate(0, BODEN, -L_FUSS / 2);
+  const stirnGeo = new THREE.ExtrudeGeometry(fuenfeck(STIRN), { depth: FLANSCH, bevelEnabled: false });
+  stirnGeo.translate(0, BODEN, L_FUSS / 2 - FLANSCH);
+  fussGruppe.add(new THREE.Mesh(innenGeo, mat(F.dichtung)), new THREE.Mesh(stirnGeo, mat(F.dichtung)));
+
+  // Innen: 10 Kniehebel rund um die Öffnung (spannen nachts den Innenflansch)
+  const knie = new THREE.Group();
+  const knieGeo = new THREE.BoxGeometry(0.05, 0.03, 0.04);
+  const kantenpunkte = (f, abstand) => {
+    const p = [[-f.hb, f.unten], [f.hb, f.unten], [f.hb, f.traufe], [0, f.first], [-f.hb, f.traufe]];
+    const punkte = [];
+    for (let i = 0; i < 5; i++) {
+      const [x1, y1] = p[i], [x2, y2] = p[(i + 1) % 5];
+      if (i === 0) continue;                       // unten liegt der Boden
+      for (const t of i === 3 || i === 2 ? [0.35, 0.75] : [0.1, 0.5, 0.9]) {
+        const x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t;
+        const nx = (y2 - y1), ny = -(x2 - x1), n = Math.hypot(nx, ny);
+        punkte.push([x + nx / n * abstand, y + ny / n * abstand]);
+      }
+    }
+    return punkte;
+  };
+  for (const [x, y] of kantenpunkte(LOCH, 0.025)) {
+    const k = new THREE.Mesh(knieGeo, mat(F.knie));
+    k.position.set(x, BODEN + y, zEndeKopf - T - 0.02);
+    knie.add(k);
+  }
+  g.add(knie);
+  // Außen: 5 Sicherungsschrauben mit Kappe durch die Stirnplatte (Fahrt, Abwesenheit)
   const griffe = new THREE.Group();
-  const griffGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.03, 8);
+  const griffGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.025, 12);
   griffGeo.rotateX(Math.PI / 2);
-  const ob = (FUSS_B + 0.02) / 2 + 0.022, oh = FUSS_H + 0.01;
-  for (const [x, y] of [[-ob, 0.10], [ob, 0.10], [-ob, oh - 0.05], [ob, oh - 0.05], [-0.15, oh + 0.035], [0.15, oh + 0.035]]) {
+  const sx = LOCH.hb + 0.028;          // mittig auf der Überdeckung Stirnplatte–Ring
+  for (const [x, y] of [[-sx, 0.08], [sx, 0.08], [-sx, LOCH.traufe - 0.02], [sx, LOCH.traufe - 0.02], [0, LOCH.first + 0.03]]) {
     const s = new THREE.Mesh(griffGeo, mat(F.griff));
-    s.position.set(x, BODEN + T + y, 0);
+    s.position.set(x, BODEN + y, 0);
     griffe.add(s);
   }
   g.add(griffe);
@@ -239,10 +297,13 @@ const menschen = [];
       const zEin = zEndeKopf + FLANSCH - L_FUSS / 2;
       const zAus = zEndeKopf - T - FLANSCH + L_FUSS / 2;
       fussGruppe.position.z = zEin + (zAus - zEin) * anteil;
-      griffe.position.z = zEndeKopf + 0.015 + (anteil < 0.02 ? FLANSCH : 0);
+      // Sicherungsschrauben nur eingeschoben (Fahrt, Abwesenheit)
+      griffe.position.z = zEndeKopf + FLANSCH + 0.012;
+      griffe.visible = anteil < 0.02;
+      stuetzen.visible = anteil > 0.5;
       fw.userData.deichsel.visible = anteil < 0.1;
     },
-    text: 'Variante B: Auszug mit verschraubten Dichtflanschen, am Tag 1,25 m, nachts 2,09 m lang',
+    text: 'Variante B: Auszug mit Satteldach und axialer Dichtung (innen Kniehebel, außen Sicherungsschrauben), am Tag 1,25 m, nachts 2,09 m lang',
   };
   varianten.B.setzeAuszug(1);
 })();

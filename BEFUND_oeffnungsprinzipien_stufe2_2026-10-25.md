@@ -103,4 +103,10 @@ Ergebnis: **so nur als Modell 1:5 freigegeben, nicht für den Prototyp.** Das Pr
 | 9 | mittel | Schrauben und Flansch sind Wärmebrücken | realistisch +12,3 bis +12,6 K statt +13,2 K |
 | 10 | niedrig | Gewicht mit Rahmen und Einlagen | eher 3–4 kg statt 1,8 kg |
 
-Folge für die Wärme: Der Abstand zur festen Kiste liegt realistisch bei ca. 2 K, nicht 1,5 K. Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.
+Folge für die Wärme: Der Abstand zur festen Kiste liegt realistisch bei ca. 2 K, nicht 1,5 K.
+
+### Umsetzung nach den Entscheidungen 27 und 28 (25.10.2026)
+- **Satteldach auch auf dem Fußteil:** Das Fußteil ist eine Fünfeck-Röhre, außen 0,57 m breit, Traufe 0,43 m und First 0,55 m über Unterkante Box, Dachneigung ca. 23°. Es liegt 4 cm über dem Boden des Kopfteils, damit der Ring auch unten eine Dichtfläche hat (Matratze dort 4 cm dünner). Innen bleiben 0,48 m Breite, 0,26–0,37 m Höhe für die Füße. Die Öffnung im Ring ist fünfeckig, ringsum 1 cm größer. Der Innenflansch hat ringsum ca. 4–6 cm Auflage am Ring, damit ist Befund 1 erledigt. Auf dem Fußteil-Dach steht kein Wasser mehr, das entschärft Befund 7.
+- **Spannen:** Innen spannen 10 Kniehebel rund um die Öffnung den Innenflansch. Außen sichern 5 Schrauben mit Kappe die Stirnplatte (6 cm Überstand). Die Lochbilder für innen und außen sind damit getrennt, das erledigt Befund 2, und von außen lässt sich nachts nichts lösen, das erledigt Befund 5.
+- **Solar:** Module auf beiden Dachseiten von Kopfteil (Deckelhälften) und Fußteil, jede Seite an einem eigenen MPPT-Eingang. Rechnung: `rechnung/dachform_pult_sattel.py`.
+- **Offen aus der Kritik:** steifer Flansch (Alu-Winkel oder Sperrholz 12 mm), Sperrholzeinlagen statt Muttern im Schaum, Kugelschienen, Edelstahl und Frostschutz an den Spannteilen. Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.

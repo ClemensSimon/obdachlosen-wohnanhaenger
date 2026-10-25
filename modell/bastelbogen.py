@@ -20,9 +20,14 @@ FIRST = 0.68      # Außenhöhe am First
 L_GESAMT = 2.09
 L_KOPF = 1.25     # Variante B: Kopfteil
 KLAPPE = (0.45, 0.48)          # Stirnklappe Breite × Höhe
-# Variante B: Fußteil außen; ringsum bleibt am Ring Platz für die Dichtfläche
-FUSS_AUSSEN = (0.61, 0.40)
-STIRN = (0.71, 0.46)           # Außenflansch (Stirnplatte), dichtet eingeschoben außen am Ring
+# Variante B: Fußteil als Fünfeck mit eigenem Satteldach (Breite, Traufe, First,
+# gemessen ab seiner Unterkante); wie in modell3d.js. Das Fußteil liegt 4 cm über
+# dem Boden des Kopfteils, die Öffnung im Ring beginnt 3 cm über dem Boden.
+FUSS_AUSSEN = (0.57, 0.345, 0.465)
+FUSS_UEBER_BODEN = 0.04
+LOCH = (0.59, 0.365, 0.485)    # fünfeckige Öffnung im Ring, ab 3 cm über dem Boden
+LOCH_UEBER_BODEN = 0.03
+STIRN = (0.69, 0.475, 0.61)    # Außenflansch (Stirnplatte), ab Unterkante Box + 5 mm
 FUSS_L = 0.905                 # Fußteil mit beiden Flanschen; ausgezogen genau 2,09 m
 
 
@@ -40,7 +45,7 @@ def rechteck(name, w, h, anzahl=1, hinweis=""):
 
 
 def giebel(name, loch=None, hinweis=""):
-    """Fünfeck, optional mit rechteckigem Ausschnitt (Breite, Höhe) unten mittig."""
+    """Fünfeck, optional mit Ausschnitt unten mittig: (Breite, Höhe) oder (Breite, Traufe, First)."""
     return [dict(name=name, w=B, h=FI, form="g", loch=loch, hinweis=hinweis)]
 
 
@@ -61,25 +66,30 @@ def teile_a():
 def teile_b():
     lk = mm(L_KOPF) - 2 * D
     kl = (mm(KLAPPE[0]), mm(KLAPPE[1]))
-    fb, fh = mm(FUSS_AUSSEN[0]), mm(FUSS_AUSSEN[1])     # Fußteil außen
-    fl = mm(FUSS_L) - 2 * D                             # Kasten zwischen den Flanschen
+    fb, ftr, ffi = (mm(v) for v in FUSS_AUSSEN)          # Fußteil außen
+    fl = mm(FUSS_L) - 2 * D                             # Röhre zwischen den Flanschen
+    fdach = round(math.hypot(fb / 2, ffi - ftr), 1)
     spiel = 1.0
+    fenster = (fb - 2 * D, ftr - 2 * D, ffi - 2 * D - 2)   # Fußteil innen
     t = []
     t += giebel("B Giebel Kopf", loch=kl, hinweis="Ausschnitt = Stirnklappe")
-    t += giebel("B Ring zum Fußteil", loch=(fb + 2 * spiel, fh + spiel),
-                hinweis="Dichtfläche innen und außen, 6 Löcher")
+    ring = giebel("B Ring zum Fußteil", loch=tuple(mm(v) for v in LOCH),
+                  hinweis="Dichtfläche innen und außen")
+    ring[0]["loch_ab"] = D + mm(LOCH_UEBER_BODEN)
+    t += ring
     t += rechteck("B Boden Kopfteil", lk, B - 2 * D)
     t += rechteck("B Seitenwand Kopfteil", lk, TR, 2)
     t += rechteck("B Deckel Kopfteil", round(lk / 2, 1), DACH, 4, "zwei Hälften je Seite")
     t += rechteck("B Fußteil Boden", fl, fb)
-    t += rechteck("B Fußteil Seite", fl, fh - D, 2, "auf den Boden")
-    t += rechteck("B Fußteil Decke", fl, fb - 2 * D, 1, "zwischen die Seiten")
+    t += rechteck("B Fußteil Seite", fl, ftr - D, 2, "auf den Boden")
+    t += rechteck("B Fußteil Dach", fl, fdach, 2, "links/rechts, am First anschrägen")
     # Innenflansch: Innenquerschnitt des Kopfteils mit 1 mm Luft, Fenster für die Beine
     t += [dict(name="B Innenflansch", w=B - 2 * D - 2 * spiel, h=FI - 2 * D - 2 * spiel,
-               traufe=TR - D, form="g", loch=(fb - 2 * D, fh - 2 * D),
+               traufe=TR - D, form="g", loch=fenster, loch_ab=mm(FUSS_UEBER_BODEN) + D,
                hinweis="Kopfende des Fußteils, dichtet ausgezogen")]
-    t += rechteck("B Außenflansch (Stirn)", mm(STIRN[0]), mm(STIRN[1]), 1,
-                  "Fußende, dichtet eingeschoben")
+    sw, str_, sfi = (mm(v) for v in STIRN)
+    t += [dict(name="B Außenflansch (Stirn)", w=sw, h=sfi, traufe=str_, form="g",
+               hinweis="Fußende, dichtet eingeschoben")]
     return t
 
 
@@ -133,10 +143,18 @@ def svg_teil(p):
         tr = p.get("traufe", TR)    # Traufhöhe dieses Fünfecks
         pts = [(x, y + h), (x, y + h - tr), (x + w / 2, y), (x + w, y + h - tr), (x + w, y + h)]
         s.append('<polygon class="s" points="%s"/>' % " ".join(f"{a:.1f},{b:.1f}" for a, b in pts))
-        if p.get("loch"):
-            lw, lh = p["loch"]
+        loch = p.get("loch")
+        ab = p.get("loch_ab", D)             # Abstand Lochunterkante zur Teilunterkante
+        if loch and len(loch) == 2:          # Rechteck (Breite, Höhe)
+            lw, lh = loch
             lx, ly = x + (w - lw) / 2, y + h - D - lh
             s.append(f'<rect x="{lx:.1f}" y="{ly:.1f}" width="{lw}" height="{lh}" class="s"/>')
+        elif loch:                           # Fünfeck (Breite, Traufe, First) ab Boden
+            lw, ltr, lfi = loch
+            lx, unten = x + (w - lw) / 2, y + h - ab
+            pts = [(lx, unten), (lx, unten - ltr), (lx + lw / 2, unten - lfi),
+                   (lx + lw, unten - ltr), (lx + lw, unten)]
+            s.append('<polygon class="s" points="%s"/>' % " ".join(f"{a:.1f},{b:.1f}" for a, b in pts))
     cx, cy = x + w / 2, y + h / 2
     s.append(f'<text x="{cx:.1f}" y="{cy:.1f}" class="n">{p["name"]}</text>')
     s.append(f'<text x="{cx:.1f}" y="{cy + 5:.1f}" class="m">{w:g} × {h:g} mm</text>')

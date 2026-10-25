@@ -8,12 +8,12 @@
 <text x="130.0" y="222.0" class="n">B Seitenwand Kopfteil</text>
 <text x="130.0" y="227.0" class="m">240 × 92 mm</text>
 <polygon class="s" points="256.0,148.0 256.0,61.0 328.0,24.0 400.0,61.0 400.0,148.0"/>
-<rect x="272.0" y="73.0" width="112.0" height="70.0" class="s"/>
+<polygon class="s" points="276.0,135.0 276.0,76.0 328.0,54.0 380.0,76.0 380.0,135.0"/>
 <text x="328.0" y="86.0" class="n">B Innenflansch</text>
 <text x="328.0" y="91.0" class="m">144 × 124 mm</text>
 <text x="328.0" y="96.0" class="m">Kopfende des Fußteils, dichtet ausgezogen</text>
-<rect x="256.0" y="176.0" width="142.0" height="92.0" class="s"/>
-<text x="327.0" y="222.0" class="n">B Außenflansch (Stirn)</text>
-<text x="327.0" y="227.0" class="m">142 × 92 mm</text>
-<text x="327.0" y="232.0" class="m">Fußende, dichtet eingeschoben</text>
+<rect x="256.0" y="176.0" width="120.0" height="89.6" class="s"/>
+<text x="316.0" y="220.8" class="n">B Deckel Kopfteil</text>
+<text x="316.0" y="225.8" class="m">120 × 89.6 mm</text>
+<text x="316.0" y="230.8" class="m">zwei Hälften je Seite</text>
 </svg>

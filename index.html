@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=5" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=7" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,7 +129,7 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Bei B dichten zwei blaue Flansche in den Endlagen, angezogen mit 6 gelben Sterngriffen von außen.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
@@ -151,12 +151,12 @@ window.addEventListener('error', function (e) {
     <a href="modell/bogen_A_4.svg"><img src="modell/bogen_A_4.svg" alt="Bogen A4: Deckel Kopf" loading="lazy" width="420" height="297"></a>
     <a href="modell/bogen_A_5.svg"><img src="modell/bogen_A_5.svg" alt="Bogen A5: Deckel Fuß" loading="lazy" width="420" height="297"></a>
   </div>
-  <h4>Variante B: Auszug (4 Bögen)</h4>
+  <h4>Variante B: Auszug mit Satteldach (4 Bögen)</h4>
   <div class="boegen">
-    <a href="modell/bogen_B_1.svg"><img src="modell/bogen_B_1.svg" alt="Bogen B1: Boden und Seitenwand Kopfteil, Innenflansch, Außenflansch" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_1.svg"><img src="modell/bogen_B_1.svg" alt="Bogen B1: Boden und Seitenwand Kopfteil, Innenflansch, Deckel" loading="lazy" width="420" height="297"></a>
     <a href="modell/bogen_B_2.svg"><img src="modell/bogen_B_2.svg" alt="Bogen B2: Seitenwand, Fußteil Boden und Seite, Deckel" loading="lazy" width="420" height="297"></a>
-    <a href="modell/bogen_B_3.svg"><img src="modell/bogen_B_3.svg" alt="Bogen B3: Fußteil Seite und Decke, Deckel" loading="lazy" width="420" height="297"></a>
-    <a href="modell/bogen_B_4.svg"><img src="modell/bogen_B_4.svg" alt="Bogen B4: Giebel Kopf, Ring zum Fußteil, zwei Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_3.svg"><img src="modell/bogen_B_3.svg" alt="Bogen B3: Fußteil Seite und Dach, Außenflansch, zwei Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_4.svg"><img src="modell/bogen_B_4.svg" alt="Bogen B4: Giebel Kopf, Ring mit fünfeckiger Öffnung" loading="lazy" width="420" height="297"></a>
   </div>
 </section>
 
@@ -186,6 +186,8 @@ window.addEventListener('error', function (e) {
       <tr><td>20</td><td>Fach</td><td>Ca. 240 l, innen und außen zugänglich, Fach für Papiere mit Zahlenschloss</td><td>Zugang nur von einer Seite</td></tr>
       <tr><td>21</td><td>Tagbetrieb</td><td>2 Sitzplätze, 1,5 m² Schatten, Umbau in 1 Minute, Dämmung bleibt trocken</td><td>Kein Tagbetrieb</td></tr>
       <tr><td>22</td><td>Lizenz</td><td>CERN-OHL-S (Hardware), CC BY-SA (Texte); Bauplan erst nach Test</td><td>Nicht kommerziell</td></tr>
+      <tr><td>27</td><td>Dach</td><td>Satteldach überall, auch auf dem Auszug; Solarmodule auf beiden Seiten (2 MPPT)</td><td>Pultdach (nur nach Süden besser)</td></tr>
+      <tr><td>28</td><td>Auszug spannen</td><td>Innen 10 Kniehebel (Schlafende), außen Sicherungsschrauben (Fahrt, Abwesenheit)</td><td>Nur von außen verschraubt</td></tr>
     </tbody>
   </table></div>
 </section>

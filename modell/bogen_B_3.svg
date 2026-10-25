@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297">
 <style>.s{fill:none;stroke:#000;stroke-width:.3}.k{stroke:#000;stroke-width:.5}.t{font:bold 4.5px sans-serif}.n{font:bold 3.6px sans-serif;text-anchor:middle}.m{font:3px sans-serif;text-anchor:middle}</style>
 <text x="10" y="14" class="t">Variante B: Auszug · Bogen 3/4 · Maßstab 1:5 · Schaumplatte 5 mm · in 100 % drucken</text><line x1="310" y1="16" x2="410" y2="16" class="k"/><text x="360" y="13" class="m">Kontrolle: 100 mm</text>
-<rect x="10" y="24" width="171.0" height="75.0" class="s"/>
-<text x="95.5" y="61.5" class="n">B Fußteil Seite</text>
-<text x="95.5" y="66.5" class="m">171 × 75 mm</text>
-<text x="95.5" y="71.5" class="m">auf den Boden</text>
-<rect x="10" y="105.0" width="171.0" height="112.0" class="s"/>
-<text x="95.5" y="161.0" class="n">B Fußteil Decke</text>
-<text x="95.5" y="166.0" class="m">171 × 112 mm</text>
-<text x="95.5" y="171.0" class="m">zwischen die Seiten</text>
-<rect x="187.0" y="105.0" width="120.0" height="89.6" class="s"/>
-<text x="247.0" y="149.8" class="n">B Deckel Kopfteil</text>
-<text x="247.0" y="154.8" class="m">120 × 89.6 mm</text>
-<text x="247.0" y="159.8" class="m">zwei Hälften je Seite</text>
+<rect x="10" y="24" width="171.0" height="64.0" class="s"/>
+<text x="95.5" y="56.0" class="n">B Fußteil Seite</text>
+<text x="95.5" y="61.0" class="m">171 × 64 mm</text>
+<text x="95.5" y="66.0" class="m">auf den Boden</text>
+<rect x="187.0" y="24" width="171.0" height="61.8" class="s"/>
+<text x="272.5" y="54.9" class="n">B Fußteil Dach</text>
+<text x="272.5" y="59.9" class="m">171 × 61.8 mm</text>
+<text x="272.5" y="64.9" class="m">links/rechts, am First anschrägen</text>
+<rect x="10" y="94.0" width="171.0" height="61.8" class="s"/>
+<text x="95.5" y="124.9" class="n">B Fußteil Dach</text>
+<text x="95.5" y="129.9" class="m">171 × 61.8 mm</text>
+<text x="95.5" y="134.9" class="m">links/rechts, am First anschrägen</text>
+<polygon class="s" points="10.0,283.8 10.0,188.8 79.0,161.8 148.0,188.8 148.0,283.8"/>
+<text x="79.0" y="222.8" class="n">B Außenflansch (Stirn)</text>
+<text x="79.0" y="227.8" class="m">138 × 122 mm</text>
+<text x="79.0" y="232.8" class="m">Fußende, dichtet eingeschoben</text>
+<rect x="154.0" y="161.8" width="120.0" height="89.6" class="s"/>
+<text x="214.0" y="206.6" class="n">B Deckel Kopfteil</text>
+<text x="214.0" y="211.6" class="m">120 × 89.6 mm</text>
+<text x="214.0" y="216.6" class="m">zwei Hälften je Seite</text>
+<rect x="280.0" y="161.8" width="120.0" height="89.6" class="s"/>
+<text x="340.0" y="206.6" class="n">B Deckel Kopfteil</text>
+<text x="340.0" y="211.6" class="m">120 × 89.6 mm</text>
+<text x="340.0" y="216.6" class="m">zwei Hälften je Seite</text>
 </svg>

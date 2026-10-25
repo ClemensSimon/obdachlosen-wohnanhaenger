@@ -7,16 +7,8 @@
 <text x="88.0" y="97.0" class="m">156 × 136 mm</text>
 <text x="88.0" y="102.0" class="m">Ausschnitt = Stirnklappe</text>
 <polygon class="s" points="172.0,160.0 172.0,68.0 250.0,24.0 328.0,68.0 328.0,160.0"/>
-<rect x="188.0" y="74.0" width="124.0" height="81.0" class="s"/>
+<polygon class="s" points="191.0,149.0 191.0,76.0 250.0,52.0 309.0,76.0 309.0,149.0"/>
 <text x="250.0" y="92.0" class="n">B Ring zum Fußteil</text>
 <text x="250.0" y="97.0" class="m">156 × 136 mm</text>
-<text x="250.0" y="102.0" class="m">Dichtfläche innen und außen, 6 Löcher</text>
-<rect x="10" y="166.0" width="120.0" height="89.6" class="s"/>
-<text x="70.0" y="210.8" class="n">B Deckel Kopfteil</text>
-<text x="70.0" y="215.8" class="m">120 × 89.6 mm</text>
-<text x="70.0" y="220.8" class="m">zwei Hälften je Seite</text>
-<rect x="136.0" y="166.0" width="120.0" height="89.6" class="s"/>
-<text x="196.0" y="210.8" class="n">B Deckel Kopfteil</text>
-<text x="196.0" y="215.8" class="m">120 × 89.6 mm</text>
-<text x="196.0" y="220.8" class="m">zwei Hälften je Seite</text>
+<text x="250.0" y="102.0" class="m">Dichtfläche innen und außen</text>
 </svg>

@@ -55,7 +55,8 @@ Ziel ist ein kompakter Anhänger, in dem ein obdachloser Mensch auch bei Frost s
 ### 11. Einstieg: Dach als Deckel
 - Gegen die Alternative Tür am Fußende fiel die Wahl auf den Deckel, weil er aufgeklappt das Vordach über der Bank bildet.
 - Auflagen: Deckel geteilt, Dach mit Gefälle gegen Schnee (30 cm nasser Schnee sind ca. 135 kg), Kompressionsdichtung mit Spannverschlüssen, **Notausstieg an der Stirnseite, der auch unter Schnee aufgeht**, innen immer ohne Schlüssel zu öffnen.
-- Muschel- und Paneellösungen werden in Stufe 2 verglichen.
+- Muschel- und Paneellösungen wurden in Stufe 2 verglichen. Ergebnis: Muschel raus (unter Schnee ca. 800 N am Kopfende).
+- **Ergänzt am 25.10. (Frage 25): Im Winter führt der Einstieg durch die Stirnklappe am Kopfende**, mindestens 0,45 × 0,50 m, mit Panikfunktion, zugleich Fluchtweg. Grund: Kein Deckel lässt sich unter 30 cm Nassschnee von innen heben (geteilt ca. 380 N, liegend schafft man ca. 100 N). Der Deckel dient am Tag als Vordach und im Sommer als Einstieg. **Verworfen:** nur Deckel mit Pflicht zum Schneeräumen, Seitentür.
 
 ### 13. Stellplatz: nur als Fahrzeug
 - Der Nutzer trägt das Risiko. Folge: **vom Schlafen zum Losfahren in höchstens 5 Minuten**, die Sachen bleiben im Wagen. Der Bauplan bekommt einen Rechtshinweis, die Mustervereinbarung für privaten Grund gibt es als freiwilligen Anhang.
@@ -101,7 +102,7 @@ Ziel ist ein kompakter Anhänger, in dem ein obdachloser Mensch auch bei Frost s
 - Tagbetrieb wie unter 21
 
 ## Offen
-- **Aus Stufe 2 (Kritik):** Kein Deckel lässt sich unter 30 cm Nassschnee von innen heben. Der geteilte Deckel braucht ca. 380 N, die Muschel ca. 800 N, liegend schafft man etwa 100 N. Vorschlag: Die Stirnklappe wird zur Wintertür (mindestens 0,45 × 0,50 m), der Deckel dient als Vordach am Tag und im Sommer als Einstieg. Muschel ist raus, vorne liegt der geteilte Deckel, der Auszug wird nachgerechnet. Entscheidung steht aus.
+- **Feste Kiste oder Auszug in der Länge** (Stufe 2): Der Auszug kostet 1,5–3 K und ca. 5 kg, dafür ist der Wagen am Tag 1,25 statt 2,09 m lang und kippt erst bei ca. 20 m/s. Entscheidung steht aus.
 - Idee für später: **Biomeiler als feste Station** (5–10 m³ bei Hof, Gärtnerei oder Gemeinde, Warmwasser zu einer Heizplatte, auf die der Wagen fährt). Im Wagen selbst nicht: 100 l bringen nur ca. 25 W, dazu CO₂, Ammoniak, Sporen und 150–200 kg. Für den Wagen besser: Latentwärmespeicher oder Wärmflasche, aufgeladen in der Wärmestube.
 - **Korrektur zu 4 und 7:** Körperwärme bringt eher 14–15 K als 21 K (sensibel 65 W, Wärmebrücken 40 %). Gurt oder Anker gegen Kippen und Rutschen ist Pflicht. Die Box braucht einen eigenen tragenden Rahmen. Einzelheiten: [Befund Stufe 1](BEFUND_huellformen_stufe1_2026-10-25.md)
 - Testnutzer oder Träger für die Zeit nach dem Selbsttest

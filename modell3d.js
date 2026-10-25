@@ -6,7 +6,10 @@ import { OrbitControls } from './lib/OrbitControls.js';
 
 const B = 0.78, TR = 0.46, FI = 0.68, T = 0.045;   // Traufe und First über Unterkante Box
 const BODEN = 0.40;            // Unterkante Schlafbox über Grund
-const L_A = 2.09, L_KOPF = 1.25, L_FUSS = 0.95, FUSS_B = 0.67, FUSS_H = 0.40;
+// Fußteil außen 0,61 × 0,40 m: so bleibt am Ring ringsum Platz für die Dichtfläche.
+// Länge so, dass ausgezogen (Innenflansch am Ring) genau 2,09 m herauskommen.
+const L_KOPF = 1.25, FUSS_B = 0.61, FUSS_H = 0.40, FLANSCH = 0.02;
+const L_A = 2.09, L_FUSS = L_A - L_KOPF + 0.045 + FLANSCH;
 const KLAPPE_B = 0.45, KLAPPE_H = 0.48;
 
 const flaeche = document.getElementById('d3-flaeche');
@@ -19,7 +22,7 @@ function farben() {
   return {
     hg: dunkel ? 0x1f2226 : 0xffffff,
     huelle: 0xd9cbb8, dach: 0x9a3b12, rahmen: 0x4a4f57, rad: 0x222222,
-    klappe: 0xc8783f, fuss: 0xbfae98, mensch: 0x3d7a5a, boden: dunkel ? 0x2a2e33 : 0xeeeae2,
+    klappe: 0xc8783f, fuss: 0xbfae98, dichtung: 0x2f6f8f, griff: 0xe0b020, mensch: 0x3d7a5a, boden: dunkel ? 0x2a2e33 : 0xeeeae2,
   };
 }
 
@@ -168,7 +171,8 @@ const menschen = [];
   const g = new THREE.Group();
   const zKopf = -L_A / 2, zFuss = L_A / 2;
   g.add(wanne(L_A - 2 * T));
-  g.add(giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(zFuss - T / 2));  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
+  g.add(giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(zFuss - T / 2));
+  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
   const kl = klappe(zKopf - 0.001, -1);
   g.add(dk, df, kl, fahrwerk(L_A, zFuss + 0.5), mensch(zKopf + 0.2, 1));
   varianten.A = { gruppe: g, deckel: [dk, df], klappen: [kl], text: 'Variante A: feste Kiste, 2,09 m lang' };
@@ -193,7 +197,37 @@ const menschen = [];
     halter.position.y = -(BODEN + T + FUSS_H / 2);   // Ursprung auf dem Grund
     fuss.add(halter);
   }
+  // Axiale Dichtflansche: innen (ausgezogen gegen den Ring von innen),
+  // außen = Stirnplatte (eingeschoben gegen den Ring von außen)
+  // Innenflansch folgt dem Innenquerschnitt des Kopfteils (y ab Unterkante Box)
+  const innen = new THREE.Shape();
+  const sp = 0.012, wf = B / 2 - T - sp;              // Luft zur Innenwand des Kopfteils
+  innen.moveTo(-wf, T); innen.lineTo(wf, T); innen.lineTo(wf, TR);
+  innen.lineTo(0, FI - T - sp - 0.02); innen.lineTo(-wf, TR); innen.closePath();
+  const fensterInnen = new THREE.Path();               // Durchgang für die Beine
+  const ib = FUSS_B - 2 * T, ih = FUSS_H - 2 * T;
+  fensterInnen.moveTo(-ib / 2, 2 * T); fensterInnen.lineTo(ib / 2, 2 * T);
+  fensterInnen.lineTo(ib / 2, 2 * T + ih); fensterInnen.lineTo(-ib / 2, 2 * T + ih); fensterInnen.closePath();
+  innen.holes.push(fensterInnen);
+  const flanschInnenGeo = new THREE.ExtrudeGeometry(innen, { depth: FLANSCH, bevelEnabled: false });
+  flanschInnenGeo.translate(0, -FUSS_H / 2 - T, -L_FUSS / 2);
+  const flanschInnen = new THREE.Mesh(flanschInnenGeo, mat(F.dichtung));
+  const flanschAussen = new THREE.Mesh(
+    new THREE.BoxGeometry(FUSS_B + 0.10, FUSS_H + 0.06, FLANSCH), mat(F.dichtung));
+  flanschAussen.position.set(0, 0.01, L_FUSS / 2 - FLANSCH / 2);
+  fuss.add(flanschInnen, flanschAussen);
   const fussGruppe = new THREE.Group(); fussGruppe.add(fuss);
+  // 6 Sterngriffschrauben am Ring, immer von außen bedient
+  const griffe = new THREE.Group();
+  const griffGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.03, 8);
+  griffGeo.rotateX(Math.PI / 2);
+  const ob = (FUSS_B + 0.02) / 2 + 0.022, oh = FUSS_H + 0.01;
+  for (const [x, y] of [[-ob, 0.10], [ob, 0.10], [-ob, oh - 0.05], [ob, oh - 0.05], [-0.15, oh + 0.035], [0.15, oh + 0.035]]) {
+    const s = new THREE.Mesh(griffGeo, mat(F.griff));
+    s.position.set(x, BODEN + T + y, 0);
+    griffe.add(s);
+  }
+  g.add(griffe);
   // Fahrwerk nur unter dem Kopfteil; Deichsel am Fußende, nachts abgenommen
   const fw = fahrwerk(L_KOPF + 0.05, (L_KOPF + 0.05) / 2 + 0.5);
   fw.position.z = kopfMitte;
@@ -201,12 +235,14 @@ const menschen = [];
   varianten.B = {
     gruppe: g, deckel: [d1, d2], klappen: [kl],
     setzeAuszug(anteil) {   // 0 = Tag (eingeschoben), 1 = Nacht (ausgezogen)
-      const zEin = zEndeKopf - L_FUSS / 2 - 0.02;
-      const zAus = L_A / 2 - L_FUSS / 2;          // Ende genau bei 2,09 m
+      // Tag: Stirnplatte liegt außen am Ring; Nacht: Innenflansch liegt innen am Ring
+      const zEin = zEndeKopf + FLANSCH - L_FUSS / 2;
+      const zAus = zEndeKopf - T - FLANSCH + L_FUSS / 2;
       fussGruppe.position.z = zEin + (zAus - zEin) * anteil;
+      griffe.position.z = zEndeKopf + 0.015 + (anteil < 0.02 ? FLANSCH : 0);
       fw.userData.deichsel.visible = anteil < 0.1;
     },
-    text: 'Variante B: Auszug, am Tag 1,25 m, nachts 2,09 m lang',
+    text: 'Variante B: Auszug mit verschraubten Dichtflanschen, am Tag 1,25 m, nachts 2,09 m lang',
   };
   varianten.B.setzeAuszug(1);
 })();

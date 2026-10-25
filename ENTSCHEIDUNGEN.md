@@ -102,6 +102,7 @@ Ziel ist ein kompakter Anhänger, in dem ein obdachloser Mensch auch bei Frost s
 - Tagbetrieb wie unter 21
 
 ## Offen
+- **Auszug mit axial verschraubten Dichtflächen (Vorgabe 25.10.):** Gedichtet wird nur in den Endlagen. Ausgezogen drückt ein Innenflansch am Fußteil von innen gegen den Ring, eingeschoben die Stirnplatte des Fußteils von außen. Dazu Moosgummi und 6 Sterngriffschrauben M8, die immer von außen bedient werden. Damit kommt der Auszug auf +13,2 K statt +12,9 K, mit Restleckluft auf +12,9 K statt +11,7 K. Er wiegt ca. 1,8 kg mehr und braucht beim Umbau 12 Handgriffe. Die Schiebedichtung ist verworfen.
 - **Feste Kiste oder Auszug (Frage 26, 25.10.):** Beide werden als Modell 1:5 gebaut, danach wird entschieden. Der Auszug kostet 1,5–3 K und ca. 5 kg, dafür ist der Wagen am Tag 1,25 statt 2,09 m lang und kippt erst bei ca. 20 m/s. Meine Empfehlung war die feste Kiste für den Prototyp und der Auszug als spätere Variante.
 - Idee für später: **Biomeiler als feste Station** (5–10 m³ bei Hof, Gärtnerei oder Gemeinde, Warmwasser zu einer Heizplatte, auf die der Wagen fährt). Im Wagen selbst nicht: 100 l bringen nur ca. 25 W, dazu CO₂, Ammoniak, Sporen und 150–200 kg. Für den Wagen besser: Latentwärmespeicher oder Wärmflasche, aufgeladen in der Wärmestube.
 - **Korrektur zu 4 und 7:** Körperwärme bringt eher 14–15 K als 21 K (sensibel 65 W, Wärmebrücken 40 %). Gurt oder Anker gegen Kippen und Rutschen ist Pflicht. Die Box braucht einen eigenen tragenden Rahmen. Einzelheiten: [Befund Stufe 1](BEFUND_huellformen_stufe1_2026-10-25.md)

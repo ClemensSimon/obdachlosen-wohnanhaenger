@@ -21,7 +21,8 @@ Mit `python bastelbogen.py` neu erzeugen. Drucken in **100 %** (nicht „an Seit
 2. Giebel vorne und hinten davor kleben.
 3. Dachplatten an der Traufe und am First anschrägen, bis sie aufliegen. Je eine linke und rechte Platte am First fest zu einer Deckelhälfte verkleben (Kopf und Fuß). Jede Hälfte bekommt an einer Traufe ein Gelenk aus Gewebeband und klappt zur Seite auf. Aufgeklappt bildet sie das Vordach über der Bank.
 4. Den Ausschnitt im Kopfgiebel als Stirnklappe wieder einsetzen, unten mit Gewebeband angeschlagen.
-5. Nur B: Fußteil als geschlossenen Kasten bauen (Stirn innen am Fußende, offenes Ende zum Kopfteil). Er muss leicht durch den Ring gleiten.
+5. Nur B: Fußteil als Kasten aus Boden, Seiten und Decke bauen. Am Fußende den **Außenflansch** (Stirnplatte) aufkleben, er steht ringsum über. Den Kasten durch den Ring schieben und erst dann von innen den **Innenflansch** (Fünfeck mit Fenster) an das Kopfende des Kastens kleben. Er muss leicht durch den Ring gleiten.
+6. Nur B, Dichtung und Schrauben: Auf die Innen- und Außenseite des Rings rund um die Öffnung einen Streifen Filz oder Moosgummi (3 mm) kleben. Sechs Löcher durch Ring und Flansche stechen (Lage siehe 3D-Modell, gelbe Griffe). Als Schrauben im Modell genügen Musterbeutelklammern oder M3-Schrauben mit Flügelmutter.
 
 ## Was am Modell zu prüfen ist
 Jeweils für A und B notieren:
@@ -35,6 +36,8 @@ Jeweils für A und B notieren:
 | Abfahrbereit | Handgriffe von Schlafen bis Losfahren zählen | ≤ 5 Minuten in echt |
 | Schnee | 6 cm Watte oder Mehl aufs Dach (30 cm), Deckel und Klappe bedienen | Klappe geht auf |
 | Nur B: Auszug | 20-mal ein- und ausziehen, Spiel und Verkanten beobachten | läuft ohne Klemmen |
+| Nur B: Dichtflansche | in beiden Endlagen die 6 Schrauben über Kreuz anziehen; Spalt mit Papierstreifen prüfen | Streifen klemmt überall |
+| Nur B: Bedienung | Alle 6 Schrauben von außen erreichbar, auch ausgezogen? | ja, ohne Einsteigen |
 | Fugen | Länge aller beweglichen Fugen mit Faden messen, × 5 | Vergleich zu 6,8 m (A) |
 | Wirkung | von außen und von innen (Handykamera in der Box) ansehen | wirkt nicht wie ein Sarg |
 

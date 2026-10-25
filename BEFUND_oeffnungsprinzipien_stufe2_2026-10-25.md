@@ -66,4 +66,23 @@ Kopfteil als Fünfeck mit 1,25 m Länge. Der Fußteil (innen 0,58 × 0,35 m) ste
 | Länge am Tag | 2,09 m | **1,25 m** |
 | Kippt leer am Tag ab | 15,5 m/s | **ca. 20 m/s** |
 
-Der Auszug kostet also 1,5–3 K und ca. 5 kg. Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.
+Der Auszug kostet also 1,5–3 K und ca. 5 kg. (Stand mit Schiebedichtung, überholt durch den folgenden Abschnitt.)
+
+## Auszug mit axial verschraubten Dichtflächen (25.10.2026)
+Statt einer Dichtung, die beim Schieben schleift, dichtet der Auszug **nur in den beiden Endlagen**, und zwar axial angepresst und verschraubt. Beim Verschieben ist die Dichtung entlastet und nutzt sich nicht ab.
+
+- **Ausgezogen (Nacht):** Am inneren Ende des Fußteils sitzt ein umlaufender **Innenflansch**, 5 cm breit, mit Moosgummi (EPDM, ca. 10 × 10 mm). Er drückt von innen gegen den Ring des Kopfteils.
+- **Eingeschoben (Tag, Fahrt):** Die Stirnplatte am Fußende ist größer als die Öffnung im Ring. Als **Außenflansch** drückt sie mit Moosgummi von außen gegen den Ring.
+- **Verschraubung:** 6 Sterngriffschrauben M8, **immer von außen** zu bedienen, auch mit Handschuhen. Ausgezogen gehen sie durch den Ring in Einschlagmuttern im Innenflansch, eingeschoben durch den Außenflansch in Einschlagmuttern im Ring. Dieselben 6 Schrauben dienen beiden Lagen.
+- **Anpresskraft:** 2,14 m Dichtung × 5 N/cm ≈ 1,1 kN, das sind ca. 180 N je Schraube. Ein Sterngriff schafft das von Hand leicht.
+
+| Größe | Schiebedichtung | Axial verschraubt | Feste Kiste |
+|---|---|---|---|
+| +K innen, dicht | 12,9 | **13,2** | 14,7 |
+| +K mit Leckluft (5 bzw. 1 m³/h) | 11,7 | **12,9** | 14,7 |
+| Mehrgewicht gegenüber Schiebedichtung | | ca. 1,8 kg | |
+| Handgriffe Tag → Nacht | ausziehen | 6 lösen, ausziehen, 6 festdrehen | keine |
+
+**Ergebnis:** Der Abstand zur festen Kiste schrumpft von bis zu 3 K auf ca. 1,5 K. Vor allem verschwindet das größte Risiko des Auszugs, die undichte Schiebefuge nach einem Winter Straße. Der Preis sind 12 Handgriffe beim Umbau, ca. 1–2 Minuten. Das passt in die Vorgabe, in 5 Minuten abfahrbereit zu sein.
+
+Was am Modell und später am Prototyp zu prüfen ist: Verkantet der Fußteil beim Anziehen der Schrauben (Reihenfolge über Kreuz)? Friert der Moosgummi am Ring fest? Lassen sich die Schrauben bei Dunkelheit finden (Markierung, Leuchtfarbe)? Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.

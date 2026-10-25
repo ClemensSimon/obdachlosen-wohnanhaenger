@@ -4,13 +4,13 @@
 <rect x="10" y="24" width="240.0" height="92.0" class="s"/>
 <text x="130.0" y="70.0" class="n">B Seitenwand Kopfteil</text>
 <text x="130.0" y="75.0" class="m">240 × 92 mm</text>
-<rect x="10" y="122.0" width="190.0" height="134.0" class="s"/>
-<text x="105.0" y="189.0" class="n">B Fußteil Boden</text>
-<text x="105.0" y="194.0" class="m">190 × 134 mm</text>
-<rect x="206.0" y="122.0" width="190.0" height="77.0" class="s"/>
-<text x="301.0" y="160.5" class="n">B Fußteil Seite</text>
-<text x="301.0" y="165.5" class="m">190 × 77 mm</text>
-<text x="301.0" y="170.5" class="m">auf den Boden</text>
+<rect x="10" y="122.0" width="171.0" height="122.0" class="s"/>
+<text x="95.5" y="183.0" class="n">B Fußteil Boden</text>
+<text x="95.5" y="188.0" class="m">171 × 122 mm</text>
+<rect x="187.0" y="122.0" width="171.0" height="75.0" class="s"/>
+<text x="272.5" y="159.5" class="n">B Fußteil Seite</text>
+<text x="272.5" y="164.5" class="m">171 × 75 mm</text>
+<text x="272.5" y="169.5" class="m">auf den Boden</text>
 <rect x="256.0" y="24" width="120.0" height="89.6" class="s"/>
 <text x="316.0" y="68.8" class="n">B Deckel Kopfteil</text>
 <text x="316.0" y="73.8" class="m">120 × 89.6 mm</text>

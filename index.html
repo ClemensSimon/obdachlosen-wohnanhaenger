@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=4" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=5" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,7 +129,7 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Bei B dichten zwei blaue Flansche in den Endlagen, angezogen mit 6 gelben Sterngriffen von außen.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
@@ -153,10 +153,10 @@ window.addEventListener('error', function (e) {
   </div>
   <h4>Variante B: Auszug (4 Bögen)</h4>
   <div class="boegen">
-    <a href="modell/bogen_B_1.svg"><img src="modell/bogen_B_1.svg" alt="Bogen B1: Boden, Seitenwand Kopfteil, Fußteil Stirn, Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_1.svg"><img src="modell/bogen_B_1.svg" alt="Bogen B1: Boden und Seitenwand Kopfteil, Innenflansch, Außenflansch" loading="lazy" width="420" height="297"></a>
     <a href="modell/bogen_B_2.svg"><img src="modell/bogen_B_2.svg" alt="Bogen B2: Seitenwand, Fußteil Boden und Seite, Deckel" loading="lazy" width="420" height="297"></a>
     <a href="modell/bogen_B_3.svg"><img src="modell/bogen_B_3.svg" alt="Bogen B3: Fußteil Seite und Decke, Deckel" loading="lazy" width="420" height="297"></a>
-    <a href="modell/bogen_B_4.svg"><img src="modell/bogen_B_4.svg" alt="Bogen B4: Giebel Kopf, Ring zum Fußteil, Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_4.svg"><img src="modell/bogen_B_4.svg" alt="Bogen B4: Giebel Kopf, Ring zum Fußteil, zwei Deckel" loading="lazy" width="420" height="297"></a>
   </div>
 </section>
 
@@ -224,7 +224,7 @@ window.addEventListener('error', function (e) {
     <thead><tr><th>Prinzip</th><th class="z">Fuge m</th><th class="z">+K</th><th class="z">Höhe am Tag m</th><th>Schwachstelle</th><th>Ergebnis</th></tr></thead>
     <tbody>
       <tr><td>Feste Kiste, Deckel geteilt</td><td class="z">6,8</td><td class="z">14,7</td><td class="z">1,07</td><td>Immer voll hoch; Hälfte unter Schnee ca. 380 N</td><td><span class="marke-ok">vorne</span></td></tr>
-      <tr><td>Auszug in der Länge</td><td class="z">2,3 + Einstieg</td><td class="z">13,7</td><td class="z">1,07 (1,25 m lang)</td><td>Kostet 1,5–3 K und ca. 5 kg; dafür am Tag 40 % kürzer, kippt erst bei ca. 20 m/s</td><td><span class="marke-ok">Alternative</span></td></tr>
+      <tr><td>Auszug, axial verschraubte Dichtflansche</td><td class="z">2,1 (nur in Endlage)</td><td class="z">13,2</td><td class="z">1,07 (1,25 m lang)</td><td>Kostet ca. 1,5 K, 7 kg und 12 Handgriffe beim Umbau; dafür am Tag 40 % kürzer, kippt erst bei ca. 20 m/s</td><td><span class="marke-ok">Alternative</span></td></tr>
       <tr class="raus"><td>Muschel, Gelenk am Fußende</td><td class="z">≈ 9</td><td class="z">14,1</td><td class="z">1,07</td><td>Unter Schnee ca. 800 N am Kopfende; nur 0,8 m² Schatten</td><td><span class="marke-aus">raus</span></td></tr>
       <tr class="raus"><td>Möwenflügel</td><td class="z">≈ 7,5</td><td class="z">14,5</td><td class="z">1,07</td><td>Fuge im First, Schmelzwasser</td><td><span class="marke-aus">raus</span></td></tr>
       <tr class="raus"><td>Hubdach mit Faltwänden</td><td class="z">≈ 12</td><td class="z">13,4</td><td class="z">≈ 0,80</td><td>Viele Fugen, Notausstieg schwierig</td><td><span class="marke-aus">raus</span></td></tr>

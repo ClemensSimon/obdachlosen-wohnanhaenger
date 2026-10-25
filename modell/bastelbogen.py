@@ -19,9 +19,11 @@ TRAUFE = 0.46     # Außenhöhe an der Traufe
 FIRST = 0.68      # Außenhöhe am First
 L_GESAMT = 2.09
 L_KOPF = 1.25     # Variante B: Kopfteil
-KLAPPE = (0.45, 0.50)          # Stirnklappe Breite × Höhe
-FUSS_INNEN = (0.62, 0.36)      # Variante B: Fußteil innen Breite × Höhe
-FUSS_L = 0.95                  # Fußteil Länge mit 0,10 m Überlappung
+KLAPPE = (0.45, 0.48)          # Stirnklappe Breite × Höhe
+# Variante B: Fußteil außen; ringsum bleibt am Ring Platz für die Dichtfläche
+FUSS_AUSSEN = (0.61, 0.40)
+STIRN = (0.71, 0.46)           # Außenflansch (Stirnplatte), dichtet eingeschoben außen am Ring
+FUSS_L = 0.905                 # Fußteil mit beiden Flanschen; ausgezogen genau 2,09 m
 
 
 def mm(m):
@@ -59,21 +61,25 @@ def teile_a():
 def teile_b():
     lk = mm(L_KOPF) - 2 * D
     kl = (mm(KLAPPE[0]), mm(KLAPPE[1]))
-    fb = mm(FUSS_INNEN[0]) + 2 * D       # Fußteil außen
-    fh = mm(FUSS_INNEN[1]) + 2 * D
-    fl = mm(FUSS_L)
+    fb, fh = mm(FUSS_AUSSEN[0]), mm(FUSS_AUSSEN[1])     # Fußteil außen
+    fl = mm(FUSS_L) - 2 * D                             # Kasten zwischen den Flanschen
     spiel = 1.0
     t = []
     t += giebel("B Giebel Kopf", loch=kl, hinweis="Ausschnitt = Stirnklappe")
     t += giebel("B Ring zum Fußteil", loch=(fb + 2 * spiel, fh + spiel),
-                hinweis="Fußteil gleitet hier durch")
+                hinweis="Dichtfläche innen und außen, 6 Löcher")
     t += rechteck("B Boden Kopfteil", lk, B - 2 * D)
     t += rechteck("B Seitenwand Kopfteil", lk, TR, 2)
     t += rechteck("B Deckel Kopfteil", round(lk / 2, 1), DACH, 4, "zwei Hälften je Seite")
     t += rechteck("B Fußteil Boden", fl, fb)
     t += rechteck("B Fußteil Seite", fl, fh - D, 2, "auf den Boden")
     t += rechteck("B Fußteil Decke", fl, fb - 2 * D, 1, "zwischen die Seiten")
-    t += rechteck("B Fußteil Stirn", fb - 2 * D, fh - 2 * D, 1, "Fußende, innen")
+    # Innenflansch: Innenquerschnitt des Kopfteils mit 1 mm Luft, Fenster für die Beine
+    t += [dict(name="B Innenflansch", w=B - 2 * D - 2 * spiel, h=FI - 2 * D - 2 * spiel,
+               traufe=TR - D, form="g", loch=(fb - 2 * D, fh - 2 * D),
+               hinweis="Kopfende des Fußteils, dichtet ausgezogen")]
+    t += rechteck("B Außenflansch (Stirn)", mm(STIRN[0]), mm(STIRN[1]), 1,
+                  "Fußende, dichtet eingeschoben")
     return t
 
 
@@ -124,8 +130,8 @@ def svg_teil(p):
     if p["form"] == "r":
         s.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" class="s"/>')
     else:
-        tr = h - (FI - TR)          # Traufe von oben gemessen
-        pts = [(x, y + h), (x, y + h - TR), (x + w / 2, y), (x + w, y + h - TR), (x + w, y + h)]
+        tr = p.get("traufe", TR)    # Traufhöhe dieses Fünfecks
+        pts = [(x, y + h), (x, y + h - tr), (x + w / 2, y), (x + w, y + h - tr), (x + w, y + h)]
         s.append('<polygon class="s" points="%s"/>' % " ".join(f"{a:.1f},{b:.1f}" for a, b in pts))
         if p.get("loch"):
             lw, lh = p["loch"]

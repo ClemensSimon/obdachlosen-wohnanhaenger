@@ -53,3 +53,17 @@ Fünfeck mit Muscheldach, Gelenk am Fußende. **Die Prüfung durch den Maschinen
 2. **Vorne liegt jetzt der geteilte Deckel (1):** halbe Hubkraft, 1,6 m² Schatten, kürzeste Fuge.
 3. **Auszug (6) wird fair nachgerechnet.** Er ist das einzige Prinzip, das den Wagen am Tag wirklich kleiner macht.
 4. Muschel, Möwenflügel, Hubdach, Origami und Faltwagen sind raus.
+
+## Auszug fair nachgerechnet (grob)
+Kopfteil als Fünfeck mit 1,25 m Länge. Der Fußteil (innen 0,58 × 0,35 m) steckt am Tag darin und wird nachts 0,85 m ausgezogen, mit 0,10 m Überlappung.
+
+| Größe | Feste Kiste | Auszug |
+|---|---|---|
+| Hüllfläche | 5,59 m² | 5,86 m² |
+| Hülle plus Schienen | 36,4 kg | ca. 41 kg |
+| +K innen, Schiebefuge dicht | 14,7 | 13,1 |
+| +K innen, 5 m³/h Leckluft an der Schiebefuge | 14,7 | 11,8 |
+| Länge am Tag | 2,09 m | **1,25 m** |
+| Kippt leer am Tag ab | 15,5 m/s | **ca. 20 m/s** |
+
+Der Auszug kostet also 1,5–3 K und ca. 5 kg. Dafür ist der Wagen am Tag 40 % kürzer, bietet dem Wind weniger Fläche und lässt sich leichter rangieren. Den Einstieg braucht er trotzdem: Stirnklappe als Wintertür und ein Deckel am Kopfteil als Vordach. Die Schiebefuge ist das Risiko. Eis in den Schienen und Leckluft müssen am Modell geprüft werden.

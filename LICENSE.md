@@ -4,7 +4,8 @@
 |---|---|---|
 | Hardware-Entwürfe (Zeichnungen, CAD, Stücklisten) | CERN-OHL-S 2.0 | [lizenzen/CERN-OHL-S-2.0.txt](lizenzen/CERN-OHL-S-2.0.txt) |
 | Texte, Bilder, Webseite | CC BY-SA 4.0 | [lizenzen/CC-BY-SA-4.0.txt](lizenzen/CC-BY-SA-4.0.txt) |
-| Rechenskripte (`rechnung/`) | MIT | unten |
+| Rechenskripte (`rechnung/`, `modell/`, `modell3d.js`) | MIT | unten |
+| three.js 0.160 (`lib/`, fremd) | MIT | [lib/three-LICENSE.txt](lib/three-LICENSE.txt) |
 
 **Ohne Gewährleistung.** Dieses Projekt ist ein Konzept und kein geprüfter Bauplan. Wer danach baut oder darin schläft, tut das auf eigene Gefahr.
 

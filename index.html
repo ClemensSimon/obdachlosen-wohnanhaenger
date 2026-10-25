@@ -82,8 +82,14 @@ h4{font-size:16px;margin:16px 0 6px}
 .skip:focus{top:8px}
 @media (max-width:640px){nav{order:3;flex-basis:100%}.thema{margin-left:auto}}
 </style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="modell3d.js"></script>
+<script type="module">
+// three.js liegt im Repo (lib/), kein fremder Server nötig. Fehler werden sichtbar gemeldet.
+import('./modell3d.js?v=3').catch(function (e) {
+  var h = document.getElementById('d3-hinweis');
+  if (h) { h.hidden = false; h.textContent = '3D-Modell konnte nicht starten: ' + e.message; }
+});
+</script>
+<script nomodule>document.addEventListener('DOMContentLoaded',function(){var h=document.getElementById('d3-hinweis');if(h)h.textContent='Dieser Browser ist zu alt für das 3D-Modell. Die Schnittmuster unten gehen trotzdem.';});</script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -127,7 +133,7 @@ h4{font-size:16px;margin:16px 0 6px}
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
     <label id="d3-auszug-feld" hidden>Auszug <input type="range" id="d3-auszug" min="0" max="100" value="100" aria-describedby="d3-status"></label>
   </div>
-  <div id="d3-flaeche" class="d3-flaeche"><p id="d3-hinweis" class="leise" style="padding:12px">3D-Modell wird geladen. Bleibt dieser Text stehen, fehlt JavaScript oder WebGL, oder das Laden von cdn.jsdelivr.net ist gesperrt. Die Schnittmuster unten gehen trotzdem.</p></div>
+  <div id="d3-flaeche" class="d3-flaeche"><p id="d3-hinweis" class="leise" style="padding:12px">3D-Modell wird geladen. Bleibt dieser Text stehen, ist JavaScript oder WebGL abgeschaltet. Die Schnittmuster unten gehen trotzdem.</p></div>
   <p id="d3-status" class="leise" aria-live="polite"></p>
 
   <h3>Schnittmuster 1:5</h3>

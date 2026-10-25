@@ -1,8 +1,8 @@
 // Drehbares 3D-Modell der beiden Varianten (Maße in Metern, wie im Konzept).
 // A: feste Kiste (Fünfeck), Deckel in zwei Hälften, Stirnklappe am Kopfende
 // B: Auszug, Kopfteil 1,25 m, Fußteil 0,95 m schiebt hinein
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from './lib/three.module.js';
+import { OrbitControls } from './lib/OrbitControls.js';
 
 const B = 0.78, TR = 0.46, FI = 0.68, T = 0.045;   // Traufe und First über Unterkante Box
 const BODEN = 0.40;            // Unterkante Schlafbox über Grund

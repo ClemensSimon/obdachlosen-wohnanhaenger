@@ -19,7 +19,7 @@ Mit `python bastelbogen.py` neu erzeugen. Drucken in **100 %** (nicht „an Seit
 ## Bauen
 1. Seitenwände an den Boden kleben, Boden liegt zwischen den Wänden. Bei A die Hälften mittig stoßen.
 2. Giebel vorne und hinten davor kleben.
-3. Dachplatten an der Traufe und am First anschrägen, bis sie aufliegen. Je Seite zwei Deckelhälften, mit Gewebeband an der Traufe als Gelenk.
+3. Dachplatten an der Traufe und am First anschrägen, bis sie aufliegen. Je eine linke und rechte Platte am First fest zu einer Deckelhälfte verkleben (Kopf und Fuß). Jede Hälfte bekommt an einer Traufe ein Gelenk aus Gewebeband und klappt zur Seite auf. Aufgeklappt bildet sie das Vordach über der Bank.
 4. Den Ausschnitt im Kopfgiebel als Stirnklappe wieder einsetzen, unten mit Gewebeband angeschlagen.
 5. Nur B: Fußteil als geschlossenen Kasten bauen (Stirn innen am Fußende, offenes Ende zum Kopfteil). Er muss leicht durch den Ring gleiten.
 

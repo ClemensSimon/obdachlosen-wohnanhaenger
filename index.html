@@ -67,10 +67,23 @@ li{margin:3px 0}
 footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:center;color:var(--tx2);font-size:14px}
 .thema{margin-left:auto;background:none;border:1px solid var(--tx2);color:var(--tx);border-radius:6px;padding:4px 8px;cursor:pointer;font:inherit;font-size:14px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+h4{font-size:16px;margin:16px 0 6px}
+.d3-leiste{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.knopf{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--tx2);border-radius:6px;background:var(--fl);color:var(--tx);cursor:pointer}
+.knopf[aria-pressed="true"]{background:var(--ak);border-color:var(--ak);color:var(--bg)}
+.d3-leiste label{display:flex;gap:6px;align-items:center;font-size:14px}
+.d3-leiste label[hidden]{display:none}
+.d3-flaeche{height:min(60vh,460px);border:1px solid var(--li);border-radius:10px;overflow:hidden;background:var(--fl);touch-action:none}
+.d3-flaeche canvas{display:block;width:100%;height:100%}
+.boegen{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.boegen a{display:block;background:#fff;border:1px solid var(--li);border-radius:8px;padding:4px}
+.boegen img{display:block;width:100%;height:auto}
 .skip{position:absolute;left:8px;top:-60px;z-index:20;background:var(--fl);color:var(--tx);padding:8px 12px;border:2px solid var(--ak);border-radius:6px}
 .skip:focus{top:8px}
 @media (max-width:640px){nav{order:3;flex-basis:100%}.thema{margin-left:auto}}
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="modell3d.js"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -78,11 +91,11 @@ footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:ce
   <a class="marke" href="#ueberblick">Schlafanhänger</a>
   <nav aria-label="Abschnitte">
     <a href="#ueberblick">Überblick</a>
+    <a href="#modell">3D und Modell</a>
     <a href="#entscheidungen">Entscheidungen</a>
     <a href="#rechnungen">Rechnungen</a>
     <a href="#vorbilder">Vorbilder</a>
-    <a href="#offen">Offen</a>
-    <a href="#mitmachen">Mitmachen</a>
+    <a href="#mitmachen">Offen und Mitmachen</a>
   </nav>
   <button class="thema" type="button" id="thema" aria-label="Hell oder dunkel umschalten">Hell/Dunkel</button>
 </div></header>
@@ -101,6 +114,39 @@ footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:ce
     <div class="kachel"><b>≈ 2.200 €</b><span>Material, geschätzt</span></div>
   </div>
   <p class="leise">Die Lücke, die das Projekt füllen will: Was es heute gibt, ist entweder mobil und ein Zelt (EDAR, WheelLY, Kälte-Iglu) oder winterfest und ortsfest (Ulmer Nest, Little Home). Mobil <em>und</em> frostsicher gibt es so noch nicht.</p>
+</section>
+
+<section id="modell" aria-labelledby="t-mod">
+  <h2 id="t-mod">3D und Modell</h2>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß.</p>
+  <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
+    <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
+    <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
+    <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
+    <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
+    <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
+    <label id="d3-auszug-feld" hidden>Auszug <input type="range" id="d3-auszug" min="0" max="100" value="100" aria-describedby="d3-status"></label>
+  </div>
+  <div id="d3-flaeche" class="d3-flaeche"><p id="d3-hinweis" class="leise" style="padding:12px">3D-Modell wird geladen. Bleibt dieser Text stehen, fehlt JavaScript oder WebGL, oder das Laden von cdn.jsdelivr.net ist gesperrt. Die Schnittmuster unten gehen trotzdem.</p></div>
+  <p id="d3-status" class="leise" aria-live="polite"></p>
+
+  <h3>Schnittmuster 1:5</h3>
+  <p class="leise">Für Modelle aus Schaumplatte 5 mm. In <b>100 %</b> auf A3 quer drucken, die Kontrolllinie muss 100 mm lang sein. Bauanleitung und Prüfliste: <a href="modell/README.md">modell/README.md</a>.</p>
+  <h4>Variante A: feste Kiste (5 Bögen)</h4>
+  <div class="boegen">
+    <a href="modell/bogen_A_1.svg"><img src="modell/bogen_A_1.svg" alt="Bogen A1: Boden, Seitenwand, Giebel Kopf" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_A_2.svg"><img src="modell/bogen_A_2.svg" alt="Bogen A2: Boden, Seitenwand, Giebel Fuß" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_A_3.svg"><img src="modell/bogen_A_3.svg" alt="Bogen A3: zwei Seitenwände" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_A_4.svg"><img src="modell/bogen_A_4.svg" alt="Bogen A4: Deckel Kopf" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_A_5.svg"><img src="modell/bogen_A_5.svg" alt="Bogen A5: Deckel Fuß" loading="lazy" width="420" height="297"></a>
+  </div>
+  <h4>Variante B: Auszug (4 Bögen)</h4>
+  <div class="boegen">
+    <a href="modell/bogen_B_1.svg"><img src="modell/bogen_B_1.svg" alt="Bogen B1: Boden, Seitenwand Kopfteil, Fußteil Stirn, Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_2.svg"><img src="modell/bogen_B_2.svg" alt="Bogen B2: Seitenwand, Fußteil Boden und Seite, Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_3.svg"><img src="modell/bogen_B_3.svg" alt="Bogen B3: Fußteil Seite und Decke, Deckel" loading="lazy" width="420" height="297"></a>
+    <a href="modell/bogen_B_4.svg"><img src="modell/bogen_B_4.svg" alt="Bogen B4: Giebel Kopf, Ring zum Fußteil, Deckel" loading="lazy" width="420" height="297"></a>
+  </div>
 </section>
 
 <section id="entscheidungen" aria-labelledby="t-ent">
@@ -206,7 +252,7 @@ footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:ce
   </table></div>
 </section>
 
-<section id="offen" aria-labelledby="t-off">
+<section id="mitmachen" aria-labelledby="t-off">
   <h2 id="t-off">Offen</h2>
   <ul>
     <li>Feste Kiste oder Auszug: Beide werden als Modell 1:5 gebaut, danach wird entschieden. <a href="modell/README.md">Bastelbögen und Prüfliste</a></li>
@@ -217,9 +263,6 @@ footer{border-top:1px solid var(--li);margin-top:40px;padding:16px;text-align:ce
     <li>Haftung für einen frei veröffentlichten Bauplan</li>
     <li>Idee: Biomeiler als feste Wärmestation an Stellplätzen (im Wagen selbst nicht: zu wenig Leistung, schlechte Luft)</li>
   </ul>
-</section>
-
-<section id="mitmachen" aria-labelledby="t-mit">
   <h2 id="t-mit">Mitmachen</h2>
   <p>Gesucht sind vor allem: Erfahrung aus der Wohnungslosenhilfe und von Betroffenen, Fahrzeug- und Anhängerbau, Bauphysik und Recht. Hinweise, Korrekturen und Widerspruch bitte als <a href="https://github.com/ClemensSimon/obdachlosen-wohnanhaenger/issues">Issue auf GitHub</a>.</p>
   <details><summary>Lizenzen</summary>

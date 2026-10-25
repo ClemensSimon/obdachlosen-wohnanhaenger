@@ -38,8 +38,8 @@ Jeweils für A und B notieren:
 | Abfahrbereit | Handgriffe von Schlafen bis Losfahren zählen | ≤ 5 Minuten in echt |
 | Schnee | 6 cm Watte oder Mehl aufs Dach (30 cm), Deckel und Klappe bedienen | Klappe geht auf |
 | Nur B: Auszug | 20-mal ein- und ausziehen, Spiel und Verkanten beobachten | läuft ohne Klemmen |
-| Nur B: Dichtflansche | in beiden Endlagen die 6 Schrauben über Kreuz anziehen; Spalt mit Papierstreifen prüfen | Streifen klemmt überall |
-| Nur B: Bedienung | Alle 6 Schrauben von außen erreichbar, auch ausgezogen? | ja, ohne Einsteigen |
+| Nur B: Dichtflansche | ausgezogen die 10 Klemmen innen, eingeschoben die 5 Schrauben außen über Kreuz anziehen; Spalt mit Papierstreifen prüfen | Streifen klemmt überall |
+| Nur B: Bedienung | Klemmen liegend von innen erreichbar, Schrauben von außen ohne Einsteigen? | ja, beides |
 | Fugen | Länge aller beweglichen Fugen mit Faden messen, × 5 | Vergleich zu 6,8 m (A) |
 | Wirkung | von außen und von innen (Handykamera in der Box) ansehen | wirkt nicht wie ein Sarg |
 

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 420 297">
+<style>.s{fill:none;stroke:#000;stroke-width:.3}.k{stroke:#000;stroke-width:.5}.t{font:bold 4.5px sans-serif}.n{font:bold 3.6px sans-serif;text-anchor:middle}.m{font:3px sans-serif;text-anchor:middle}</style>
+<text x="10" y="14" class="t">Variante A: feste Kiste · Bogen 1/5 · Maßstab 1:5 · Schaumplatte 5 mm · in 100 % drucken</text><line x1="310" y1="16" x2="410" y2="16" class="k"/><text x="360" y="13" class="m">Kontrolle: 100 mm</text>
+<rect x="10" y="24" width="204.0" height="146.0" class="s"/>
+<text x="112.0" y="97.0" class="n">A Boden (Hälfte)</text>
+<text x="112.0" y="102.0" class="m">204 × 146 mm</text>
+<text x="112.0" y="107.0" class="m">Stoß in der Mitte</text>
+<rect x="10" y="176.0" width="204.0" height="92.0" class="s"/>
+<text x="112.0" y="222.0" class="n">A Seitenwand (Hälfte)</text>
+<text x="112.0" y="227.0" class="m">204 × 92 mm</text>
+<text x="112.0" y="232.0" class="m">zwischen den Giebeln</text>
+<polygon class="s" points="220.0,160.0 220.0,68.0 298.0,24.0 376.0,68.0 376.0,160.0"/>
+<rect x="253.0" y="55.0" width="90.0" height="100.0" class="s"/>
+<text x="298.0" y="92.0" class="n">A Giebel Kopf</text>
+<text x="298.0" y="97.0" class="m">156 × 136 mm</text>
+<text x="298.0" y="102.0" class="m">Ausschnitt = Stirnklappe, aufbewahren</text>
+</svg>

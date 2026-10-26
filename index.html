@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=11" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=13" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,7 +129,7 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit Faltverdeck, E Kiste mit Eisfischerzelt als Vorraum, F Kiste mit Origami-Vorraum (Yoshimura-Faltwerk). Der Regler baut Schirm, Zelt oder Faltwerk auf.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit unsymmetrischem Balg (zurückgeschoben ist die Bettkante frei), E Kiste mit Eisfischerzelt als Vorraum, F Kiste mit Origami (Auswahl Muster: Miura-Vordach und Windwand oder Yoshimura-Vorraum). Der Regler baut auf; bei F zeigt 0 das gefaltete Paket in Transportlage.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
@@ -140,6 +140,7 @@ window.addEventListener('error', function (e) {
     <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
     <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
+    <label id="d3-muster-feld" hidden>Muster <select id="d3-muster"><option value="miura">Miura: Vordach und Windwand</option><option value="yoshimura">Yoshimura: Vorraum</option></select></label>
     <label id="d3-auszug-feld" hidden><span id="d3-regler-text">Auszug</span> <input type="range" id="d3-auszug" min="0" max="100" value="100"></label>
   </div>
   <div id="d3-flaeche" class="d3-flaeche"><p id="d3-hinweis" class="leise" style="padding:12px">3D-Modell wird geladen. Bleibt dieser Text stehen, ist JavaScript oder WebGL abgeschaltet. Die Schnittmuster unten gehen trotzdem.</p></div>
@@ -253,6 +254,20 @@ window.addEventListener('error', function (e) {
       <tr><td>Kokon 60 mm in der Jurte</td><td class="z">–</td><td class="z">13,1</td><td class="z">54</td><td>Wohnen und Schlafen; bei −10 °C ca. 59 W Heizung für +15 °C</td></tr>
     </tbody>
   </table></div>
+
+  <h3>Stufe 3b: Origami und Faltmechanismen (Entwurf)</h3>
+  <p class="leise">Origami nur dort, wo nichts dicht sein muss (Vordach, Windwand, Vorraum); für den warmen Schlafraum bleibt das Urteil aus Stufe 2. Faltfehler = größte Längenänderung einer Kante beim Falten, 0 = starr faltbar. Rechnung: <a href="rechnung/origami_varianten.py">origami_varianten.py</a>, Befund: <a href="BEFUND_origami_faltmechanismen_2026-10-26.md">Stufe 3b</a>. Im 3D-Modell: Variante F, Auswahl Muster.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Origami-Muster"><table id="tab-origami">
+    <thead><tr><th>Muster</th><th>offen m</th><th>gefaltet m</th><th>passt auf Anhänger</th><th class="z">kg</th><th class="z">Faltfehler mm</th></tr></thead>
+    <tbody>
+      <tr><td>Miura-Vordach, Stegplatte 10 mm</td><td>1,95 × 1,55</td><td>0,11 × 0,76 × 0,20</td><td>ja</td><td class="z">9</td><td class="z">0</td></tr>
+      <tr><td>Miura-Windwand, PIR 25</td><td>1,55 × 1,14</td><td>0,23 × 0,62 × 0,21</td><td>ja</td><td class="z">10</td><td class="z">0</td></tr>
+      <tr><td>Yoshimura-Vorraum 1,56 m, Firstgelenk</td><td>1,56 × 1,8 × 1,5</td><td>0,78 × 1,50 × 0,46</td><td>ja, vor der Stirnklappe</td><td class="z">56</td><td class="z">15</td></tr>
+      <tr class="raus"><td>Yoshimura-Vorraum 1,8 m</td><td>1,8 × 1,8 × 1,5</td><td>1,80 × 1,50 × 0,23</td><td>nein</td><td class="z">60</td><td class="z">14</td></tr>
+      <tr class="raus"><td>Fächerdach-Jurte, PIR 25</td><td>Ø 2,8 × 1,9</td><td>Bündel Ø 0,5 × 1,4</td><td>ja</td><td class="z">49</td><td class="z">107</td></tr>
+    </tbody>
+  </table></div>
+  <p>Leichteste Lösung mit Tagesplatz: Kiste mit Koffer-Deckel (Seitenwand schwenkt mit hoch, Bettkante frei), Miura-Vordach und Miura-Windwand, 81 kg gesamt, +15,7 K, 38 W Heizung bei −10 °C. Wärmste: Kiste in der Jurte, 129 kg, +18,2 K, 24 W.</p>
 
   <h3>Was die Prüfung korrigiert hat</h3>
   <ul>

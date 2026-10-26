@@ -98,12 +98,13 @@ function module(hb, traufe, first, laenge, xVersatz = 0) {
   return g;
 }
 
-// Unterteil der Schlafbox (Wanne bis zur Traufe) und Deckel getrennt
+// Unterteil der Schlafbox: Boden und linke Wand bis zur Traufe. Die rechte
+// Seitenwand (Wohnseite) gehört zum Deckel und schwenkt mit ihm nach oben; dann ist
+// die Bettkante frei zum Sitzen (Simon 26.10., wie beim Balg des Kokons)
 function wanne(laenge) {
   const g = new THREE.Group();
   const s = new THREE.Shape();
-  s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, TR);
-  s.lineTo(B / 2 - T, TR); s.lineTo(B / 2 - T, T); s.lineTo(-B / 2 + T, T);
+  s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, T); s.lineTo(-B / 2 + T, T);
   s.lineTo(-B / 2 + T, TR); s.lineTo(-B / 2, TR); s.closePath();
   const geo = new THREE.ExtrudeGeometry(s, { depth: laenge, bevelEnabled: false });
   geo.translate(0, BODEN, -laenge / 2);
@@ -130,17 +131,21 @@ function giebel(z, loch) {
   return new THREE.Mesh(geo, mat(F.huelle));
 }
 
-// Deckelhälfte: Satteldach von Traufe zu Traufe, Gelenk an der rechten Traufe
+// Deckelhälfte: Satteldach mit rechter Seitenwand, Gelenk an der linken Traufe;
+// öffnet nach oben wie ein Koffer, die Seitenwand schwenkt mit
 function deckel(laenge, zMitte) {
   const s = new THREE.Shape();
-  s.moveTo(-B / 2, 0); s.lineTo(0, FI - TR); s.lineTo(B / 2, 0);
-  s.lineTo(B / 2 - T, 0); s.lineTo(0, FI - TR - T); s.lineTo(-B / 2 + T, 0); s.closePath();
+  s.moveTo(-B / 2, TR); s.lineTo(0, FI); s.lineTo(B / 2, TR); s.lineTo(B / 2, T);
+  s.lineTo(B / 2 - T, T); s.lineTo(B / 2 - T, TR); s.lineTo(0, FI - T); s.lineTo(-B / 2 + T, TR);
+  s.closePath();
   const geo = new THREE.ExtrudeGeometry(s, { depth: laenge - 0.01, bevelEnabled: false });
-  geo.translate(-B / 2, 0, -(laenge - 0.01) / 2);     // Gelenk im Ursprung
-  const m = new THREE.Mesh(geo, mat(F.dach));
+  geo.translate(B / 2, -TR, -(laenge - 0.01) / 2);     // Gelenk (linke Traufe) im Ursprung
+  const dach = mat(F.dach);
+  const m = new THREE.Mesh(geo, dach);
   const gelenk = new THREE.Group();
-  gelenk.position.set(B / 2, BODEN + TR, zMitte);
-  gelenk.add(m, module(B / 2, 0, FI - TR, laenge, -B / 2));   // Module klappen mit
+  gelenk.position.set(-B / 2, BODEN + TR, zMitte);
+  gelenk.add(m, module(B / 2, 0, FI - TR, laenge, B / 2));    // Module klappen mit
+  gelenk.userData.richtung = 1;
   return gelenk;
 }
 
@@ -567,6 +572,45 @@ function tagBank(k, d) {
   };
 })();
 
+// Miura-ori, starr faltbar (Schenk & Guest 2013). Knoten P(i,j) =
+// (j·S, i·L + (j ungerade ? V : 0), (i ungerade ? H : 0)); theta 0 = flach.
+// abbild(x, y, z, laengeY) legt das Blatt in die Szene.
+function miuraBlatt(zeilen, spalten, a, b, gammaGrad, thetaOffenGrad, abbild, farbe) {
+  const ga = gammaGrad * Math.PI / 180, tPack = 88 * Math.PI / 180, tOffen = thetaOffenGrad * Math.PI / 180;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(zeilen * spalten * 6 * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const linien = new THREE.BufferGeometry();
+  const lpos = new Float32Array(((zeilen + 1) * spalten + (spalten + 1) * zeilen) * 6);
+  linien.setAttribute('position', new THREE.BufferAttribute(lpos, 3));
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(geo, mat(farbe, { flatShading: true, side: THREE.DoubleSide })),
+    new THREE.LineSegments(linien, new THREE.LineBasicMaterial({ color: F.rahmen })));
+  g.userData.setze = v => {
+    const th = tPack + (tOffen - tPack) * v, st = Math.sin(th), ct = Math.cos(th), tg = Math.tan(ga);
+    const H = a * st * Math.sin(ga), w = Math.sqrt(1 + ct * ct * tg * tg);
+    const S = b * ct * tg / w, L = a * Math.sqrt(1 - st * st * Math.sin(ga) ** 2), V = b / w;
+    const laengeY = zeilen * L + V;
+    const P = (i, j) => abbild(j * S, i * L + (j % 2 ? V : 0), i % 2 ? H : 0, laengeY, spalten * S);
+    let k = 0;
+    const put = p => { pos[k++] = p[0]; pos[k++] = p[1]; pos[k++] = p[2]; };
+    for (let i = 0; i < zeilen; i++) for (let j = 0; j < spalten; j++) {
+      const p00 = P(i, j), p10 = P(i + 1, j), p11 = P(i + 1, j + 1), p01 = P(i, j + 1);
+      [p00, p10, p11, p00, p11, p01].forEach(put);
+    }
+    k = 0;
+    const lin = (p, q) => { for (const v3 of [p, q]) { lpos[k++] = v3[0]; lpos[k++] = v3[1]; lpos[k++] = v3[2]; } };
+    for (let i = 0; i <= zeilen; i++) for (let j = 0; j < spalten; j++) lin(P(i, j), P(i, j + 1));
+    for (let j = 0; j <= spalten; j++) for (let i = 0; i < zeilen; i++) lin(P(i, j), P(i + 1, j));
+    geo.attributes.position.needsUpdate = true; geo.computeVertexNormals(); geo.computeBoundingSphere();
+    linien.attributes.position.needsUpdate = true; linien.computeBoundingSphere();
+    g.userData.ausladung = spalten * S;
+  };
+  g.userData.setze(1);
+  return g;
+}
+
+// F: Origami-Muster an der festen Kiste. Regler 0 = gefaltet in Transportlage.
 (function variante_f() {
   const g = new THREE.Group();
   const zKopf = -L_A / 2, zFuss = L_A / 2;
@@ -574,12 +618,58 @@ function tagBank(k, d) {
   g.add(giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(zFuss - T / 2));
   const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
   const kl = klappe(zKopf - 0.001, -1);
-  const ori = origamiTonne(); ori.position.z = zKopf - 0.01;
-  g.add(dk, df, kl, ori, fahrwerk(L_A, zFuss + 0.5), mensch(zKopf + 0.2, 1));
+  g.add(dk, df, kl, fahrwerk(L_A, zFuss + 0.5), mensch(zKopf + 0.2, 1));
+
+  // Muster 1: Miura-Vordach an der rechten Traufe (Stegplatte 10 mm, 2 % Gefälle je
+  // 15 cm) und Miura-Windwand am Fußende (PIR 25), beide starr faltbar
+  const miura = new THREE.Group();
+  const yTraufe = BODEN + TR + 0.03;
+  const vordach = miuraBlatt(8, 10, 0.20, 0.21, 70, 25,
+    (x, y, z, ly) => [B / 2 + x, yTraufe + z - 0.15 * x, y - ly / 2], 0x9fb4c4);
+  const windwand = miuraBlatt(6, 8, 0.20, 0.21, 70, 30,
+    (x, y, z) => [B / 2 + 0.02 + x, 0.03 + y, zFuss + 0.03 + z], F.huelle);
+  const stuetzen = new THREE.Group();
+  for (const z of [-0.7, 0.7]) { const s = stab(0.015, F.rahmen); s.userData.z = z; stuetzen.add(s); }
+  miura.add(vordach, windwand, stuetzen);
+
+  // Muster 2: Yoshimura-Vorraum mit Firstgelenk; gefaltet zwei Pakete, die beim
+  // Fahren senkrecht vor der Stirnklappe stehen
+  const yoshi = new THREE.Group();
+  const tonne = origamiTonne(1.56, 1.5, 1.8); tonne.position.z = zKopf - 0.01;
+  const paket = new THREE.Group();
+  for (const dx of [-0.39 / 2 - 0.005, 0.39 / 2 + 0.005]) {
+    const p = new THREE.Mesh(new THREE.BoxGeometry(0.39, 1.5, 0.46), mat(F.huelle));
+    p.position.set(dx, 0.15 + 0.75, zKopf - 0.25); paket.add(p);
+  }
+  yoshi.add(tonne, paket);
+  g.add(miura, yoshi);
+
+  let reglerF = 1;
+  const TEXT = {
+    miura: 'Variante F, Miura-ori (starr faltbar): Vordach 1,95 × 1,55 m aus 80 Stegplatten 10 mm, gefaltet 0,11 × 0,76 × 0,20 m an der Traufe des Deckels (vor dem Öffnen einfalten); Windwand 1,55 × 1,14 m aus PIR 25, gefaltet 0,23 × 0,62 × 0,21 m am Fußende',
+    yoshimura: 'Variante F, Yoshimura-Vorraum 1,56 × 1,8 × 1,5 m mit Firstgelenk, 136 Platten PIR 25; gefaltet zwei Pakete von zusammen 0,78 × 1,5 × 0,46 m vor der Stirnklappe; Faltfehler 15 mm, Gelenke mit Spalt nötig',
+  };
   varianten.F = {
-    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Faltwerk aufziehen',
-    setzeRegler: v => ori.userData.setze(v),
-    text: 'Variante F: feste Kiste mit Origami-Vorraum (Yoshimura-Tonne 1,8 × 1,5 × 1,8 m, feste Dreiecksplatten mit Stoffgelenken)',
+    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Falten: 0 = Transport, 100 = offen',
+    get text() { return TEXT[zustand.muster]; },
+    setzeRegler: v => {
+      miura.visible = zustand.muster === 'miura';
+      yoshi.visible = zustand.muster === 'yoshimura';
+      vordach.userData.setze(v); windwand.userData.setze(v);
+      const aus = vordach.userData.ausladung;
+      stuetzen.visible = v > 0.9;
+      stuetzen.children.forEach(s => setzeStab(s, new THREE.Vector3(B / 2 + aus, 0, s.userData.z),
+        new THREE.Vector3(B / 2 + aus, yTraufe - 0.15 * aus, s.userData.z)));
+      const offen = Math.max(0, (v - 0.06) / 0.94);
+      paket.visible = v < 0.06; tonne.visible = v >= 0.06;
+      tonne.userData.setze(offen);
+      reglerF = v;
+    },
+    // Das Miura-Vordach hängt an der Traufe des Deckels: vor dem Öffnen einfalten
+    animiere(d) {
+      vordach.visible = d < 0.02;
+      stuetzen.visible = d < 0.02 && reglerF > 0.9;
+    },
   };
 })();
 
@@ -589,12 +679,12 @@ varianten.B.setzeRegler = v => varianten.B.setzeAuszug(v);
 
 // --- Bedienung ---------------------------------------------------------------
 const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: true,
-  regler: { B: 1, C: 1, E: 1, F: 1 } };
+  regler: { B: 1, C: 1, E: 1, F: 1 }, muster: 'miura' };
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
-  A: ['Deckel als Vordach', 'Stirnklappe'], B: ['Deckel als Vordach', 'Stirnklappe'],
-  C: ['Tag: Balg zurück, Bettkante frei', 'Jurtentür'], D: ['Tag: Balg zurück, Bettkante frei', null], E: ['Deckel als Vordach', 'Stirnklappe'],
-  F: ['Deckel als Vordach', 'Stirnklappe'],
+  A: ['Deckel mit Seitenwand auf', 'Stirnklappe'], B: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
+  C: ['Tag: Balg zurück, Bettkante frei', 'Jurtentür'], D: ['Tag: Balg zurück, Bettkante frei', null], E: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
+  F: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
 };
 
 // melden = false: Statuszeile nicht neu setzen (Regler, sonst liest der Screenreader jeden Schritt)
@@ -602,6 +692,7 @@ function anzeigen(melden = true) {
   const v = varianten[zustand.variante];
   for (const [k, w] of Object.entries(varianten)) w.gruppe.visible = k === zustand.variante;
   document.getElementById('d3-auszug-feld').hidden = !v.regler;
+  document.getElementById('d3-muster-feld').hidden = zustand.variante !== 'F';
   if (v.regler) {
     const wert = zustand.regler[zustand.variante];
     document.getElementById('d3-regler-text').textContent = v.regler;
@@ -630,8 +721,16 @@ function anzeigen(melden = true) {
 
 const regler = document.getElementById('d3-auszug');
 // Startansicht je Variante: Kamera und Blickpunkt (Jurte und Zelt sind größer)
-const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55], B: [3.2, 2.0, 2.6, 0.55], C: [4.6, 3.2, 4.2, 0.9],
-  D: [3.2, 2.0, 2.6, 0.55], E: [3.4, 2.6, -4.4, 0.8], F: [3.4, 2.6, -4.4, 0.8] };
+const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55, 0], B: [3.2, 2.0, 2.6, 0.55, 0], C: [4.6, 3.2, 4.2, 0.9, 0],
+  D: [3.2, 2.0, 2.6, 0.55, 0], E: [3.4, 2.6, -4.4, 0.8, -0.9],
+  miura: [4.0, 2.4, 3.0, 0.7, 0.2], yoshimura: [3.4, 2.6, -4.4, 0.8, -0.9] };
+function ansicht() {
+  const [x, y, z, ty, tz] = ANSICHT[zustand.variante === 'F' ? zustand.muster : zustand.variante];
+  kamera.position.set(x, y, z); steuerung.target.set(0, ty, tz);
+}
+document.getElementById('d3-muster').addEventListener('change', e => {
+  zustand.muster = e.target.value; ansicht(); anzeigen();
+});
 function reglerText(wert) {
   if (zustand.variante !== 'B') return `${varianten[zustand.variante].regler}: ${Math.round(wert * 100)} Prozent`;
   return `Länge ${(L_KOPF + (L_A - L_KOPF) * wert).toFixed(2).replace('.', ',')} m`;
@@ -640,8 +739,7 @@ document.querySelectorAll('[data-variante]').forEach(b => b.addEventListener('cl
   if (zustand.variante === b.dataset.variante) return;   // Drehung des Nutzers behalten
   zustand.variante = b.dataset.variante;
   zustand.deckelAuf = zustand.klappeAuf = false;          // Schalter gelten je Variante neu
-  const [x, y, z, ty] = ANSICHT[zustand.variante];
-  kamera.position.set(x, y, z); steuerung.target.set(0, ty, 'EF'.includes(zustand.variante) ? -0.9 : 0);
+  ansicht();
   anzeigen();
 }));
 document.getElementById('d3-deckel').addEventListener('click', () => { zustand.deckelAuf = !zustand.deckelAuf; anzeigen(); });
@@ -673,7 +771,7 @@ function schritt() {
   deckelWinkel += (ziel.deckel - deckelWinkel) * k;
   klappeWinkel += (ziel.klappe - klappeWinkel) * k;
   for (const v of Object.values(varianten)) {
-    v.deckel.forEach(d => { d.rotation.z = -deckelWinkel * 1.75; });
+    v.deckel.forEach(d => { d.rotation.z = deckelWinkel * 1.75 * (d.userData.richtung || -1); });
     v.klappen.forEach(c => { c.rotation.x = klappeWinkel * 1.5 * c.userData.richtung; });
     if (v.animiere) v.animiere(deckelWinkel, klappeWinkel);
   }

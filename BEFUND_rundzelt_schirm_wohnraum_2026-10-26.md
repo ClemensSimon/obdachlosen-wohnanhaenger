@@ -108,7 +108,8 @@ Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
     - viele Gelenkfugen, also Leckluft
     - die Dicke der Platten verlangt eigene Faltmuster (thick origami)
   - Vorbild: Cardborigami von Tina Hovsepian. Das ist ein gefalteter Unterstand aus Pappe für Obdachlose in Los Angeles, 4,8 kg schwer und in unter einer Minute aufgebaut.
-  - Origami taugt als feste, faltbare **Kiste**, also als Ersatz für Deckel und Auszug, und als robuster Wohnraum. Wärmer als die Jurte wird der Wohnraum dadurch nicht.
+  - Origami taugt als robuster Wohnraum, Vordach und Windwand. Wärmer als die Jurte wird der Wohnraum dadurch nicht.
+  - **Korrektur aus Stufe 3b:** Für den warmen Schlafraum gilt weiter das Urteil aus Stufe 2: zu viele Fugen, und die Falten frieren fest. Siehe `BEFUND_origami_faltmechanismen_2026-10-26.md`.
   - 3D-Modell, Variante F:
     - Kiste mit Origami-Vorraum am Kopfende: Tonne 1,8 m breit, 1,5 m hoch, 1,8 m lang. Sie hat 9 Ringe zu je 8 Feldern, im Wechsel Berg- und Talfalte.
     - Die Faltbewegung ist **angenähert**. Ringabstand und Tiefe der Talfalte sind so gekoppelt, dass der Abstand von Ring zu Ring gleich bleibt. Die Talfalte wird beim Aufziehen von etwa 25 cm auf 10 cm flacher.

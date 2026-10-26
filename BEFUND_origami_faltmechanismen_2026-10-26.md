@@ -75,6 +75,15 @@ Bewertung:
 
 ## Stufe 3c: Origami-Jurte gerechnet (26.10. abends)
 
+> **Korrigiert nach der Maschinenbau-Kritik (unten):**
+> - Das Vlies gehört nicht in die Platten, sonst wäre der Stapel 3,0 m dick. Es wird eine eigene Innenhaut, gerollt Ø 0,48 × 1,3 m.
+> - Die Khana bekommt Rohre 20 × 1,5 statt 16 × 1: 46 Rohre, 138 Gelenke, 22 kg.
+> - Die Tür wird 1,0 m breit statt 0,8 m.
+> - Die Jurte wiegt damit **68 kg statt 61 kg**, mit Kiste 149 kg.
+> - PIR 25 als Dach ist verworfen.
+>
+> Die Zahlen in diesem Abschnitt sind entsprechend nachgezogen, wo sie in der Tabelle stehen.
+
 Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons Auftrag: „Arbeite die verschiedensten Versionen aus, eine Origami-Jurte kann ich noch nicht sehen.“
 
 **Dach:**
@@ -89,16 +98,16 @@ Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons 
 
 | Dach | Stapel m | Dach kg | Jurte kg | Jurte allein | Kiste darin | Heizung −10 °C |
 |---|---|---|---|---|---|---|
-| **Stegplatte 10 mm + Vlies 100 mm** | **0,28 × 0,38 × 1,21** | **25** | **61** | +2,4 K | **+18,1 K** | 25 W |
-| PIR 25 | 0,69 × 0,39 × 1,21 | 35 | 70 | +2,1 K | +17,9 K | 26 W |
+| **Stegplatte 10 mm, Vlies 100 mm als eigene Innenhaut** | **0,28 × 0,38 × 1,21 + Vlies-Rolle Ø 0,48 × 1,3** | **25** | **68** | +2,4 K | **+18,1 K** | 25 W |
+| PIR 25 (verworfen) | 0,69 × 0,39 × 1,21 | 35 | 78 | +2,1 K | +17,9 K | 26 W |
 
 - Die Jurte allein hält kaum warm. Erst mit der Kiste darin wird es so warm wie mit der Stoff-Jurte (+18,2 K), und Origami bringt dabei nichts zusätzlich.
 - **Gewonnen werden:** ein festes Dach gegen Schnee, Messer und Wind sowie ein Paket, das flach auf dem Deckel liegt. Dazu braucht der Anhänger keinen Platz neben dem Mast mehr und steht mittig.
 
 **Wand (Khana):**
-- 48 Alu-Rohre 16 × 1 mm, je 1,60 m lang, verbunden mit 144 Scherengelenken nach Simons Gelenk von 2025.
-- 21 Rauten, offen im Winkel von 43° gekreuzt, Wandhöhe 1,1 m.
-- Gewicht 14 kg, Paket 0,17 × 0,12 × 1,6 m.
+- 46 Alu-Rohre 20 × 1,5 mm, je 1,60 m lang, verbunden mit 138 Scherengelenken nach Simons Gelenk von 2025.
+- 20 Rauten, offen im Winkel von 43° gekreuzt, Wandhöhe 1,1 m.
+- Gewicht 22 kg, Paket 0,21 × 0,15 × 1,6 m.
 - Darüber hängt eine Hülle aus Vlies 100 mm.
 
 **Statik (überschlägig, nicht geprüft):**
@@ -116,7 +125,7 @@ Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons 
 5. Den Anhänger rückwärts hineinschieben. Die Stirnklappe zeigt dann zur Tür, davor bleiben 0,3 m frei.
 
 **Harte Grenzen:**
-- **Fährt die Jurte mit, ist die Grenze „leer höchstens 85 kg“ verletzt.** Mit Kiste sind es 142 kg.
+- **Fährt die Jurte mit, ist die Grenze „leer höchstens 85 kg“ verletzt.** Mit Kiste sind es 149 kg.
 - Die Pakete liegen auf dem Deckel. Die Transporthöhe beträgt dann 1,36 m, der Schwerpunkt liegt auf 0,75 m. Der Wagen kippt seitlich schon ab 25° statt ab 32°.
 - Taugt sie als Station am Platz, gilt: Losfahren in 5 Minuten geht, weil der Anhänger rückwärts hinausrollt. **Das widerspricht aber Entscheidung 13 („nur als Fahrzeug“).** Diese Frage geht an Simon.
 - Das gilt genauso für die Stoff-Jurte (Variante C, 129 kg) und wurde dort bisher nicht als Grenzverletzung ausgewiesen.
@@ -125,7 +134,37 @@ Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons 
 - Gelenke für dicke Platten: Die Scharniere sitzen bei Bergfalten außen und bei Talfalten innen.
 - Verriegelung der Naht
 - Gewicht der Krone
-- Kritik durch einen Maschinenbauer
+- Kritik durch einen Maschinenbauer: erledigt, siehe unten.
+
+### Maschinenbau-Kritik zu 3c (26.10.)
+
+**Urteil:** nur mit Auflagen freigabefähig. Die Jurte wird als Option geführt, die außerhalb der 85-kg-Grenze bleibt, und nicht als Teil des Fahrzeugs.
+
+| Nr | Befund | Zahl | Maßnahme | Stand |
+|---|---|---|---|---|
+| 1 | Stapelmaß falsch, das Vlies steckte in den Platten | 24 × 0,11 m = 3,0 m dick | Vlies als eigene Innenhaut | eingearbeitet |
+| 2 | „Faltfehler 0“ gilt nur für Platten ohne Dicke | Gelenkversatz bis 0,24 m. An der Krone ist die Platte nur 9 cm breit, der Stapel dort aber 28 cm dick | Dickenfaltung (versetzte Achsen, nach Lang/Tachi), Papiermodell 1:5 mit 3-mm-Pappe | offen |
+| 3 | Gegen Sog gibt es keinen Anschlag | Bei 20 m/s 1,4 kN Auftrieb gegen 0,7 kN Gewicht | 24 zugfeste Haken Dach–Khana, Gurte zum Anhängerrahmen, Ballast ab ca. 60 kg (auf Pflaster keine Heringe) | offen, als Pflicht notiert |
+| 4 | Khana-Rohr 16 × 1 knickt | Sicherheit 2,2, bei Verwehung 1,1 | Rohr 20 × 1,5: Sicherheit 5,9 bzw. 2,9 | eingearbeitet |
+| 5 | Über der Tür ist der Zugring offen | 1,5 kN | Den Türsturz als Zugband auslegen, die Naht mit doppelter Stahlklinke (2 kN) sichern | offen |
+| 6 | Die Tür lässt dem Anhänger nur 1 cm Spiel | Kiste 1,08 m hoch, Sturz 1,10 m | Tür 1,0 m breit (eingearbeitet). An der Tür die Khana höher als 1,2 m bauen | teilweise |
+| 7 | PIR 25 biegt sich durch und kriecht | 16 mm, mit Kriechen 48 mm | Stegplatte | eingearbeitet |
+| 8 | Aufbau dauert lange | 20–30 Minuten mit Handschuhen. Der offene Fächer ist bei Wind ein Segel von 7 m² | nur als Station, nicht für jede Nacht | Grenze bleibt verletzt |
+| 9 | Krone als lose Haube | Loch Ø 0,7 m | Haube als Druckring mit Gurt sichern, Kraft über die Scharniere per FE prüfen | offen |
+
+FMEA, höchste Risikozahl (RPZ) zuerst:
+
+| Fehlerart | RPZ |
+|---|---|
+| Sog hebt das Dach ab | 378 |
+| Khana knickt bei Verwehung | 300, mit Rohr 20 × 1,5 gesenkt |
+| Plattendicke blockiert das Falten | 224 |
+| Stapel passt nicht | 189, behoben |
+| Klinke der Naht bricht | 180 |
+| PIR kriecht | 160, behoben |
+| Tür klemmt | 140, gesenkt |
+
+Für die Scherengitter-Tonne (3d) gilt dasselbe zu Sog und Verankerung.
 
 ## Stufe 3d: Scherengitter-Tonne nach Simons Entwurf 2025 (26.10. abends)
 
@@ -144,7 +183,7 @@ Rechnung: `rechnung/scherengitter_tonne.py`, 3D-Modell: Variante H.
 | 2,8 × 2,6 m, 5 Bögen zu je 8 Elementen | 0,54 | 0,35 × 0,35 × 0,67 | 29 | 53 | +2,2 K | +17,9 K |
 
 **Bewertung:**
-- Das ist der leichteste feste Wohnraum bisher: 42 kg gegen 61 kg bei der Origami-Jurte und 48 kg bei der Stoff-Jurte, die keine feste Form hat.
+- Das ist der leichteste feste Wohnraum bisher: 42 kg gegen 68 kg bei der Origami-Jurte und 48 kg bei der Stoff-Jurte, die keine feste Form hat.
 - Warm wird es wie in der Jurte, allerdings nur mit der Kiste darin.
 - Innen nur 1,1 m hoch, also Sitzen, kein Stehen. Der Deckel der Kiste stößt beim Öffnen an die Bögen. Die Kiste müsste dazu tiefer stehen, oder die Tonne wird 2,8 m breit.
 - Der polare Bogen ist ein Mechanismus. Er steht erst, wenn je Bogen ein Gelenk gesperrt ist oder ein Seil die Fußpunkte hält. Der Schub am Fuß beträgt bei Schnee 0,45 kN je Bogen, Gurte in der Bodenplane fangen ihn ab.

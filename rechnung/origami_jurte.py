@@ -27,7 +27,7 @@ Y_DECKEL = 0.40 + 0.68                     # First des Deckels über Grund (BODE
 J = dict(r=1.40, wand=1.10, first=1.90)    # wie Schirm-Jurte (Variante C)
 N_DACH = 24                                # Platten = Falten
 S_KRONE = 0.40                             # Platten enden 0,4 m (schräg) unter dem Scheitel
-TUER = 0.80
+TUER = 1.00                                 # Kritik 26.10.: 0,8 m ließ dem 0,78 m breiten Anhänger 1 cm je Seite
 SCHNEE_KN_M2 = 0.83                        # Entscheidung 11: 30 cm Nassschnee = 135 kg auf 1,63 m²
 
 
@@ -127,7 +127,7 @@ def statik(d, kg_dach, platte):
 
 
 # --- Khana: Scherengitter aus Rohren (Simons Scherengelenk 2025) ------------------
-def khana(e=0.267, glieder=6, rohr_kg_m=0.127, gelenk_kg=0.025, abschnitte=4, rohr_d=0.016):
+def khana(e=0.267, glieder=6, rohr_kg_m=0.24, gelenk_kg=0.025, abschnitte=4, rohr_d=0.020, rohr_i=3754e-12):
     ls = glieder * e
     umfang = 2 * math.pi * J["r"] - TUER
     sin_a = J["wand"] / ls
@@ -139,8 +139,16 @@ def khana(e=0.267, glieder=6, rohr_kg_m=0.127, gelenk_kg=0.025, abschnitte=4, ro
     # zu: Stäbe liegen nebeneinander, je Abschnitt zwei Lagen
     je = staebe / abschnitte
     paket = (abschnitte * 2 * rohr_d * 1.3, je / 2 * rohr_d * 1.3, ls)
+    pcr = math.pi ** 2 * 69e9 * rohr_i / ls ** 2          # N, Euler, Knicklänge = Stablänge (Alu)
     return dict(ls=ls, alpha=math.degrees(math.asin(sin_a)), zellen=zellen, staebe=staebe,
-                gelenke=gelenke, kg=kg, paket=paket, w=w)
+                gelenke=gelenke, kg=kg, paket=paket, w=w, pcr=pcr, sin_a=sin_a)
+
+
+def sog(kg_jurte, v=20.0, cp=0.9):
+    """Auftrieb auf das Dach bei Wind v (m/s) gegen das Eigengewicht der Jurte."""
+    q = 0.5 * 1.25 * v * v
+    auf = q * cp * math.pi * J["r"] ** 2
+    return auf, kg_jurte * 9.81
 
 
 def waerme(d):
@@ -153,14 +161,14 @@ def waerme(d):
 
 if __name__ == "__main__":
     kh = khana()
-    print(f"Khana: {kh['staebe']} Rohre Alu 16×1 je {kh['ls']:.2f} m, {kh['zellen']} Rauten, "
+    print(f"Khana: {kh['staebe']} Rohre Alu 20×1,5 je {kh['ls']:.2f} m, {kh['zellen']} Rauten, "
           f"{kh['gelenke']} Scherengelenke, offen {kh['alpha']:.0f}° Kreuzungswinkel, {kh['kg']:.1f} kg, "
           f"Paket {kh['paket'][0]:.2f}×{kh['paket'][1]:.2f}×{kh['paket'][2]:.2f} m")
 
     W_FILZ = 16 + 5     # Wandhülle Vlies 100 mm und Bodenmatte (wie Stufe 3b)
     BASIS_KISTE = 81    # Kiste + Miura-Vordach (Stufe 3b), Grenze leer 85 kg
     print("\nA) Geschlossener Ring (alle 24 Falten verbunden), symmetrisch gefaltet:")
-    print("Dach | Faltfehler mm | Knoten über Scheitel | Platten an Krone | Bündel m | passt")
+    print("Dach | Faltfehler mm (Plattendicke 0) | Knoten über Scheitel | Platten an Krone | Bündel m | passt")
     dächer = (dach("PIR 25"), dach("Hohlkammer 10", True))
     for d in dächer:
         w, p = d["weg"], d["weg"]["paket"]
@@ -169,7 +177,7 @@ if __name__ == "__main__":
               f"Ø {p[0]:.2f} × {p[2]:.2f} | {'ja' if passt(p) else 'NEIN'}")
 
     print("\nB) Fächer mit offener Naht über der Tür (gewählt):")
-    print("Dach | Faltfehler mm | Knoten über Scheitel | Stapel m | passt | kg"
+    print("Dach | Faltfehler mm (Plattendicke 0) | Knoten über Scheitel | Stapel m | passt | kg"
           " | Ring kN | Platte σ MPa | Jurte allein K | Kiste darin K | Heizung W")
     for d in dächer:
         w, p = d["faecher"], d["faecher"]["paket"]
@@ -196,6 +204,16 @@ if __name__ == "__main__":
               f"Transporthöhe {Y_DECKEL + oben:.2f} m; "
               f"Schwerpunkt {ys:.2f} m, kippt seitlich ab {math.degrees(math.atan2(spur / 2, ys)):.0f}° "
               f"(Kiste allein {math.degrees(math.atan2(spur / 2, 0.55)):.0f}°); Schnee gesamt {st['W'] / 1000:.1f} kN")
+        f_rohr = st["W"] / kh["staebe"] / kh["sin_a"]
+        auf, gew = sog(jurte_kg)
+        print(f"   Khana: Druck je Rohr {f_rohr:.0f} N, Knicklast {kh['pcr']:.0f} N, Sicherheit "
+              f"{kh['pcr'] / f_rohr:.1f}, bei einseitiger Verwehung (×2) {kh['pcr'] / f_rohr / 2:.1f}; "
+              f"Sog 20 m/s {auf / 1000:.2f} kN gegen Gewicht {gew / 1000:.2f} kN → "
+              f"{'hebt ab, Anker ' + format((auf - gew) / 1000, '.2f') + ' kN nötig' if auf > gew else 'hält'}")
+        if "Vlies" in d["platte"]:
+            vol = d["flaeche"] * 0.10 * 0.35          # Vlies auf 35 % gepresst
+            print(f"   Vlies 100 mm als eigene Innenhaut (in den Platten wäre der Stapel "
+                  f"{N_DACH * 0.11 * 1.15:.1f} m dick): gerollt Ø {2 * math.sqrt(vol / 1.3 / math.pi):.2f} × 1,3 m")
     print("\nHarte Grenzen: leer ≤ 85 kg verletzt, sobald die Jurte mitfährt. Steht sie am Platz,"
           " ist sie ein fester Bau (Entscheidung 13: nur als Fahrzeug). Losfahren in 5 min geht nur ohne Abbau:"
           " Anhänger rückwärts durch die Tür, Jurte bleibt stehen.")

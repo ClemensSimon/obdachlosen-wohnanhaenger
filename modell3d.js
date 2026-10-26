@@ -676,7 +676,7 @@ function miuraBlatt(zeilen, spalten, a, b, gammaGrad, thetaOffenGrad, abbild, fa
 // --- Stufe 3c: Origami-Jurte (rechnung/origami_jurte.py) ------------------------
 // Khana: Scherengitter aus Rohren (Simons Scherengelenk 2025), zieht sich von der
 // Tür aus um den Kreis auf. Winkel u = Bogenlänge ab Türkante, Tür bei +z.
-function khanaGitter(r, tuer, wandHoehe, e = 0.267, glieder = 6, zellen = 21) {
+function khanaGitter(r, tuer, wandHoehe, e = 0.267, glieder = 6, zellen = 20) {
   const ls = glieder * e, unter = 4;
   const bogen = 2 * Math.PI * r - tuer, u0 = tuer / 2;
   const alphaOffen = Math.asin(wandHoehe / ls), alphaZu = 84 * Math.PI / 180;
@@ -753,7 +753,7 @@ function faecherDach(r, wand, first, n = 24, sKrone = 0.40) {
 }
 
 (function variante_g() {
-  const g = new THREE.Group(), J = JURTE, tuer = 0.8;
+  const g = new THREE.Group(), J = JURTE, tuer = 1.0;   // Kritik 26.10.: 0,8 m ließ dem Anhänger 1 cm je Seite
   const boden = new THREE.Mesh(new THREE.CircleGeometry(J.r, 48), mat(F.fuss));
   boden.rotation.x = -Math.PI / 2; boden.position.y = 0.012; g.add(boden);
   const khana = khanaGitter(J.r, tuer, J.wand); g.add(khana);
@@ -785,8 +785,8 @@ function faecherDach(r, wand, first, n = 24, sKrone = 0.40) {
   const pakete = new THREE.Group();
   const pd = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.28, 1.21), mat(0x9fb4c4));
   pd.position.set(-0.13, BODEN + FI + 0.14, 0);
-  const pk = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.17, 1.6), mat(F.griff));
-  pk.position.set(0.20, BODEN + FI - 0.02, 0);
+  const pk = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.21, 1.6), mat(F.griff));
+  pk.position.set(0.22, BODEN + FI, 0);
   pakete.add(pd, pk); wagen.add(pakete);
   wagen.rotation.y = Math.PI;
   g.add(wagen);
@@ -811,7 +811,7 @@ function faecherDach(r, wand, first, n = 24, sKrone = 0.40) {
     },
     // Deckel auf: die Pakete sind abgenommen
     animiere(d) { pakete.visible = reglerG < 0.05 && d < 0.02; },
-    text: 'Variante G, Origami-Jurte Ø 2,8 m: Khana aus 48 Alu-Rohren mit Scherengelenken, Dach als Fächer aus 24 Stegplatten 10 mm mit Vlies (Faltfehler 0 mm), Krone als Haube. Gefaltet liegen Dach (0,28 × 0,38 × 1,21 m) und Khana (0,17 × 0,12 × 1,6 m) auf dem Deckel; die Jurte wiegt 61 kg und fährt deshalb nicht mit dem Schlafwagen (Grenze 85 kg)',
+    text: 'Variante G, Origami-Jurte Ø 2,8 m (Entwurf, Kritik offen): Khana aus 46 Alu-Rohren 20 × 1,5 mit Scherengelenken, Dach als Fächer aus 24 Stegplatten 10 mm, Vlies 100 mm als eigene Innenhaut, Krone als Haube, Tür 1,0 m. Gefaltet liegen Dach (0,28 × 0,38 × 1,21 m) und Khana (0,21 × 0,15 × 1,6 m) auf dem Deckel, Vlies und Wandhülle in der Kiste. Die Jurte wiegt 68 kg und fährt deshalb nicht mit dem Schlafwagen (Grenze 85 kg); bei Sturm braucht sie 0,7 kN Verankerung',
   };
 })();
 

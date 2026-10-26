@@ -10,6 +10,8 @@ Webseite: https://clemenssimon.github.io/obdachlosen-wohnanhaenger/
 - [ENTSCHEIDUNGEN.md](ENTSCHEIDUNGEN.md): Grundkonzept, Begründungen, verworfene Alternativen, offene Punkte
 - [BEFUND_huellformen_stufe1_2026-10-25.md](BEFUND_huellformen_stufe1_2026-10-25.md): sechs Hüllformen im Vergleich
 - [BEFUND_oeffnungsprinzipien_stufe2_2026-10-25.md](BEFUND_oeffnungsprinzipien_stufe2_2026-10-25.md): sieben Öffnungsprinzipien
+- [BEFUND_rundzelt_schirm_wohnraum_2026-10-26.md](BEFUND_rundzelt_schirm_wohnraum_2026-10-26.md): Stufe 3, Wohnraum aus Jurte, Kokon, Zelt
+- [BEFUND_origami_faltmechanismen_2026-10-26.md](BEFUND_origami_faltmechanismen_2026-10-26.md): Stufe 3b–3d, Origami, Origami-Jurte, Scherengitter-Tonne
 - [rechnung/](rechnung/): Rechenskripte (`python rechnung/huellformen_stufe1.py`)
 - [modell/](modell/): Bastelbögen 1:5 und Prüfliste
 - `modell3d.js`: 3D-Modell der Webseite. Nach jeder Änderung neu bündeln, damit es auch lokal (file://) läuft:

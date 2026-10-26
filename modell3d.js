@@ -1,7 +1,9 @@
-// Drehbares 3D-Modell der beiden Varianten (Maße in Metern, wie im Konzept).
+// Drehbares 3D-Modell der Varianten (Maße in Metern, wie im Konzept).
 // A: feste Kiste (Fünfeck), Deckel in zwei Hälften, Stirnklappe am Kopfende
 // B: Auszug, Kopfteil 1,25 m, Fußteil mit eigenem Satteldach schiebt hinein;
 //    gedichtet axial in den Endlagen (innen Kniehebel, außen Sicherungsschrauben)
+// C: Schirm-Jurte als Wohnraum, darin der Kokon (Haus im Haus); D: Kokon allein;
+// E: Kiste mit Eisfischerzelt als Vorraum (Stufe 3)
 // Solarmodule liegen auf beiden Dachseiten (Entscheidung Frage 27).
 import * as THREE from './lib/three.module.js';
 import { OrbitControls } from './lib/OrbitControls.js';
@@ -308,25 +310,218 @@ const menschen = [];
   varianten.B.setzeAuszug(1);
 })();
 
+// --- Stufe 3: textile Hüllen (Befund 26.10.) ---------------------------------
+const JURTE = { r: 1.35, wand: 1.1, first: 1.9, krone: 0.25 };   // Ø 2,7 m, damit der Anhänger hineinpasst
+const glas = (c, o = 0.35) => mat(c, { transparent: true, opacity: o, side: THREE.DoubleSide, depthWrite: false });
+
+// Stab von a nach b (Zylinder der Höhe 1, wird gestreckt)
+function stab(r, farbe) { return new THREE.Mesh(new THREE.CylinderGeometry(r, r, 1, 8), mat(farbe)); }
+const _y = new THREE.Vector3(0, 1, 0);
+function setzeStab(m, a, b) {
+  const d = new THREE.Vector3().subVectors(b, a);
+  m.position.copy(a).addScaledVector(d, 0.5);
+  m.scale.set(1, Math.max(d.length(), 0.001), 1);
+  m.quaternion.setFromUnitVectors(_y, d.normalize());
+}
+
+// Kokon: niedrige Wanne (PIR) mit Faltverdeck aus Bügeln, die sich zum Kopfende
+// zusammenschieben wie eine Schiebeplane; offen = 1 heißt zurückgeschoben (Bank)
+function kokon(laenge) {
+  const g = new THREE.Group();
+  // innen 0,60 m breit, 0,58 m hoch (Kritik 26.10.); Vlies 60 mm + Haut: außen 0,74 m
+  const hs = 0.28, r = 0.37, y0 = BODEN + T + hs, n = 6;
+  const s = new THREE.Shape();
+  s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, T + hs);
+  s.lineTo(B / 2 - T, T + hs); s.lineTo(B / 2 - T, T); s.lineTo(-B / 2 + T, T);
+  s.lineTo(-B / 2 + T, T + hs); s.lineTo(-B / 2, T + hs); s.closePath();
+  const wg = new THREE.ExtrudeGeometry(s, { depth: laenge, bevelEnabled: false });
+  wg.translate(0, BODEN, -laenge / 2);
+  g.add(new THREE.Mesh(wg, mat(F.huelle)));
+  // Kopfende fest (Halbscheibe auf der Wanne), daran klappt nichts
+  const kopf = new THREE.Mesh(new THREE.CircleGeometry(r, 24, 0, Math.PI), mat(F.fuss, { side: THREE.DoubleSide }));
+  kopf.position.set(0, y0, -laenge / 2 + 0.01);
+  g.add(kopf);
+  const buegel = [], bahnen = [];
+  const bGeo = new THREE.TorusGeometry(r, 0.012, 8, 24, Math.PI);
+  const pGeo = new THREE.CylinderGeometry(r, r, 1, 24, 1, true, Math.PI / 2, Math.PI);
+  pGeo.rotateX(Math.PI / 2);
+  for (let i = 0; i < n; i++) {
+    const b = new THREE.Mesh(bGeo, mat(F.rahmen)); b.position.y = y0; buegel.push(b); g.add(b);
+    if (i < n - 1) { const p = new THREE.Mesh(pGeo, mat(F.dach, { side: THREE.DoubleSide })); p.position.y = y0; bahnen.push(p); g.add(p); }
+  }
+  const fussende = new THREE.Mesh(new THREE.CircleGeometry(r, 24, 0, Math.PI), mat(F.fuss, { side: THREE.DoubleSide }));
+  fussende.position.y = y0; g.add(fussende);
+  g.userData.setze = offen => {
+    for (let i = 0; i < n; i++) {
+      const zu = -laenge / 2 + i * laenge / (n - 1), auf = -laenge / 2 + 0.03 + i * 0.045;
+      buegel[i].position.z = zu + (auf - zu) * offen;
+    }
+    for (let i = 0; i < n - 1; i++) {
+      const a = buegel[i].position.z, e = buegel[i + 1].position.z;
+      bahnen[i].position.z = (a + e) / 2; bahnen[i].scale.y = 1;
+      bahnen[i].scale.z = Math.max(e - a, 0.001);
+    }
+    fussende.position.z = buegel[n - 1].position.z;
+  };
+  g.userData.setze(0);
+  return g;
+}
+
+// Schirm-Jurte: Mittelmast, Krone, 12 Rippen mit Streben zum Läufer; die Wand
+// hängt erst, wenn der Schirm offen ist. Mitte im Ursprung der Gruppe.
+function schirmJurte() {
+  const g = new THREE.Group(), J = JURTE, n = 12;
+  const lr = Math.hypot(J.r - J.krone, J.first - J.wand);
+  const phiAuf = Math.atan2(J.r - J.krone, J.first - J.wand), phiZu = 0.08;
+  const strebe = 0.85, anRippe = 0.45 * lr;
+  const boden = new THREE.Mesh(new THREE.CircleGeometry(J.r, 48), mat(F.fuss));
+  boden.rotation.x = -Math.PI / 2; boden.position.y = 0.012; g.add(boden);
+  const mast = stab(0.025, F.rahmen); setzeStab(mast, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, J.first + 0.12, 0)); g.add(mast);
+  const krone = new THREE.Mesh(new THREE.TorusGeometry(J.krone, 0.02, 8, 32), mat(F.rahmen));
+  krone.rotation.x = Math.PI / 2; krone.position.y = J.first; g.add(krone);
+  const laeufer = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.08, 12), mat(F.griff)); g.add(laeufer);
+  const rippen = [], streben = [];
+  for (let i = 0; i < n; i++) { const a = stab(0.012, F.rahmen), b = stab(0.008, F.griff); rippen.push(a); streben.push(b); g.add(a, b); }
+  const dach = new THREE.Mesh(new THREE.BufferGeometry(), glas(F.dach, 0.45)); g.add(dach);
+  // Wand mit Tür (Lücke 0,8 m) auf der Wohnseite +x
+  const tuerWinkel = 0.8 / J.r;
+  const wandGeo = new THREE.CylinderGeometry(J.r, J.r, J.wand, 48, 1, true, Math.PI / 2 + tuerWinkel / 2, 2 * Math.PI - tuerWinkel);
+  const wand = new THREE.Mesh(wandGeo, glas(F.huelle, 0.3)); wand.position.y = J.wand / 2; g.add(wand);
+  const tuer = new THREE.Group();
+  const tb = new THREE.Mesh(new THREE.PlaneGeometry(0.78, J.wand - 0.05), glas(F.klappe, 0.55));
+  tb.rotation.y = Math.PI / 2; tb.position.set(0, 0, 0.39); tuer.add(tb);
+  tuer.position.set(J.r * Math.cos(tuerWinkel / 2), J.wand / 2, -0.39);
+  g.add(tuer);
+  // Drei flexible Solarmodule auf der Südseite des Dachs
+  const module3 = new THREE.Group();
+  for (const w of [-0.5, 0, 0.5]) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.006, 0.8), mat(F.modul, { roughness: 0.35 }));
+    // auf der Dachfläche (Kegel von der Krone zur Traufe), 1,5 cm darüber
+    const rm = (J.r + J.krone) / 2, ym = J.first - (rm - J.krone) * (J.first - J.wand) / (J.r - J.krone) + 0.015;
+    m.position.set(rm * Math.cos(w + Math.PI), ym, rm * Math.sin(w + Math.PI));
+    m.rotation.order = 'YXZ'; m.rotation.y = -(w + Math.PI) + Math.PI / 2;
+    m.rotation.x = Math.atan2(J.first - J.wand, J.r - J.krone);
+    module3.add(m);
+  }
+  g.add(module3);
+  g.userData.setze = auf => {
+    const phi = phiZu + (phiAuf - phiZu) * auf;
+    const ende = [J.krone + lr * Math.sin(phi), J.first - lr * Math.cos(phi)];
+    const p = [J.krone + anRippe * Math.sin(phi), J.first - anRippe * Math.cos(phi)];
+    const yl = p[1] - Math.sqrt(Math.max(strebe * strebe - p[0] * p[0], 0));
+    laeufer.position.y = yl;
+    for (let i = 0; i < n; i++) {
+      const w = i * 2 * Math.PI / n, c = Math.cos(w), s = Math.sin(w);
+      setzeStab(rippen[i], new THREE.Vector3(J.krone * c, J.first, J.krone * s), new THREE.Vector3(ende[0] * c, ende[1], ende[0] * s));
+      setzeStab(streben[i], new THREE.Vector3(0, yl, 0), new THREE.Vector3(p[0] * c, p[1], p[0] * s));
+    }
+    dach.geometry.dispose();
+    dach.geometry = new THREE.CylinderGeometry(J.krone, ende[0], J.first - ende[1], 48, 1, true);
+    dach.position.y = (J.first + ende[1]) / 2;
+    const steht = auf > 0.97;
+    wand.visible = tuer.visible = module3.visible = steht;
+  };
+  g.userData.tuer = tuer;
+  g.userData.setze(1);
+  return g;
+}
+
+// Eisfischerzelt (Hub): Würfel 1,8 m mit Naben in den Wänden, steht am Kopfende
+function hubZelt() {
+  const g = new THREE.Group(), a = 1.8;
+  const box = new THREE.Mesh(new THREE.BoxGeometry(a, a, a), glas(0x2f6f8f, 0.3));
+  box.position.y = a / 2; g.add(box);
+  const kanten = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(a, a, a)),
+    new THREE.LineBasicMaterial({ color: F.rahmen }));
+  kanten.position.y = a / 2; g.add(kanten);
+  for (const [x, y, z] of [[a / 2, a / 2, 0], [-a / 2, a / 2, 0], [0, a / 2, -a / 2], [0, a, 0]]) {
+    const nabe = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), mat(F.griff));
+    nabe.position.set(x, y, z); g.add(nabe);
+  }
+  return g;
+}
+
+(function variante_c() {
+  const g = new THREE.Group();
+  const j = schirmJurte(); g.add(j);
+  // Anhänger mit Kokon neben dem Mast, Wohnseite (+x) bleibt frei
+  const wagen = new THREE.Group();
+  const k = kokon(L_A); wagen.add(k, fahrwerk(L_A, L_A / 2 + 0.5), mensch(-L_A / 2 + 0.2, 1));
+  wagen.position.x = -(B / 2 + 0.04);
+  wagen.children[1].userData.deichsel.visible = false;
+  g.add(wagen);
+  varianten.C = {
+    gruppe: g, deckel: [], klappen: [], regler: 'Schirm öffnen',
+    setzeRegler: v => j.userData.setze(v),
+    animiere(d, kl) { k.userData.setze(d); j.userData.tuer.rotation.y = kl * 1.4; },
+    text: 'Variante C: Schirm-Jurte Ø 2,7 m als Wohnraum, darin der Kokon auf dem Anhänger (Haus im Haus)',
+  };
+})();
+
+(function variante_d() {
+  const g = new THREE.Group();
+  const k = kokon(L_A);
+  g.add(k, fahrwerk(L_A, L_A / 2 + 0.5), mensch(-L_A / 2 + 0.2, 1));
+  varianten.D = {
+    gruppe: g, deckel: [], klappen: [],
+    animiere(d) { k.userData.setze(d); },
+    text: 'Variante D: Kokon mit Faltverdeck (Bügel schieben sich zum Kopfende), 0,78 m breit',
+  };
+})();
+
+(function variante_e() {
+  const g = new THREE.Group();
+  const zKopf = -L_A / 2, zFuss = L_A / 2;
+  g.add(wanne(L_A - 2 * T));
+  g.add(giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(zFuss - T / 2));
+  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
+  const kl = klappe(zKopf - 0.001, -1);
+  const hub = hubZelt(); hub.position.z = zKopf - 0.9;
+  g.add(dk, df, kl, hub, fahrwerk(L_A, zFuss + 0.5), mensch(zKopf + 0.2, 1));
+  varianten.E = {
+    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Zelt aufbauen',
+    setzeRegler: v => { const s = 0.08 + 0.92 * v; hub.scale.set(s, s, s); hub.position.z = zKopf - 0.9 * s; },
+    text: 'Variante E: feste Kiste mit Eisfischerzelt 1,8 m als Vorraum vor der Stirnklappe',
+  };
+})();
+
 for (const v of Object.values(varianten)) szene.add(v.gruppe);
+varianten.B.regler = 'Auszug';
+varianten.B.setzeRegler = v => varianten.B.setzeAuszug(v);
 
 // --- Bedienung ---------------------------------------------------------------
-const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, auszug: 1, mensch: true };
+const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: true,
+  regler: { B: 1, C: 1, E: 1 } };
 const ziel = { deckel: 0, klappe: 0 };
+const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
+  A: ['Deckel als Vordach', 'Stirnklappe'], B: ['Deckel als Vordach', 'Stirnklappe'],
+  C: ['Verdeck zurück', 'Jurtentür'], D: ['Verdeck zurück', null], E: ['Deckel als Vordach', 'Stirnklappe'],
+};
 
 // melden = false: Statuszeile nicht neu setzen (Regler, sonst liest der Screenreader jeden Schritt)
 function anzeigen(melden = true) {
-  for (const [k, v] of Object.entries(varianten)) v.gruppe.visible = k === zustand.variante;
-  document.getElementById('d3-auszug-feld').hidden = zustand.variante !== 'B';
+  const v = varianten[zustand.variante];
+  for (const [k, w] of Object.entries(varianten)) w.gruppe.visible = k === zustand.variante;
+  document.getElementById('d3-auszug-feld').hidden = !v.regler;
+  if (v.regler) {
+    const wert = zustand.regler[zustand.variante];
+    document.getElementById('d3-regler-text').textContent = v.regler;
+    regler.value = Math.round(wert * 100);
+    regler.setAttribute('aria-valuetext', reglerText(wert));
+    v.setzeRegler(wert);            // nur die sichtbare Variante neu stellen
+  }
+  const [t1, t2] = KNOPF[zustand.variante];
+  document.getElementById('d3-deckel').textContent = t1;
+  const kb = document.getElementById('d3-klappe');
+  kb.hidden = !t2; if (t2) kb.textContent = t2;
   // Im Auszug liegt nur jemand, wenn das Fußteil ausgezogen ist
-  const liegtFrei = zustand.variante !== 'B' || zustand.auszug > 0.95;
+  const liegtFrei = zustand.variante !== 'B' || zustand.regler.B > 0.95;
   menschen.forEach(m => { m.visible = zustand.mensch && liegtFrei; });
   ziel.deckel = zustand.deckelAuf ? 1 : 0;
   ziel.klappe = zustand.klappeAuf ? 1 : 0;
-  if (varianten.B) varianten.B.setzeAuszug(zustand.auszug);
-  if (melden) status.textContent = varianten[zustand.variante].text +
-    (zustand.deckelAuf ? ', Deckel offen als Vordach' : ', Deckel zu') +
-    (zustand.klappeAuf ? ', Stirnklappe offen' : '');
+  if (melden) status.textContent = v.text +
+    (zustand.deckelAuf ? `, ${t1.toLowerCase()}: offen` : '') +
+    (zustand.klappeAuf && t2 ? `, ${t2} offen` : '');
   document.querySelectorAll('[data-variante]').forEach(b =>
     b.setAttribute('aria-pressed', String(b.dataset.variante === zustand.variante)));
   document.getElementById('d3-deckel').setAttribute('aria-pressed', String(zustand.deckelAuf));
@@ -334,17 +529,28 @@ function anzeigen(melden = true) {
   document.getElementById('d3-mensch').setAttribute('aria-pressed', String(zustand.mensch));
 }
 
+const regler = document.getElementById('d3-auszug');
+// Startansicht je Variante: Kamera und Blickpunkt (Jurte und Zelt sind größer)
+const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55], B: [3.2, 2.0, 2.6, 0.55], C: [4.6, 3.2, 4.2, 0.9],
+  D: [3.2, 2.0, 2.6, 0.55], E: [3.4, 2.6, -4.4, 0.8] };
+function reglerText(wert) {
+  if (zustand.variante !== 'B') return `${varianten[zustand.variante].regler}: ${Math.round(wert * 100)} Prozent`;
+  return `Länge ${(L_KOPF + (L_A - L_KOPF) * wert).toFixed(2).replace('.', ',')} m`;
+}
 document.querySelectorAll('[data-variante]').forEach(b => b.addEventListener('click', () => {
-  zustand.variante = b.dataset.variante; anzeigen();
+  if (zustand.variante === b.dataset.variante) return;   // Drehung des Nutzers behalten
+  zustand.variante = b.dataset.variante;
+  zustand.deckelAuf = zustand.klappeAuf = false;          // Schalter gelten je Variante neu
+  const [x, y, z, ty] = ANSICHT[zustand.variante];
+  kamera.position.set(x, y, z); steuerung.target.set(0, ty, zustand.variante === 'E' ? -0.9 : 0);
+  anzeigen();
 }));
 document.getElementById('d3-deckel').addEventListener('click', () => { zustand.deckelAuf = !zustand.deckelAuf; anzeigen(); });
 document.getElementById('d3-klappe').addEventListener('click', () => { zustand.klappeAuf = !zustand.klappeAuf; anzeigen(); });
 document.getElementById('d3-mensch').addEventListener('click', () => { zustand.mensch = !zustand.mensch; anzeigen(); });
-const regler = document.getElementById('d3-auszug');
 regler.addEventListener('input', () => {
-  zustand.auszug = Number(regler.value) / 100;
-  const laenge = (L_KOPF + (L_A - L_KOPF) * zustand.auszug).toFixed(2).replace('.', ',');
-  regler.setAttribute('aria-valuetext', `Länge ${laenge} m`);
+  const wert = Number(regler.value) / 100;
+  zustand.regler[zustand.variante] = wert;
   anzeigen(false);
 });
 
@@ -370,6 +576,7 @@ function schritt() {
   for (const v of Object.values(varianten)) {
     v.deckel.forEach(d => { d.rotation.z = -deckelWinkel * 1.75; });
     v.klappen.forEach(c => { c.rotation.x = klappeWinkel * 1.5 * c.userData.richtung; });
+    if (v.animiere) v.animiere(deckelWinkel, klappeWinkel);
   }
   steuerung.update();
   renderer.render(szene, kamera);

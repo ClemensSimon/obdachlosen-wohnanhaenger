@@ -47,7 +47,7 @@ p{max-width:72ch}
 table{border-collapse:collapse;width:100%;font-size:15px}
 th,td{padding:8px 10px;border-bottom:1px solid var(--li);text-align:left;vertical-align:top}
 thead th{position:sticky;top:0;background:var(--kopf);z-index:1}
-thead tr.filter th{top:37px;padding:4px 6px}
+thead tr.filter th{top:40px;padding:4px 6px}
 thead input{width:100%;min-width:70px;padding:4px 6px;font:inherit;font-size:14px;border:1px solid var(--tx2);border-radius:6px;background:var(--fl);color:var(--tx)}
 thead input::placeholder{color:var(--tx2);opacity:1}
 td.z,th.z{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -73,7 +73,7 @@ h4{font-size:16px;margin:16px 0 6px}
 .knopf{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--tx2);border-radius:6px;background:var(--fl);color:var(--tx);cursor:pointer}
 .knopf[aria-pressed="true"]{background:var(--ak);border-color:var(--ak);color:var(--bg)}
 .d3-leiste label{display:flex;gap:6px;align-items:center;font-size:14px}
-.d3-leiste label[hidden]{display:none}
+.d3-leiste label[hidden],.d3-leiste [hidden]{display:none}
 .d3-flaeche{height:min(60vh,460px);border:1px solid var(--li);border-radius:10px;overflow:hidden;background:var(--fl);touch-action:none}
 .d3-flaeche canvas{display:block;width:100%;height:100%}
 .boegen{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=7" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=8" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,14 +129,17 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit Faltverdeck, E Kiste mit Eisfischerzelt als Vorraum. Der Regler baut Schirm oder Zelt auf.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
+    <button type="button" class="knopf" data-variante="C" aria-pressed="false">C: Jurte + Kokon</button>
+    <button type="button" class="knopf" data-variante="D" aria-pressed="false">D: Kokon</button>
+    <button type="button" class="knopf" data-variante="E" aria-pressed="false">E: Kiste + Eisfischerzelt</button>
     <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
     <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
-    <label id="d3-auszug-feld" hidden>Auszug <input type="range" id="d3-auszug" min="0" max="100" value="100" aria-describedby="d3-status"></label>
+    <label id="d3-auszug-feld" hidden><span id="d3-regler-text">Auszug</span> <input type="range" id="d3-auszug" min="0" max="100" value="100"></label>
   </div>
   <div id="d3-flaeche" class="d3-flaeche"><p id="d3-hinweis" class="leise" style="padding:12px">3D-Modell wird geladen. Bleibt dieser Text stehen, ist JavaScript oder WebGL abgeschaltet. Die Schnittmuster unten gehen trotzdem.</p></div>
   <p id="d3-status" class="leise" aria-live="polite"></p>
@@ -235,6 +238,21 @@ window.addEventListener('error', function (e) {
     </tbody>
   </table></div>
 
+  <h3>Stufe 3: Wohnraum und kleine Heizung (Entwurf)</h3>
+  <p class="leise">Realistische Annahmen nach der Kritik vom 26.10. Rechnung: <a href="rechnung/rundzelt_schirm.py">rundzelt_schirm.py</a>, Befund: <a href="BEFUND_rundzelt_schirm_wohnraum_2026-10-26.md">Stufe 3</a>. Kein Wohnraum wird mit Körperwärme allein warm (+1 bis +3 K). Er ist Puffer gegen Wind und Schnee; geschlafen wird im Kokon oder in der Kiste darin, mit einer kleinen Heizung von ca. 60 W.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Stufe 3"><table id="tab-stufe3">
+    <thead><tr><th>Hülle</th><th class="z">Fläche m²</th><th class="z">+K ohne Heizung</th><th class="z">kg</th><th>Rolle</th></tr></thead>
+    <tbody>
+      <tr><td>Eisfischerzelt 1,8 m</td><td class="z">16,2</td><td class="z">1,0</td><td class="z">15</td><td>Vorraum, Windschutz</td></tr>
+      <tr><td>Schirm-Jurte Ø 2,7 m, Vlies 100 mm</td><td class="z">16,0</td><td class="z">2,6</td><td class="z">42</td><td>Wohnraum</td></tr>
+      <tr><td>Origami-Tonne, PIR 25 mm</td><td class="z">15,5</td><td class="z">2,2</td><td class="z">68</td><td>Wohnraum, steif und schnittfest</td></tr>
+      <tr><td>Kokon, Vlies 60 mm</td><td class="z">3,9</td><td class="z">10,7</td><td class="z">11</td><td>Schlafen</td></tr>
+      <tr><td>Kokon, Vlies 100 mm</td><td class="z">4,1</td><td class="z">14,2</td><td class="z">13</td><td>Schlafen</td></tr>
+      <tr><td>Fünfeck-Kiste, PIR 45 mm</td><td class="z">4,1</td><td class="z">15,7</td><td class="z">27</td><td>Schlafen</td></tr>
+      <tr><td>Kokon 60 mm in der Jurte</td><td class="z">–</td><td class="z">13,3</td><td class="z">53</td><td>Wohnen und Schlafen; bei −10 °C ca. 57 W Heizung für +15 °C</td></tr>
+    </tbody>
+  </table></div>
+
   <h3>Was die Prüfung korrigiert hat</h3>
   <ul>
     <li><b>Kälter als zuerst gedacht:</b> +14–15 K statt +21 K. Gerechnet sind jetzt 65 W Wärme vom Körper statt 90 W und 40 % Zuschlag für die Fugen.</li>
@@ -261,6 +279,7 @@ window.addEventListener('error', function (e) {
       <tr><td><a href="https://endless-sphere.com/sphere/threads/widepath-camper-trailer.64586/">Widepath</a></td><td>DK</td><td>Fahrradanhänger</td><td>feste Schale</td><td>40 kg; Bett und Sitzbank in einem</td></tr>
       <tr><td><a href="https://www.communitysupportedshelters.org/conestoga-huts">Conestoga Hut</a></td><td>US</td><td>zerlegbar</td><td>gedämmt</td><td>Tonnenform, Bausatz aus Werkstatt</td></tr>
       <tr><td><a href="https://en.wikipedia.org/wiki/Hexayurt">Hexayurt</a></td><td>weltweit</td><td>zerlegbar</td><td>mit PIR möglich</td><td>Null Verschnitt aus Standardplatten</td></tr>
+      <tr><td><a href="https://newatlas.com/cardborigami-homeless-shelter/26437/">Cardborigami</a></td><td>US</td><td>tragbar, flach gefaltet</td><td>Pappe, beschichtet</td><td>Origami für Obdachlose; 4,8 kg, in unter 1 Minute aufgebaut</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -268,6 +287,7 @@ window.addEventListener('error', function (e) {
 <section id="mitmachen" aria-labelledby="t-off">
   <h2 id="t-off">Offen</h2>
   <ul>
+    <li>Wohnraum (Stufe 3): Jurte, Origami oder Eisfischerzelt; kleine Heizung ohne Flamme; Anhängelast mit Wohnraum ca. 120 kg ungeprüft</li>
     <li>Feste Kiste oder Auszug: Beide werden als Modell 1:5 gebaut, danach wird entschieden. <a href="modell/README.md">Bastelbögen und Prüfliste</a></li>
     <li>Stirnklappe als Wintertür im Detail: Öffnung nach innen oder außen, Dichtung, Schloss mit Panikfunktion</li>
     <li>Wer testet nach dem Dummy und dem Selbsttest? Gesucht wird ein Träger aus der Wohnungslosenhilfe</li>

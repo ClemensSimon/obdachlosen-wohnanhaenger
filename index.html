@@ -138,6 +138,7 @@ window.addEventListener('error', function (e) {
     <button type="button" class="knopf" data-variante="E" aria-pressed="false">E: Kiste + Eisfischerzelt</button>
     <button type="button" class="knopf" data-variante="F" aria-pressed="false">F: Kiste + Origami</button>
     <button type="button" class="knopf" data-variante="G" aria-pressed="false">G: Origami-Jurte</button>
+    <button type="button" class="knopf" data-variante="H" aria-pressed="false">H: Scherengitter-Tonne</button>
     <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
     <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
@@ -278,10 +279,22 @@ window.addEventListener('error', function (e) {
       <tr><td>Fächer, Stegplatte 10 mm + Vlies 100 mm, Naht über der Tür</td><td>0,28 × 0,38 × 1,21</td><td>ja</td><td class="z">25</td><td class="z">61</td><td class="z">+18,1</td></tr>
       <tr><td>Fächer, PIR 25</td><td>0,69 × 0,39 × 1,21</td><td>ja</td><td class="z">35</td><td class="z">70</td><td class="z">+17,9</td></tr>
       <tr class="raus"><td>geschlossener Ring, PIR 25</td><td>Bündel Ø 1,50 × 1,17</td><td>nein</td><td class="z">35</td><td class="z">70</td><td class="z">+17,9</td></tr>
-      <tr class="raus"><td>Flasher (Vorschlag aus 3b)</td><td colspan="5">faltet sich eben auf, kein Gefälle gegen Schnee</td></tr>
+      <tr class="raus"><td>Flasher (Vorschlag aus 3b)</td><td>eben, kein Gefälle gegen Schnee</td><td>–</td><td class="z">–</td><td class="z">–</td><td class="z">–</td></tr>
     </tbody>
   </table></div>
   <p>Faltfehler 0 mm über den ganzen Faltweg. Schnee 30 cm nass: 5,4 kN auf dem Dach, 1,5 kN im Zugring an der Traufe. Die Jurte verletzt die Grenze leer 85 kg, wenn sie mitfährt (Kiste mit Jurte 142 kg). Sie taugt deshalb nur als Station, die am Platz bleibt; morgens fährt der Anhänger rückwärts durch die Tür hinaus. Das widerspricht Entscheidung 13 („nur als Fahrzeug“) und ist von Simon zu entscheiden.</p>
+
+  <h3>Stufe 3d: Scherengitter-Tonne (Entwurf)</h3>
+  <p class="leise">Nach Simons Entwurf von 2025: Bögen aus polaren Scherenelementen (Gelenk teilt die Stäbe ungleich, deshalb krümmt sich der Bogen beim Aufziehen) mit Längsscheren dazwischen. Das ganze Gestell faltet sich in beide Richtungen zu einem Bündel. Rechnung: <a href="rechnung/scherengitter_tonne.py">scherengitter_tonne.py</a>. Im 3D-Modell: Variante H.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Scherengitter-Tonne"><table id="tab-scherentonne">
+    <thead><tr><th>Ausführung</th><th>Stab m</th><th>Bündel m</th><th class="z">Gestell kg</th><th class="z">gesamt kg</th><th class="z">Kiste darin K</th></tr></thead>
+    <tbody>
+      <tr><td>2,5 × 2,6 m, 4 Bögen zu je 6 Elementen</td><td>0,63</td><td>0,27 × 0,27 × 0,88</td><td class="z">20</td><td class="z">42</td><td class="z">+18,2</td></tr>
+      <tr><td>2,5 × 2,6 m, 5 Bögen zu je 8 Elementen</td><td>0,48</td><td>0,35 × 0,35 × 0,67</td><td class="z">28</td><td class="z">50</td><td class="z">+18,2</td></tr>
+      <tr><td>2,8 × 2,6 m, 5 Bögen zu je 8 Elementen</td><td>0,54</td><td>0,35 × 0,35 × 0,67</td><td class="z">29</td><td class="z">53</td><td class="z">+17,9</td></tr>
+    </tbody>
+  </table></div>
+  <p>Leichtester fester Wohnraum bisher (42 kg, Jurte 61 kg). Innen nur 1,1 m hoch, also Sitzen, kein Stehen. Der Bogen ist ein Mechanismus: Er steht erst, wenn je Bogen ein Gelenk gesperrt ist oder ein Seil die Fußpunkte hält. Auch hier gilt: Fährt die Tonne mit, ist die Grenze von 85 kg überschritten.</p>
 
   <h3>Was die Prüfung korrigiert hat</h3>
   <ul>
@@ -356,7 +369,7 @@ window.addEventListener('error', function (e) {
     });
     function anwenden(){
       Array.prototype.forEach.call(tab.tBodies[0].rows,function(z){
-        var sicht=felder.every(function(f,i){var w=f.value.trim().toLowerCase();return !w||z.cells[i].textContent.toLowerCase().indexOf(w)>=0;});
+        var sicht=felder.every(function(f,i){var w=f.value.trim().toLowerCase();return !w||(z.cells[i]||{textContent:''}).textContent.toLowerCase().indexOf(w)>=0;});
         z.hidden=!sicht;
       });
     }

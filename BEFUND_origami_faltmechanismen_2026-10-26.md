@@ -127,6 +127,29 @@ Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons 
 - Gewicht der Krone
 - Kritik durch einen Maschinenbauer
 
+## Stufe 3d: Scherengitter-Tonne nach Simons Entwurf 2025 (26.10. abends)
+
+Rechnung: `rechnung/scherengitter_tonne.py`, 3D-Modell: Variante H.
+
+**Aufbau:**
+- Bögen aus polaren Scherenelementen nach Escrig und Pérez Piñero.
+- Das Gelenk teilt die Stäbe im Verhältnis Ro/Ri. Beim Aufziehen ändert sich darum nur der Radius, der Bogen bleibt ein Kreis. Bei φ = 0 liegen alle Stäbe nebeneinander.
+- Zwischen den Bögen sitzen Längsscheren, so faltet die ganze Tonne in beide Richtungen.
+- Haut: Plane mit Vlies 100 mm, die Stirnwände sind aus derselben Plane, eine mit Tür.
+
+| Ausführung | Stab m | Bündel m | Gestell kg | gesamt kg | Tonne allein | Kiste darin |
+|---|---|---|---|---|---|---|
+| **2,5 × 2,6 m, 4 Bögen zu je 6 Elementen** | 0,63 | 0,27 × 0,27 × 0,88 | 20 | **42** | +2,5 K | +18,2 K |
+| 2,5 × 2,6 m, 5 Bögen zu je 8 Elementen | 0,48 | 0,35 × 0,35 × 0,67 | 28 | 50 | +2,5 K | +18,2 K |
+| 2,8 × 2,6 m, 5 Bögen zu je 8 Elementen | 0,54 | 0,35 × 0,35 × 0,67 | 29 | 53 | +2,2 K | +17,9 K |
+
+**Bewertung:**
+- Das ist der leichteste feste Wohnraum bisher: 42 kg gegen 61 kg bei der Origami-Jurte und 48 kg bei der Stoff-Jurte, die keine feste Form hat.
+- Warm wird es wie in der Jurte, allerdings nur mit der Kiste darin.
+- Innen nur 1,1 m hoch, also Sitzen, kein Stehen. Der Deckel der Kiste stößt beim Öffnen an die Bögen. Die Kiste müsste dazu tiefer stehen, oder die Tonne wird 2,8 m breit.
+- Der polare Bogen ist ein Mechanismus. Er steht erst, wenn je Bogen ein Gelenk gesperrt ist oder ein Seil die Fußpunkte hält. Der Schub am Fuß beträgt bei Schnee 0,45 kN je Bogen, Gurte in der Bodenplane fangen ihn ab.
+- Harte Grenzen wie bei der Jurte: Fährt die Tonne mit, sind die 85 kg überschritten (Kiste mit Tonne ca. 123 kg).
+
 Quellen:
 - Flasher mit dicken Platten: [Lang: Accommodating Thickness in Origami-Based Deployable Arrays](https://langorigami.com/publication/accommodating-thickness-in-origami-based-deployable-arrays/), [NASA JPL: Solar Power, Origami-Style](https://www.jpl.nasa.gov/news/solar-power-origami-style/)
 - Origami-Kuppel nach dem Schirmprinzip: [Machover, Coleman, Pantazis: Deployable, Collapsible, Rigid Origami Shelter (MIT 2017, Figshare)](https://figshare.com/articles/deployable-collapsible-rigid_1_pdf_pdf/6848444)

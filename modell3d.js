@@ -680,7 +680,7 @@ function khanaGitter(r, tuer, wandHoehe, e = 0.267, glieder = 6, zellen = 21) {
   const ls = glieder * e, unter = 4;
   const bogen = 2 * Math.PI * r - tuer, u0 = tuer / 2;
   const alphaOffen = Math.asin(wandHoehe / ls), alphaZu = 84 * Math.PI / 180;
-  const staebe = 2 * (zellen + glieder / 2 + 1);
+  const staebe = 2 * (zellen + glieder / 2 + 2);   // je Richtung i = −g/2−1 … zellen bzw. 0 … zellen+g/2+1
   const pos = new Float32Array(staebe * unter * 6);
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -692,7 +692,7 @@ function khanaGitter(r, tuer, wandHoehe, e = 0.267, glieder = 6, zellen = 21) {
     const U = Math.min(zellen * w, bogen);
     let k = 0;
     const put = p => { pos[k++] = p[0]; pos[k++] = p[1]; pos[k++] = p[2]; };
-    for (const s of [1, -1]) for (let i = -glieder / 2 - 1; i <= zellen + 1; i++) {
+    for (const s of [1, -1]) for (let i = s > 0 ? -glieder / 2 - 1 : 0; i <= (s > 0 ? zellen : zellen + glieder / 2 + 1); i++) {
       if (k >= pos.length) break;
       const ua = i * w;
       // Teil des Stabs innerhalb 0 ≤ u ≤ U (Enden der Wand wie bei der Khana schräg abgeschnitten)
@@ -809,9 +809,96 @@ function faecherDach(r, wand, first, n = 24, sKrone = 0.40) {
       wagen.position.z = v < 0.05 ? 0 : 3.3 * (1 - reinV);
       fw.userData.deichsel.visible = reinV < 0.05;
     },
-    // Deckel nur öffnen, wenn der Anhänger steht und nichts darauf liegt
-    animiere() { if (reglerG < 0.05) dk.rotation.z = df.rotation.z = 0; },
+    // Deckel auf: die Pakete sind abgenommen
+    animiere(d) { pakete.visible = reglerG < 0.05 && d < 0.02; },
     text: 'Variante G, Origami-Jurte Ø 2,8 m: Khana aus 48 Alu-Rohren mit Scherengelenken, Dach als Fächer aus 24 Stegplatten 10 mm mit Vlies (Faltfehler 0 mm), Krone als Haube. Gefaltet liegen Dach (0,28 × 0,38 × 1,21 m) und Khana (0,17 × 0,12 × 1,6 m) auf dem Deckel; die Jurte wiegt 61 kg und fährt deshalb nicht mit dem Schlafwagen (Grenze 85 kg)',
+  };
+})();
+
+// --- Stufe 3d: Scherengitter-Tonne (Simon 2025, rechnung/scherengitter_tonne.py) ----
+// Bögen aus polaren Scherenelementen: Gelenk teilt die Stäbe im Verhältnis k = Ro/Ri,
+// Enden innen auf Ri, außen auf Ro; mit dem Winkel φ je Element ändert sich nur der
+// Radius. Zwischen den Bögen Längsscheren. v = 0 Bündel, 1 Halbkreis Ro 1,25 m.
+function scherenTonne(Ro = 1.25, tiefe = 0.15, n = 6, laenge = 2.6, felder = 3) {
+  const Ri0 = Ro - tiefe, k = Ro / Ri0, phiMax = Math.PI / n;
+  const l = Ri0 * Math.sqrt(1 + k * k - 2 * k * Math.cos(phiMax));
+  const lFeld = Math.hypot(laenge / felder, tiefe), boegen = felder + 1;
+  const segmente = boegen * 2 * n + felder * (n + 1) * 2;
+  const pos = new Float32Array(segmente * 6);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const g = new THREE.Group();
+  g.add(new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: F.griff })));
+  // Haut: Halbzylinder mit zwei Stirnwänden, erst wenn die Tonne steht
+  const haut = new THREE.Group();
+  const mantel = new THREE.Mesh(new THREE.CylinderGeometry(Ro + 0.02, Ro + 0.02, laenge, 32, 1, true, -Math.PI / 2, Math.PI),
+    glas(F.huelle, 0.3));
+  mantel.rotation.x = Math.PI / 2; haut.add(mantel);
+  for (const z of [-laenge / 2, laenge / 2]) {
+    const s = new THREE.Mesh(new THREE.CircleGeometry(Ro + 0.02, 32, 0, Math.PI), glas(F.huelle, z > 0 ? 0.15 : 0.3));
+    s.position.z = z; haut.add(s);
+  }
+  g.add(haut);
+  g.userData.setze = v => {
+    const phi = Math.max(0.004, phiMax * v);
+    const Ri = l / Math.sqrt(1 + k * k - 2 * k * Math.cos(phi)), RoV = k * Ri, Th = n * phi;
+    const yc = -Ri * Math.cos(Th / 2);                 // innere Fußpunkte auf dem Boden
+    const feld = Math.max(0.03, Math.sqrt(Math.max(lFeld * lFeld - (RoV - Ri) ** 2, 0)) * v);
+    const zArch = j => (j - felder / 2) * feld;
+    const knoten = (r, m, j) => {
+      const w = Math.PI / 2 - Th / 2 + m * phi;
+      return [r * Math.cos(w), yc + r * Math.sin(w), zArch(j)];
+    };
+    let q = 0;
+    const lin = (a, b) => { for (const x of [...a, ...b]) pos[q++] = x; };
+    for (let j = 0; j < boegen; j++) for (let m = 0; m < n; m++) {
+      lin(knoten(Ri, m, j), knoten(RoV, m + 1, j)); lin(knoten(Ri, m + 1, j), knoten(RoV, m, j));
+    }
+    for (let j = 0; j < felder; j++) for (let m = 0; m <= n; m++) {
+      lin(knoten(Ri, m, j), knoten(RoV, m, j + 1)); lin(knoten(RoV, m, j), knoten(Ri, m, j + 1));
+    }
+    geo.attributes.position.needsUpdate = true; geo.computeBoundingSphere();
+    haut.visible = v > 0.98;
+  };
+  g.userData.setze(1);
+  return g;
+}
+
+(function variante_h() {
+  const g = new THREE.Group();
+  const boden = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 2.6), mat(F.fuss));
+  boden.rotation.x = -Math.PI / 2; boden.position.y = 0.012; g.add(boden);
+  const tonne = scherenTonne(); g.add(tonne);
+  const wagen = new THREE.Group();
+  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
+  const kl = klappe(-L_A / 2 - 0.001, -1);
+  const fw = fahrwerk(L_A, L_A / 2 + 0.5);
+  wagen.add(wanne(L_A - 2 * T), giebel(-L_A / 2 + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(L_A / 2 - T / 2),
+    dk, df, kl, fw, mensch(-L_A / 2 + 0.2, 1));
+  // Transportlage: Gestell 0,27 × 0,27 × 0,88 m und Plane gerollt auf dem Deckel
+  const pakete = new THREE.Group();
+  const pg = new THREE.Mesh(new THREE.BoxGeometry(0.27, 0.27, 0.88), mat(F.griff));
+  pg.position.set(-0.15, BODEN + FI + 0.1, -0.4);
+  const pp = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.9, 16), mat(F.huelle));
+  pp.rotation.x = Math.PI / 2; pp.position.set(0.05, BODEN + FI + 0.1, 0.5);
+  pakete.add(pg, pp); wagen.add(pakete);
+  wagen.rotation.y = Math.PI;
+  g.add(wagen);
+  let reglerH = 1;
+  varianten.H = {
+    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Aufbau: Gestell, dann Anhänger',
+    setzeRegler: v => {
+      reglerH = v;
+      const auf = Math.min(1, Math.max(0, (v - 0.05) / 0.80));
+      const rein = Math.min(1, Math.max(0, (v - 0.90) / 0.10));
+      pakete.visible = v < 0.05;
+      tonne.visible = boden.visible = v >= 0.05;
+      tonne.userData.setze(auf);
+      wagen.position.z = v < 0.05 ? 0 : 3.0 * (1 - rein);
+      fw.userData.deichsel.visible = rein < 0.05;
+    },
+    animiere(d) { pakete.visible = reglerH < 0.05 && d < 0.02; },
+    text: 'Variante H, Scherengitter-Tonne nach Simons Entwurf 2025: 4 Bögen aus je 6 polaren Scherenelementen (Stäbe 0,63 m) und Längsscheren, 2,5 m breit, 1,25 m hoch, 2,6 m lang, Plane mit Vlies 100 mm. Gefaltet ein Bündel 0,27 × 0,27 × 0,88 m und die Plane; 42 kg, Kiste darin +18,2 K. Der Bogen ist ein Mechanismus und braucht ein gesperrtes Gelenk oder ein Fußseil',
   };
 })();
 
@@ -821,13 +908,13 @@ varianten.B.setzeRegler = v => varianten.B.setzeAuszug(v);
 
 // --- Bedienung ---------------------------------------------------------------
 const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: true,
-  regler: { B: 1, C: 1, E: 1, F: 1, G: 1 }, muster: 'miura' };
+  regler: { B: 1, C: 1, E: 1, F: 1, G: 1, H: 1 }, muster: 'miura' };
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
   A: ['Deckel mit Seitenwand auf', 'Stirnklappe'], B: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
   C: ['Tag: Balg zurück, Bettkante frei', 'Jurtentür'], D: ['Tag: Balg zurück, Bettkante frei', null], E: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
   F: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
-  G: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
+  G: ['Deckel mit Seitenwand auf', 'Stirnklappe'], H: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
 };
 
 // melden = false: Statuszeile nicht neu setzen (Regler, sonst liest der Screenreader jeden Schritt)
@@ -865,7 +952,7 @@ function anzeigen(melden = true) {
 const regler = document.getElementById('d3-auszug');
 // Startansicht je Variante: Kamera und Blickpunkt (Jurte und Zelt sind größer)
 const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55, 0], B: [3.2, 2.0, 2.6, 0.55, 0], C: [4.6, 3.2, 4.2, 0.9, 0],
-  D: [3.2, 2.0, 2.6, 0.55, 0], E: [3.4, 2.6, -4.4, 0.8, -0.9], G: [4.4, 3.4, 5.6, 0.8, 0.9],
+  D: [3.2, 2.0, 2.6, 0.55, 0], E: [3.4, 2.6, -4.4, 0.8, -0.9], G: [4.4, 3.4, 5.6, 0.8, 0.9], H: [4.2, 3.0, 5.2, 0.7, 0.8],
   miura: [4.0, 2.4, 3.0, 0.7, 0.2], yoshimura: [3.4, 2.6, -4.4, 0.8, -0.9] };
 function ansicht() {
   const [x, y, z, ty, tz] = ANSICHT[zustand.variante === 'F' ? zustand.muster : zustand.variante];

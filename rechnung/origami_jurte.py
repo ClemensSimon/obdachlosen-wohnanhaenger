@@ -17,10 +17,13 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from rundzelt_schirm import ANNAHMEN, KOERPER_W, u_wert, LAMBDA_PIR  # noqa: E402
+from rundzelt_schirm import ANNAHMEN, KOERPER_W, u_wert, AUSSEN, ZIEL_K  # noqa: E402
 from origami_varianten import PLATTE, SCHARNIER_KG_M, passt  # noqa: E402
 
+sys.stdout.reconfigure(encoding="utf-8")
 REAL = ANNAHMEN["realistisch"]
+DT = ZIEL_K - AUSSEN                       # 25 K: +15 °C innen bei −10 °C außen
+Y_DECKEL = 0.40 + 0.68                     # First des Deckels über Grund (BODEN + FI)
 J = dict(r=1.40, wand=1.10, first=1.90)    # wie Schirm-Jurte (Variante C)
 N_DACH = 24                                # Platten = Falten
 S_KRONE = 0.40                             # Platten enden 0,4 m (schräg) unter dem Scheitel
@@ -75,7 +78,7 @@ def faltweg(t):
 
 def faecher_weg(t, schritte=200):
     """Fächer mit offener Naht über der Tür: Abstand der Falten im Azimut wächst
-    von 0 (Stapel) bis 2π/N (Kegel); Innenfalte a frei gewählt, Außenfalte b aus der
+    von fast 0 (Stapel) bis 2π/N (Kegel); Innenfalte a frei gewählt, Außenfalte b aus der
     festen Traufkante. Gefaltet liegen alle Platten in einer Ebene übereinander."""
     R, th0, d, c, K = kegel()
     fehler, ueber = 0.0, False
@@ -175,22 +178,22 @@ if __name__ == "__main__":
         h = waerme(d)
         hk = 4.13                          # Kiste PIR 45, Stufe 3b
         plus = KOERPER_W / hk + KOERPER_W / h
-        heiz = max(0, 1 / (1 / hk + 1 / h) * 25 - KOERPER_W)
+        heiz = max(0, 1 / (1 / hk + 1 / h) * DT - KOERPER_W)
         print(f"{d['platte']} | {w['fehler'] * 1000:.2f} | {'JA' if w['ueber'] else 'nein'} | "
               f"{p[0]:.2f} × {p[1]:.2f} × {p[2]:.2f} | {'ja' if passt(p) else 'NEIN'} | {d['kg']:.0f} | "
-              f"{st['ring'] / 1000:.2f} | {sig} |{KOERPER_W / h:+.1f} | {plus:+.1f} | {heiz:.0f}")
+              f"{st['ring'] / 1000:.2f} | {sig} | {KOERPER_W / h:+.1f} | {plus:+.1f} | {heiz:.0f}")
         jurte_kg = d["kg"] + kh["kg"] + W_FILZ
         # Transport: Dachstapel flach auf dem Deckel, Khana daneben, Hülle in der Kiste
-        y_deckel = 0.40 + 0.68
+
         oben = max(p[0], kh["paket"][0])
-        teile = [(BASIS_KISTE, 0.55), (d["kg"], y_deckel + p[0] / 2),
-                 (kh["kg"], y_deckel + kh["paket"][0] / 2), (W_FILZ, 0.65)]
+        teile = [(BASIS_KISTE, 0.55), (d["kg"], Y_DECKEL + p[0] / 2),
+                 (kh["kg"], Y_DECKEL + kh["paket"][0] / 2), (W_FILZ, 0.65)]
         m = sum(k for k, _ in teile)
         ys = sum(k * y for k, y in teile) / m
         spur = 0.68
         print(f"   Jurte gesamt {jurte_kg:.0f} kg; mit Kiste {m:.0f} kg (Grenze 85 kg: "
               f"{'VERLETZT' if m > 85 else 'ok'}); Breite oben {p[1] + kh['paket'][1]:.2f} m; "
-              f"Transporthöhe {y_deckel + oben:.2f} m; "
+              f"Transporthöhe {Y_DECKEL + oben:.2f} m; "
               f"Schwerpunkt {ys:.2f} m, kippt seitlich ab {math.degrees(math.atan2(spur / 2, ys)):.0f}° "
               f"(Kiste allein {math.degrees(math.atan2(spur / 2, 0.55)):.0f}°); Schnee gesamt {st['W'] / 1000:.1f} kN")
     print("\nHarte Grenzen: leer ≤ 85 kg verletzt, sobald die Jurte mitfährt. Steht sie am Platz,"

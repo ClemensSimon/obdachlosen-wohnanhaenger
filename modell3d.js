@@ -3,7 +3,7 @@
 // B: Auszug, Kopfteil 1,25 m, Fußteil mit eigenem Satteldach schiebt hinein;
 //    gedichtet axial in den Endlagen (innen Kniehebel, außen Sicherungsschrauben)
 // C: Schirm-Jurte als Wohnraum, darin der Kokon (Haus im Haus); D: Kokon allein;
-// E: Kiste mit Eisfischerzelt als Vorraum (Stufe 3)
+// E: Kiste mit Eisfischerzelt als Vorraum; F: Kiste mit Origami-Vorraum (Stufe 3)
 // Solarmodule liegen auf beiden Dachseiten (Entscheidung Frage 27).
 import * as THREE from './lib/three.module.js';
 import { OrbitControls } from './lib/OrbitControls.js';
@@ -441,6 +441,51 @@ function hubZelt() {
   return g;
 }
 
+// Origami-Tonne (Yoshimura-Muster): Bergringe auf der Ellipse, Talringe um eine
+// halbe Teilung versetzt und nach innen gefaltet. Angenähert: Ringabstand und
+// Faltentiefe sind gekoppelt (Abstand Ring zu Ring gleich lang), die Diagonalen
+// der Dreiecke ändern sich noch; ein starr faltbares Muster ist noch zu rechnen.
+function origamiTonne(spann = 1.8, hoehe = 1.5, laenge = 1.8, ringe = 9, m = 8) {
+  const d = laenge / (ringe - 1), h0 = 0.10, kante = Math.hypot(d, h0);
+  const geo = new THREE.BufferGeometry();
+  const anzahl = (ringe - 1) * (2 * m + 1) * 3;
+  const pos = new Float32Array(anzahl * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const tonne = new THREE.Mesh(geo, mat(F.huelle, { flatShading: true, side: THREE.DoubleSide }));
+  const kanten = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 10), new THREE.LineBasicMaterial({ color: F.rahmen }));
+  const g = new THREE.Group(); g.add(tonne, kanten);
+  const a = spann / 2, schritt = Math.PI / m;
+  const punkt = (phi, tief) => {     // Punkt auf der Ellipse, um tief nach innen versetzt
+    const x = a * Math.cos(phi), y = hoehe * Math.sin(phi);
+    const nx = Math.cos(phi) / a, ny = Math.sin(phi) / hoehe, n = Math.hypot(nx, ny);
+    return [x - tief * nx / n, Math.max(y - tief * ny / n, 0)];
+  };
+  g.userData.setze = auf => {
+    const s = d * (0.06 + 0.94 * auf), tief = Math.sqrt(Math.max(kante * kante - s * s, 0));   // offen: h0
+    let k = 0;
+    const tri = (p, q, r) => { for (const v of [p, q, r]) { pos[k++] = v[0]; pos[k++] = v[1]; pos[k++] = v[2]; } };
+    for (let i = 0; i < ringe - 1; i++) {
+      // gerade Ringe: Berg (auf der Ellipse), ungerade: Tal (versetzt, nach innen)
+      const berg = i % 2 === 0 ? i : i + 1, tal = i % 2 === 0 ? i + 1 : i;
+      const zb = -berg * s, zt = -tal * s;
+      const P = [], Q = [];
+      for (let j = 0; j <= m; j++) { const [x, y] = punkt(j * schritt, 0); P.push([x, y, zb]); }
+      Q.push([...punkt(0, 0), zt]);
+      for (let j = 1; j <= m; j++) { const [x, y] = punkt((j - 0.5) * schritt, tief); Q.push([x, y, zt]); }
+      Q.push([...punkt(Math.PI, 0), zt]);
+      for (let j = 0; j < m; j++) tri(P[j], P[j + 1], Q[j + 1]);
+      for (let j = 0; j <= m; j++) tri(Q[j], Q[j + 1], P[j]);
+    }
+    geo.attributes.position.needsUpdate = true;
+    geo.computeVertexNormals();
+    geo.computeBoundingSphere();
+    kanten.geometry.dispose();
+    kanten.geometry = new THREE.EdgesGeometry(geo, 10);
+  };
+  g.userData.setze(1);
+  return g;
+}
+
 (function variante_c() {
   const g = new THREE.Group();
   const j = schirmJurte(); g.add(j);
@@ -485,17 +530,34 @@ function hubZelt() {
   };
 })();
 
+(function variante_f() {
+  const g = new THREE.Group();
+  const zKopf = -L_A / 2, zFuss = L_A / 2;
+  g.add(wanne(L_A - 2 * T));
+  g.add(giebel(zKopf + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(zFuss - T / 2));
+  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
+  const kl = klappe(zKopf - 0.001, -1);
+  const ori = origamiTonne(); ori.position.z = zKopf - 0.01;
+  g.add(dk, df, kl, ori, fahrwerk(L_A, zFuss + 0.5), mensch(zKopf + 0.2, 1));
+  varianten.F = {
+    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Faltwerk aufziehen',
+    setzeRegler: v => ori.userData.setze(v),
+    text: 'Variante F: feste Kiste mit Origami-Vorraum (Yoshimura-Tonne 1,8 × 1,5 × 1,8 m, feste Dreiecksplatten mit Stoffgelenken)',
+  };
+})();
+
 for (const v of Object.values(varianten)) szene.add(v.gruppe);
 varianten.B.regler = 'Auszug';
 varianten.B.setzeRegler = v => varianten.B.setzeAuszug(v);
 
 // --- Bedienung ---------------------------------------------------------------
 const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: true,
-  regler: { B: 1, C: 1, E: 1 } };
+  regler: { B: 1, C: 1, E: 1, F: 1 } };
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
   A: ['Deckel als Vordach', 'Stirnklappe'], B: ['Deckel als Vordach', 'Stirnklappe'],
   C: ['Verdeck zurück', 'Jurtentür'], D: ['Verdeck zurück', null], E: ['Deckel als Vordach', 'Stirnklappe'],
+  F: ['Deckel als Vordach', 'Stirnklappe'],
 };
 
 // melden = false: Statuszeile nicht neu setzen (Regler, sonst liest der Screenreader jeden Schritt)
@@ -532,7 +594,7 @@ function anzeigen(melden = true) {
 const regler = document.getElementById('d3-auszug');
 // Startansicht je Variante: Kamera und Blickpunkt (Jurte und Zelt sind größer)
 const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55], B: [3.2, 2.0, 2.6, 0.55], C: [4.6, 3.2, 4.2, 0.9],
-  D: [3.2, 2.0, 2.6, 0.55], E: [3.4, 2.6, -4.4, 0.8] };
+  D: [3.2, 2.0, 2.6, 0.55], E: [3.4, 2.6, -4.4, 0.8], F: [3.4, 2.6, -4.4, 0.8] };
 function reglerText(wert) {
   if (zustand.variante !== 'B') return `${varianten[zustand.variante].regler}: ${Math.round(wert * 100)} Prozent`;
   return `Länge ${(L_KOPF + (L_A - L_KOPF) * wert).toFixed(2).replace('.', ',')} m`;
@@ -542,7 +604,7 @@ document.querySelectorAll('[data-variante]').forEach(b => b.addEventListener('cl
   zustand.variante = b.dataset.variante;
   zustand.deckelAuf = zustand.klappeAuf = false;          // Schalter gelten je Variante neu
   const [x, y, z, ty] = ANSICHT[zustand.variante];
-  kamera.position.set(x, y, z); steuerung.target.set(0, ty, zustand.variante === 'E' ? -0.9 : 0);
+  kamera.position.set(x, y, z); steuerung.target.set(0, ty, 'EF'.includes(zustand.variante) ? -0.9 : 0);
   anzeigen();
 }));
 document.getElementById('d3-deckel').addEventListener('click', () => { zustand.deckelAuf = !zustand.deckelAuf; anzeigen(); });

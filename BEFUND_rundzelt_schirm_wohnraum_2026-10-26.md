@@ -99,6 +99,12 @@ Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
     - die Dicke der Platten verlangt eigene Faltmuster (thick origami)
   - Vorbild: Cardborigami von Tina Hovsepian. Das ist ein gefalteter Unterstand aus Pappe für Obdachlose in Los Angeles, 4,8 kg schwer und in unter einer Minute aufgebaut.
   - Origami taugt als feste, faltbare **Kiste**, also als Ersatz für Deckel und Auszug, und als robuster Wohnraum. Wärmer als die Jurte wird der Wohnraum dadurch nicht.
+  - 3D-Modell, Variante F:
+    - Kiste mit Origami-Vorraum am Kopfende: Tonne 1,8 m breit, 1,5 m hoch, 1,8 m lang. Sie hat 9 Ringe zu je 8 Feldern, im Wechsel Berg- und Talfalte.
+    - Die Faltbewegung ist **angenähert**. Ringabstand und Tiefe der Talfalte sind so gekoppelt, dass der Abstand von Ring zu Ring gleich bleibt. Die Talfalte wird beim Aufziehen von etwa 25 cm auf 10 cm flacher.
+    - Die Diagonalen der Dreiecke ändern sich dabei noch zwischen 0,28 und 0,38 m. Für feste Platten braucht es ein berechnetes, starr faltbares Muster. Zusammengeschoben ist der Stapel etwa 0,1 m tief, aber 1,8 m breit.
+    - Für die Fahrt mit 0,8 m Breite muss die Tonne deshalb zusätzlich in der Mitte falten (Miura-Muster) oder flach auf der Kiste liegen. Das ist noch offen.
+    - Die Stirnwand vorne fehlt im Modell noch.
 
 ## Offen
 

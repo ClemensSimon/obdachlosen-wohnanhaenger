@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=8" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=9" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,13 +129,14 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit Faltverdeck, E Kiste mit Eisfischerzelt als Vorraum. Der Regler baut Schirm oder Zelt auf.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit Faltverdeck, E Kiste mit Eisfischerzelt als Vorraum, F Kiste mit Origami-Vorraum (Yoshimura-Faltwerk). Der Regler baut Schirm, Zelt oder Faltwerk auf.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
     <button type="button" class="knopf" data-variante="C" aria-pressed="false">C: Jurte + Kokon</button>
     <button type="button" class="knopf" data-variante="D" aria-pressed="false">D: Kokon</button>
     <button type="button" class="knopf" data-variante="E" aria-pressed="false">E: Kiste + Eisfischerzelt</button>
+    <button type="button" class="knopf" data-variante="F" aria-pressed="false">F: Kiste + Origami</button>
     <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
     <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>

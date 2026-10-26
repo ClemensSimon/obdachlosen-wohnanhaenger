@@ -84,13 +84,16 @@ Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
   - 6 Bügel aus GFK schieben sich zum Kopfende zusammen wie eine Lkw-Schiebeplane.
   - Am Tag ist der Kokon eine Bank, nachts die Schlafhülle.
   - Er hat 0,74 m Außenbreite und wiegt 11–13 kg statt 27 kg wie die Kiste.
-  - **Absenkbare Seitenwand (Simon, 26.10.):**
-    - Die Wand zur Wohnseite ist aus PIR und 0,33 m hoch. Sie läuft in Schienen und senkt sich senkrecht außen am Boden vorbei ab, wie die Seite eines Kinderbetts. Ein Schwenk über ein Scharnier würde in der Jurte durch den Mast fahren (QS 26.10.).
-    - Im Tagmodus fährt erst das Verdeck zurück, dann senkt sich die Wand ab. Die Bettkante liegt frei in etwa 0,55 m Höhe, ein Stuhl hat 0,45 m. Mit 10 cm weniger Bodenfreiheit oder einer Fußstufe passt sie.
+  - **Unsymmetrischer Balg (Simon, 26.10.):**
+    - Auf der Wohnseite gibt es keine feste Wand. Dort reicht der Balg selbst bis zur Bettkante hinunter.
+    - Auf der anderen Seite sitzt er auf einer festen PIR-Wand von 0,33 m.
+    - Zurückgeschoben ist die Bettkante frei zum Sitzen. Dafür braucht es **keinen zweiten Klappmechanismus**, also keine zusätzliche Fuge und keine Spanner.
+    - Die Bettkante liegt in etwa 0,55 m Höhe, ein Stuhl hat 0,45 m. Mit 10 cm weniger Bodenfreiheit oder einer Fußstufe passt sie.
     - In der Jurte ergibt das zwei Sitzplätze links und rechts vom Mast.
-    - Kosten:
-      - Die Fuge an der Wand ist 2 m lang. Sie braucht eine umlaufende Dichtung und 3–4 Spanner wie am Auszug.
-      - Nachts muss die Wand zuerst hoch, sonst liegt das Verdeck nicht auf.
+    - Zu klären:
+      - Der Balg muss unten an der Bettkante dicht anliegen. Ein Wulst oder Magnetband könnte das leisten.
+      - Die Bügel sind dadurch unsymmetrisch. Die längere rechte Seite muss seitlich ausgesteift werden, damit sie bei Wind nicht nach innen gedrückt wird.
+    - Eine absenkbare Seitenwand (Entwurf vom Nachmittag) ist damit überflüssig.
 - **E, Kiste mit Eisfischerzelt als Vorraum:**
   - Das Zelt steht in 30–90 s, ist aber nur Windschutz (+1 K).
   - Es ist die billigste Möglichkeit, einen Wohnraum zu bekommen. Man kann es fertig kaufen, für 150–300 €.

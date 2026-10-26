@@ -324,40 +324,45 @@ function setzeStab(m, a, b) {
   m.quaternion.setFromUnitVectors(_y, d.normalize());
 }
 
-// Kokon: niedrige Wanne (PIR) mit Faltverdeck aus Bügeln, die sich zum Kopfende
-// zusammenschieben wie eine Schiebeplane; offen = 1 heißt zurückgeschoben (Bank)
+// Kokon: niedrige Wanne (PIR) mit Faltverdeck (Balg) aus Bügeln, die sich zum
+// Kopfende zusammenschieben wie eine Schiebeplane; offen = 1 heißt zurückgeschoben.
+// Der Balg ist unsymmetrisch (Simon 26.10.): links sitzt er auf der festen Wand,
+// rechts (Wohnseite) reicht er bis zur Bettkante hinunter. Zurückgeschoben ist die
+// Bettkante frei zum Sitzen, ohne zweiten Klappmechanismus.
 function kokon(laenge) {
   const g = new THREE.Group();
   // innen 0,60 m breit, 0,58 m hoch (Kritik 26.10.); Vlies 60 mm + Haut: außen 0,74 m
-  const hs = 0.28, r = 0.37, y0 = BODEN + T + hs, n = 6;
-  // Wanne: Boden und linke Wand fest; die rechte Seitenwand (Wohnseite) senkt sich
-  // senkrecht am Boden vorbei ab wie beim Kinderbett, dann ist die Bettkante zum
-  // Sitzen frei (Simon 26.10.). Kein Schwenk: sie überstreicht nichts daneben.
-  const s = new THREE.Shape();
-  s.moveTo(-B / 2, 0); s.lineTo(B / 2 - T, 0); s.lineTo(B / 2 - T, T); s.lineTo(-B / 2 + T, T);
+  const hs = 0.28, r = 0.37, y0 = BODEN + T + hs, yb = BODEN + T, n = 6;
+  const s = new THREE.Shape();      // Boden über die ganze Breite, nur links eine Wand
+  s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, T); s.lineTo(-B / 2 + T, T);
   s.lineTo(-B / 2 + T, T + hs); s.lineTo(-B / 2, T + hs); s.closePath();
   const wg = new THREE.ExtrudeGeometry(s, { depth: laenge, bevelEnabled: false });
   wg.translate(0, BODEN, -laenge / 2);
   g.add(new THREE.Mesh(wg, mat(F.huelle)));
-  const seite = new THREE.Mesh(new THREE.BoxGeometry(T, T + hs, laenge - 0.02), mat(F.klappe));
-  const yZu = BODEN + (T + hs) / 2;
-  seite.position.set(B / 2 - T / 2, yZu, 0);
-  g.add(seite);
-  g.userData.seite = w => { seite.position.y = yZu - hs * Math.min(Math.max(w, 0), 1); };   // 0 oben, 1 unten
-  // Kopfende fest (Halbscheibe auf der Wanne), daran klappt nichts
-  const kopf = new THREE.Mesh(new THREE.CircleGeometry(r, 24, 0, Math.PI), mat(F.fuss, { side: THREE.DoubleSide }));
-  kopf.position.set(0, y0, -laenge / 2 + 0.01);
-  g.add(kopf);
+  // Querschnitt des Balgs: von der linken Wand über den Bogen, rechts senkrecht zur Bettkante
+  const profil = [];
+  for (let k = 0; k <= 24; k++) { const w = Math.PI * (1 - k / 24); profil.push([r * Math.cos(w), y0 + r * Math.sin(w)]); }
+  profil.push([r, yb + 0.01]);
+  const stirn = () => {             // Stirnfläche bis hinunter auf den Boden
+    const f = new THREE.Shape();
+    f.moveTo(-r, yb); profil.forEach(([x, y]) => f.lineTo(x, y)); f.closePath();
+    return new THREE.Mesh(new THREE.ShapeGeometry(f), mat(F.fuss, { side: THREE.DoubleSide }));
+  };
+  const kopf = stirn(); kopf.position.z = -laenge / 2 + 0.01; g.add(kopf);
+  const bGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(profil.map(([x, y]) => new THREE.Vector3(x, y, 0)),
+    false, 'catmullrom', 0), 64, 0.012, 6);
+  const ecken = [], idx = [];
+  profil.forEach(([x, y]) => ecken.push(x, y, -0.5, x, y, 0.5));
+  for (let k = 0; k < profil.length - 1; k++) { const a = 2 * k; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.Float32BufferAttribute(ecken, 3));
+  pGeo.setIndex(idx); pGeo.computeVertexNormals();
   const buegel = [], bahnen = [];
-  const bGeo = new THREE.TorusGeometry(r, 0.012, 8, 24, Math.PI);
-  const pGeo = new THREE.CylinderGeometry(r, r, 1, 24, 1, true, Math.PI / 2, Math.PI);
-  pGeo.rotateX(Math.PI / 2);
   for (let i = 0; i < n; i++) {
-    const b = new THREE.Mesh(bGeo, mat(F.rahmen)); b.position.y = y0; buegel.push(b); g.add(b);
-    if (i < n - 1) { const p = new THREE.Mesh(pGeo, mat(F.dach, { side: THREE.DoubleSide })); p.position.y = y0; bahnen.push(p); g.add(p); }
+    const b = new THREE.Mesh(bGeo, mat(F.rahmen)); buegel.push(b); g.add(b);
+    if (i < n - 1) { const p = new THREE.Mesh(pGeo, mat(F.dach, { side: THREE.DoubleSide })); bahnen.push(p); g.add(p); }
   }
-  const fussende = new THREE.Mesh(new THREE.CircleGeometry(r, 24, 0, Math.PI), mat(F.fuss, { side: THREE.DoubleSide }));
-  fussende.position.y = y0; g.add(fussende);
+  const fussende = stirn(); g.add(fussende);
   g.userData.setze = offen => {
     for (let i = 0; i < n; i++) {
       const zu = -laenge / 2 + i * laenge / (n - 1), auf = -laenge / 2 + 0.03 + i * 0.045;
@@ -365,7 +370,7 @@ function kokon(laenge) {
     }
     for (let i = 0; i < n - 1; i++) {
       const a = buegel[i].position.z, e = buegel[i + 1].position.z;
-      bahnen[i].position.z = (a + e) / 2; bahnen[i].scale.y = 1;
+      bahnen[i].position.z = (a + e) / 2;
       bahnen[i].scale.z = Math.max(e - a, 0.001);
     }
     fussende.position.z = buegel[n - 1].position.z;
@@ -500,10 +505,9 @@ function origamiTonne(spann = 1.8, hoehe = 1.5, laenge = 1.8, ringe = 9, m = 8) 
   return g;
 }
 
-// Tagstellung des Kokons: erst das Verdeck zurück, dann die Seitenwand herunter
+// Tagstellung des Kokons: Balg zurück, die Bettkante auf der Wohnseite wird frei
 function tagBank(k, d) {
-  k.userData.setze(Math.min(1, d / 0.6));
-  k.userData.seite(Math.max(0, (d - 0.6) / 0.4));
+  k.userData.setze(d);
 }
 
 (function variante_c() {
@@ -543,7 +547,7 @@ function tagBank(k, d) {
   varianten.D = {
     gruppe: g, deckel: [], klappen: [],
     animiere(d) { tagBank(k, d); },
-    text: 'Variante D: Kokon mit Faltverdeck (Bügel schieben sich zum Kopfende) und absenkbarer Seitenwand: am Tag Bank mit Bettkante, 0,78 m breit',
+    text: 'Variante D: Kokon mit Balg (Bügel schieben sich zum Kopfende); auf der Wohnseite reicht der Balg bis zur Bettkante, zurückgeschoben ist die Bettkante frei zum Sitzen; 0,78 m breit',
   };
 })();
 
@@ -589,7 +593,7 @@ const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: tru
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
   A: ['Deckel als Vordach', 'Stirnklappe'], B: ['Deckel als Vordach', 'Stirnklappe'],
-  C: ['Tag: Bank mit Bettkante', 'Jurtentür'], D: ['Tag: Bank mit Bettkante', null], E: ['Deckel als Vordach', 'Stirnklappe'],
+  C: ['Tag: Balg zurück, Bettkante frei', 'Jurtentür'], D: ['Tag: Balg zurück, Bettkante frei', null], E: ['Deckel als Vordach', 'Stirnklappe'],
   F: ['Deckel als Vordach', 'Stirnklappe'],
 };
 

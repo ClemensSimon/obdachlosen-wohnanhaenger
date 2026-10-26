@@ -673,18 +673,161 @@ function miuraBlatt(zeilen, spalten, a, b, gammaGrad, thetaOffenGrad, abbild, fa
   };
 })();
 
+// --- Stufe 3c: Origami-Jurte (rechnung/origami_jurte.py) ------------------------
+// Khana: Scherengitter aus Rohren (Simons Scherengelenk 2025), zieht sich von der
+// Tür aus um den Kreis auf. Winkel u = Bogenlänge ab Türkante, Tür bei +z.
+function khanaGitter(r, tuer, wandHoehe, e = 0.267, glieder = 6, zellen = 21) {
+  const ls = glieder * e, unter = 4;
+  const bogen = 2 * Math.PI * r - tuer, u0 = tuer / 2;
+  const alphaOffen = Math.asin(wandHoehe / ls), alphaZu = 84 * Math.PI / 180;
+  const staebe = 2 * (zellen + glieder / 2 + 1);
+  const pos = new Float32Array(staebe * unter * 6);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const linien = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: F.griff }));
+  const punkt = (u, y) => { const w = (u0 + u) / r; return [r * Math.sin(w), y, r * Math.cos(w)]; };
+  linien.userData.setze = v => {   // 0 = zusammengeschoben an der Türkante, 1 = offen
+    const al = alphaZu + (alphaOffen - alphaZu) * v;
+    const w = 2 * e * Math.cos(al), H = ls * Math.sin(al), Lh = glieder * w / 2;
+    const U = Math.min(zellen * w, bogen);
+    let k = 0;
+    const put = p => { pos[k++] = p[0]; pos[k++] = p[1]; pos[k++] = p[2]; };
+    for (const s of [1, -1]) for (let i = -glieder / 2 - 1; i <= zellen + 1; i++) {
+      if (k >= pos.length) break;
+      const ua = i * w;
+      // Teil des Stabs innerhalb 0 ≤ u ≤ U (Enden der Wand wie bei der Khana schräg abgeschnitten)
+      let t0 = 0, t1 = 1;
+      if (Lh > 1e-6) {
+        const ta = (0 - ua) / (s * Lh), tb = (U - ua) / (s * Lh);
+        t0 = Math.max(0, Math.min(ta, tb)); t1 = Math.min(1, Math.max(ta, tb));
+      } else if (ua < 0 || ua > U) t1 = -1;
+      if (t1 <= t0) continue;
+      for (let j = 0; j < unter; j++) {
+        const ta = t0 + (t1 - t0) * j / unter, tb = t0 + (t1 - t0) * (j + 1) / unter;
+        put(punkt(ua + s * Lh * ta, H * ta)); put(punkt(ua + s * Lh * tb, H * tb));
+      }
+    }
+    pos.fill(0, k);
+    geo.attributes.position.needsUpdate = true; geo.computeBoundingSphere();
+  };
+  linien.userData.setze(1);
+  return linien;
+}
+
+// Faltkegel als Fächer: 24 Trapezplatten, alle Falten zielen auf einen gedachten
+// Scheitel; die Naht über der Tür bleibt offen, gefaltet liegen die Platten als
+// Stapel übereinander. Innenfalte a frei, Außenfalte b aus der festen Traufkante.
+function faecherDach(r, wand, first, n = 24, sKrone = 0.40) {
+  const R = Math.hypot(r, first - wand), th0 = Math.atan2(r, first - wand);
+  const d = 2 * Math.PI / n, c = 2 * r * Math.sin(d / 2), K = 1 - c * c / (2 * R * R);
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(n * 6 * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const lgeo = new THREE.BufferGeometry();
+  const lpos = new Float32Array(n * 4 * 6);
+  lgeo.setAttribute('position', new THREE.BufferAttribute(lpos, 3));
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(geo, mat(0x9fb4c4, { flatShading: true, side: THREE.DoubleSide })),
+    new THREE.LineSegments(lgeo, new THREE.LineBasicMaterial({ color: F.rahmen })));
+  g.userData.setze = v => {        // Scheitel im Ursprung der Gruppe
+    const a = 0.05 + (th0 - 0.05) * v, dz = d * v;
+    const m = Math.hypot(Math.cos(a), Math.sin(a) * Math.cos(dz));
+    const b = Math.atan2(Math.sin(a) * Math.cos(dz), Math.cos(a)) + Math.acos(Math.min(1, K / m));
+    const falte = (i, s) => {
+      const p = i % 2 ? b : a, w = Math.PI + (i - n / 2) * dz;
+      return [s * Math.sin(p) * Math.sin(w), -s * Math.cos(p), s * Math.sin(p) * Math.cos(w)];
+    };
+    let k = 0, l = 0;
+    const put = q => { pos[k++] = q[0]; pos[k++] = q[1]; pos[k++] = q[2]; };
+    const lin = (p, q) => { for (const x of [...p, ...q]) lpos[l++] = x; };
+    for (let i = 0; i < n; i++) {
+      const p1 = falte(i, sKrone), p2 = falte(i, R), p3 = falte(i + 1, R), p4 = falte(i + 1, sKrone);
+      [p1, p2, p3, p1, p3, p4].forEach(put);
+      lin(p1, p2); lin(p2, p3); lin(p3, p4); lin(p4, p1);
+    }
+    geo.attributes.position.needsUpdate = true; geo.computeVertexNormals(); geo.computeBoundingSphere();
+    lgeo.attributes.position.needsUpdate = true; lgeo.computeBoundingSphere();
+  };
+  g.userData.setze(1);
+  return g;
+}
+
+(function variante_g() {
+  const g = new THREE.Group(), J = JURTE, tuer = 0.8;
+  const boden = new THREE.Mesh(new THREE.CircleGeometry(J.r, 48), mat(F.fuss));
+  boden.rotation.x = -Math.PI / 2; boden.position.y = 0.012; g.add(boden);
+  const khana = khanaGitter(J.r, tuer, J.wand); g.add(khana);
+  // Türrahmen
+  const xT = tuer / 2, zT = Math.sqrt(J.r * J.r - xT * xT), rahmen = new THREE.Group();
+  for (const [p, q] of [[[-xT, 0, zT], [-xT, J.wand, zT]], [[xT, 0, zT], [xT, J.wand, zT]], [[-xT, J.wand, zT], [xT, J.wand, zT]]]) {
+    const s = stab(0.02, F.rahmen); setzeStab(s, new THREE.Vector3(...p), new THREE.Vector3(...q)); rahmen.add(s);
+  }
+  g.add(rahmen);
+  // Wandhülle Vlies 100 mm, erst wenn Dach und Wand stehen
+  const td = Math.asin(xT / J.r);
+  const huelle = new THREE.Mesh(new THREE.CylinderGeometry(J.r + 0.01, J.r + 0.01, J.wand, 48, 1, true, td, 2 * Math.PI - 2 * td),
+    glas(F.huelle, 0.3));
+  huelle.position.y = J.wand / 2; g.add(huelle);
+  const dach = faecherDach(J.r, J.wand, J.first); dach.position.y = J.first; g.add(dach);
+  const krone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.22, 24), mat(F.dach));
+  krone.position.y = J.first - 0.12; g.add(krone);
+  // Aufstellstange mit Kurbel: nur zum Aufbauen, danach heraus
+  const stange = stab(0.025, F.griff); setzeStab(stange, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, J.first + 0.05, 0)); g.add(stange);
+
+  // Anhänger (feste Kiste), rückwärts hinein: Stirnklappe zeigt zur Tür
+  const wagen = new THREE.Group();
+  const dk = deckel(L_A / 2, -L_A / 4), df = deckel(L_A / 2, L_A / 4);
+  const kl = klappe(-L_A / 2 - 0.001, -1);
+  const fw = fahrwerk(L_A, L_A / 2 + 0.5);
+  wagen.add(wanne(L_A - 2 * T), giebel(-L_A / 2 + T / 2, [KLAPPE_B, KLAPPE_H]), giebel(L_A / 2 - T / 2),
+    dk, df, kl, fw, mensch(-L_A / 2 + 0.2, 1));
+  // Transportlage: Dachstapel 0,28 × 0,38 × 1,21 m und Khana 0,17 × 0,12 × 1,6 m auf dem Deckel
+  const pakete = new THREE.Group();
+  const pd = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.28, 1.21), mat(0x9fb4c4));
+  pd.position.set(-0.13, BODEN + FI + 0.14, 0);
+  const pk = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.17, 1.6), mat(F.griff));
+  pk.position.set(0.20, BODEN + FI - 0.02, 0);
+  pakete.add(pd, pk); wagen.add(pakete);
+  wagen.rotation.y = Math.PI;
+  g.add(wagen);
+
+  let reglerG = 1;
+  varianten.G = {
+    gruppe: g, deckel: [dk, df], klappen: [kl], regler: 'Aufbau: Wand, Dach, Anhänger',
+    setzeRegler: v => {
+      reglerG = v;
+      const wandV = Math.min(1, Math.max(0, (v - 0.05) / 0.35));
+      const dachV = Math.min(1, Math.max(0, (v - 0.40) / 0.45));
+      const reinV = Math.min(1, Math.max(0, (v - 0.90) / 0.10));
+      pakete.visible = v < 0.05;
+      khana.visible = boden.visible = rahmen.visible = v >= 0.05;
+      khana.userData.setze(wandV);
+      dach.visible = v >= 0.40;
+      dach.userData.setze(dachV);
+      stange.visible = v >= 0.40 && v < 0.88;
+      krone.visible = huelle.visible = v >= 0.88;
+      wagen.position.z = v < 0.05 ? 0 : 3.3 * (1 - reinV);
+      fw.userData.deichsel.visible = reinV < 0.05;
+    },
+    // Deckel nur öffnen, wenn der Anhänger steht und nichts darauf liegt
+    animiere() { if (reglerG < 0.05) dk.rotation.z = df.rotation.z = 0; },
+    text: 'Variante G, Origami-Jurte Ø 2,8 m: Khana aus 48 Alu-Rohren mit Scherengelenken, Dach als Fächer aus 24 Stegplatten 10 mm mit Vlies (Faltfehler 0 mm), Krone als Haube. Gefaltet liegen Dach (0,28 × 0,38 × 1,21 m) und Khana (0,17 × 0,12 × 1,6 m) auf dem Deckel; die Jurte wiegt 61 kg und fährt deshalb nicht mit dem Schlafwagen (Grenze 85 kg)',
+  };
+})();
+
 for (const v of Object.values(varianten)) szene.add(v.gruppe);
 varianten.B.regler = 'Auszug';
 varianten.B.setzeRegler = v => varianten.B.setzeAuszug(v);
 
 // --- Bedienung ---------------------------------------------------------------
 const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: true,
-  regler: { B: 1, C: 1, E: 1, F: 1 }, muster: 'miura' };
+  regler: { B: 1, C: 1, E: 1, F: 1, G: 1 }, muster: 'miura' };
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
   A: ['Deckel mit Seitenwand auf', 'Stirnklappe'], B: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
   C: ['Tag: Balg zurück, Bettkante frei', 'Jurtentür'], D: ['Tag: Balg zurück, Bettkante frei', null], E: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
   F: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
+  G: ['Deckel mit Seitenwand auf', 'Stirnklappe'],
 };
 
 // melden = false: Statuszeile nicht neu setzen (Regler, sonst liest der Screenreader jeden Schritt)
@@ -722,7 +865,7 @@ function anzeigen(melden = true) {
 const regler = document.getElementById('d3-auszug');
 // Startansicht je Variante: Kamera und Blickpunkt (Jurte und Zelt sind größer)
 const ANSICHT = { A: [3.2, 2.0, 2.6, 0.55, 0], B: [3.2, 2.0, 2.6, 0.55, 0], C: [4.6, 3.2, 4.2, 0.9, 0],
-  D: [3.2, 2.0, 2.6, 0.55, 0], E: [3.4, 2.6, -4.4, 0.8, -0.9],
+  D: [3.2, 2.0, 2.6, 0.55, 0], E: [3.4, 2.6, -4.4, 0.8, -0.9], G: [4.4, 3.4, 5.6, 0.8, 0.9],
   miura: [4.0, 2.4, 3.0, 0.7, 0.2], yoshimura: [3.4, 2.6, -4.4, 0.8, -0.9] };
 function ansicht() {
   const [x, y, z, ty, tz] = ANSICHT[zustand.variante === 'F' ? zustand.muster : zustand.variante];

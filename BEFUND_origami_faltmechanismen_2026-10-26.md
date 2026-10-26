@@ -71,7 +71,61 @@ Bewertung:
   - Das Dach hält Schnee und Messer stand.
   - Es trägt die Solarmodule.
   - Es lässt sich ohne Mast aufspannen.
-- Nächster Schritt: das Flasher-Dach für Ø 2,8 m mit 12 Ecken rechnen. Dabei sind Paketmaß, Höhe, Gefälle und Faltfehler zu bestimmen, dann folgt ein 3D-Modell.
+- **Überholt durch Stufe 3c (unten):** Das Flasher-Dach ist verworfen, und der Mast bleibt als Aufstellstange für den Aufbau.
+
+## Stufe 3c: Origami-Jurte gerechnet (26.10. abends)
+
+Rechnung: `rechnung/origami_jurte.py`, 3D-Modell: Variante G. Anlass war Simons Auftrag: „Arbeite die verschiedensten Versionen aus, eine Origami-Jurte kann ich noch nicht sehen.“
+
+**Dach:**
+- Der **Flasher fällt weg.** Er faltet sich zu einer Ebene auf, das Dach braucht aber Gefälle gegen Schnee.
+- **Gewählt ist ein Faltkegel:** 24 Trapezplatten, alle Falten zielen auf einen gedachten Scheitel. Innen- und Außenfalten wechseln sich ab. Die Platten enden 0,4 m unter dem Scheitel, darüber sitzt die Krone als lose Haube.
+- Über den ganzen Faltweg wurde geprüft:
+  - Faltfehler 0,00 mm
+  - kein Knoten über dem Scheitel
+  - Plattendicke an der Krone
+- **Als geschlossener Ring passt das Dach nicht auf den Anhänger.** Dort bleibt das Bündel rund: Ø 1,50 m mit PIR 25, Ø 1,05 m mit Stegplatte. Grund: An der Krone brauchen die Platten Platz für ihre Dicke.
+- **Mit offener Naht über der Tür passt es.** Das Dach faltet dann wie ein Handfächer zu einem flachen Stapel:
+
+| Dach | Stapel m | Dach kg | Jurte kg | Jurte allein | Kiste darin | Heizung −10 °C |
+|---|---|---|---|---|---|---|
+| **Stegplatte 10 mm + Vlies 100 mm** | **0,28 × 0,38 × 1,21** | **25** | **61** | +2,4 K | **+18,1 K** | 25 W |
+| PIR 25 | 0,69 × 0,39 × 1,21 | 35 | 70 | +2,1 K | +17,9 K | 26 W |
+
+- Die Jurte allein hält kaum warm. Erst mit der Kiste darin wird es so warm wie mit der Stoff-Jurte (+18,2 K), und Origami bringt dabei nichts zusätzlich.
+- **Gewonnen werden:** ein festes Dach gegen Schnee, Messer und Wind sowie ein Paket, das flach auf dem Deckel liegt. Dazu braucht der Anhänger keinen Platz neben dem Mast mehr und steht mittig.
+
+**Wand (Khana):**
+- 48 Alu-Rohre 16 × 1 mm, je 1,60 m lang, verbunden mit 144 Scherengelenken nach Simons Gelenk von 2025.
+- 21 Rauten, offen im Winkel von 43° gekreuzt, Wandhöhe 1,1 m.
+- Gewicht 14 kg, Paket 0,17 × 0,12 × 1,6 m.
+- Darüber hängt eine Hülle aus Vlies 100 mm.
+
+**Statik (überschlägig, nicht geprüft):**
+- 30 cm Nassschnee bringen 5,4 kN aufs Dach.
+- Der Zugring an der Traufe muss 1,5 kN halten. Ein Stahlseil mit 4 mm reicht.
+- Eine Platte aus PIR 25 trägt quer zwischen zwei Falten mit 0,10 MPa Biegespannung. Reiner Schaum hält etwa 0,2–0,4 MPa aus, deshalb braucht sie eine Deckschicht.
+- Steif ist das Dach nur, wenn alle Traufpunkte am Zugring festliegen und die Naht über der Tür verriegelt ist.
+- Gegen Regen an den Falzen: eine durchgehende Regenhaut (1,5 kg, im Gewicht enthalten).
+
+**Aufbau:**
+1. Die Khana von der Tür aus um den Kreis aufziehen.
+2. Den Dachstapel am Scheitel an die Aufstellstange mit Kurbel hängen und hochkurbeln.
+3. Den Fächer aufziehen, bis sich die Naht über der Tür schließt. Dabei wandert die Traufe von 0,3 m auf 1,1 m und legt sich auf die Khana.
+4. Die Stange herausnehmen.
+5. Den Anhänger rückwärts hineinschieben. Die Stirnklappe zeigt dann zur Tür, davor bleiben 0,3 m frei.
+
+**Harte Grenzen:**
+- **Fährt die Jurte mit, ist die Grenze „leer höchstens 85 kg“ verletzt.** Mit Kiste sind es 142 kg.
+- Die Pakete liegen auf dem Deckel. Die Transporthöhe beträgt dann 1,36 m, der Schwerpunkt liegt auf 0,75 m. Der Wagen kippt seitlich schon ab 25° statt ab 32°.
+- Taugt sie als Station am Platz, gilt: Losfahren in 5 Minuten geht, weil der Anhänger rückwärts hinausrollt. **Das widerspricht aber Entscheidung 13 („nur als Fahrzeug“).** Diese Frage geht an Simon.
+- Das gilt genauso für die Stoff-Jurte (Variante C, 129 kg) und wurde dort bisher nicht als Grenzverletzung ausgewiesen.
+
+**Offen:**
+- Gelenke für dicke Platten: Die Scharniere sitzen bei Bergfalten außen und bei Talfalten innen.
+- Verriegelung der Naht
+- Gewicht der Krone
+- Kritik durch einen Maschinenbauer
 
 Quellen:
 - Flasher mit dicken Platten: [Lang: Accommodating Thickness in Origami-Based Deployable Arrays](https://langorigami.com/publication/accommodating-thickness-in-origami-based-deployable-arrays/), [NASA JPL: Solar Power, Origami-Style](https://www.jpl.nasa.gov/news/solar-power-origami-style/)

@@ -94,7 +94,7 @@ window.addEventListener('error', function (e) {
   if (e.filename && e.filename.indexOf('modell3d') >= 0) d3Fehler(e.message);
 });
 </script>
-<script src="modell3d.bundle.js?v=13" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
+<script src="modell3d.bundle.js?v=14" defer onerror="d3Fehler('Datei modell3d.bundle.js nicht geladen')"></script>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -129,7 +129,7 @@ window.addEventListener('error', function (e) {
 
 <section id="modell" aria-labelledby="t-mod">
   <h2 id="t-mod">3D und Modell</h2>
-  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit unsymmetrischem Balg (zurückgeschoben ist die Bettkante frei), E Kiste mit Eisfischerzelt als Vorraum, F Kiste mit Origami (Auswahl Muster: Miura-Vordach und Windwand oder Yoshimura-Vorraum). Der Regler baut auf; bei F zeigt 0 das gefaltete Paket in Transportlage.</p>
+  <p class="leise">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen. Maße wie im Konzept, Details vereinfacht. Die grüne Figur ist 1,76 m groß. Dunkelblau: Solarmodule auf beiden Dachseiten. Bei B dichten zwei blaue Flansche in den Endlagen: nachts spannen 10 rote Kniehebel innen (Deckel öffnen, um sie zu sehen), am Tag sichern 5 gelbe Schrauben außen. Stufe 3 (Entwurf, noch nicht entschieden): C Jurte als Wohnraum mit Kokon darin, D Kokon mit unsymmetrischem Balg (zurückgeschoben ist die Bettkante frei), E Kiste mit Eisfischerzelt als Vorraum, F Kiste mit Origami (Auswahl Muster: Miura-Vordach und Windwand oder Yoshimura-Vorraum), G Origami-Jurte (Scherengitter-Wand und Fächerdach, Anhänger fährt rückwärts hinein). Der Regler baut auf; bei F und G zeigt 0 die gefalteten Pakete in Transportlage.</p>
   <div class="d3-leiste" role="group" aria-label="Ansicht des 3D-Modells">
     <button type="button" class="knopf" data-variante="A" aria-pressed="true">A: feste Kiste</button>
     <button type="button" class="knopf" data-variante="B" aria-pressed="false">B: Auszug</button>
@@ -137,6 +137,7 @@ window.addEventListener('error', function (e) {
     <button type="button" class="knopf" data-variante="D" aria-pressed="false">D: Kokon</button>
     <button type="button" class="knopf" data-variante="E" aria-pressed="false">E: Kiste + Eisfischerzelt</button>
     <button type="button" class="knopf" data-variante="F" aria-pressed="false">F: Kiste + Origami</button>
+    <button type="button" class="knopf" data-variante="G" aria-pressed="false">G: Origami-Jurte</button>
     <button type="button" class="knopf" id="d3-deckel" aria-pressed="false">Deckel als Vordach</button>
     <button type="button" class="knopf" id="d3-klappe" aria-pressed="false">Stirnklappe</button>
     <button type="button" class="knopf" id="d3-mensch" aria-pressed="true">Person</button>
@@ -268,6 +269,19 @@ window.addEventListener('error', function (e) {
     </tbody>
   </table></div>
   <p>Leichteste Lösung mit Tagesplatz: Kiste mit Koffer-Deckel (Seitenwand schwenkt mit hoch, Bettkante frei), Miura-Vordach und Miura-Windwand, 81 kg gesamt, +15,7 K, 38 W Heizung bei −10 °C. Wärmste: Kiste in der Jurte, 129 kg, +18,2 K, 24 W.</p>
+
+  <h3>Stufe 3c: Origami-Jurte (Entwurf)</h3>
+  <p class="leise">Wand: Khana als Scherengitter aus 48 Alu-Rohren 16 × 1 mit 144 Scherengelenken. Dach: 24 Trapezplatten, alle Falten zielen auf einen gedachten Scheitel, Krone als lose Haube. Rechnung: <a href="rechnung/origami_jurte.py">origami_jurte.py</a>, Befund: <a href="BEFUND_origami_faltmechanismen_2026-10-26.md">Stufe 3b/3c</a>. Im 3D-Modell: Variante G.</p>
+  <div class="rahmen" role="region" tabindex="0" aria-label="Tabelle Origami-Jurte"><table id="tab-origami-jurte">
+    <thead><tr><th>Dach</th><th>gefaltet m</th><th>passt auf Anhänger</th><th class="z">Dach kg</th><th class="z">Jurte kg</th><th class="z">Kiste darin K</th></tr></thead>
+    <tbody>
+      <tr><td>Fächer, Stegplatte 10 mm + Vlies 100 mm, Naht über der Tür</td><td>0,28 × 0,38 × 1,21</td><td>ja</td><td class="z">25</td><td class="z">61</td><td class="z">+18,1</td></tr>
+      <tr><td>Fächer, PIR 25</td><td>0,69 × 0,39 × 1,21</td><td>ja</td><td class="z">35</td><td class="z">70</td><td class="z">+17,9</td></tr>
+      <tr class="raus"><td>geschlossener Ring, PIR 25</td><td>Bündel Ø 1,50 × 1,17</td><td>nein</td><td class="z">35</td><td class="z">70</td><td class="z">+17,9</td></tr>
+      <tr class="raus"><td>Flasher (Vorschlag aus 3b)</td><td colspan="5">faltet sich eben auf, kein Gefälle gegen Schnee</td></tr>
+    </tbody>
+  </table></div>
+  <p>Faltfehler 0 mm über den ganzen Faltweg. Schnee 30 cm nass: 5,4 kN auf dem Dach, 1,5 kN im Zugring an der Traufe. Die Jurte verletzt die Grenze leer 85 kg, wenn sie mitfährt (Kiste mit Jurte 142 kg). Sie taugt deshalb nur als Station, die am Platz bleibt; morgens fährt der Anhänger rückwärts durch die Tür hinaus. Das widerspricht Entscheidung 13 („nur als Fahrzeug“) und ist von Simon zu entscheiden.</p>
 
   <h3>Was die Prüfung korrigiert hat</h3>
   <ul>

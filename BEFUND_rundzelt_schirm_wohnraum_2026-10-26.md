@@ -16,7 +16,7 @@ Rechnung: `rechnung/rundzelt_schirm.py` mit zwei Annahmensätzen:
 1. **Den Wohnraum allein mit Körperwärme warm zu halten, geht mit keiner Form.**
    - Jede Hülle mit Sitz- oder Stehhöhe hat 15–16 m² Fläche.
    - Mit 65 W Körperwärme wird sie nur 2–4 K wärmer als draußen. Das gilt für die Jurte genauso wie für die Origami-Tonne aus PIR-Platten und das Eisfischerzelt.
-   - Ohne Flamme braucht es 4–6 kWh je Nacht, um den Wohnraum auf +15 °C zu heizen. Das schafft keine kleine Heizung.
+   - Ohne Flamme braucht es etwa 6 kWh je Nacht, um den Wohnraum auf +15 °C zu heizen. Das schafft keine kleine Heizung.
 2. **Darum gilt: Wohnraum als Puffer, warmer Kern zum Schlafen (Haus im Haus).**
    - Der Wohnraum hält Wind, Regen und Schnee ab. Er ist der Raum für den Tag, Tisch und Sachen.
    - Geschlafen wird im Kokon oder in der Kiste auf dem Anhänger, der im Wohnraum steht.
@@ -37,28 +37,28 @@ Rechnung: `rechnung/rundzelt_schirm.py` mit zwei Annahmensätzen:
 | Hülle | Fläche m² | Boden m² | Temperaturplus ohne Heizung | Gewicht Hülle und Gestell |
 |---|---|---|---|---|
 | Eisfischerzelt 1,8 m, 90 g/m² | 16,2 | 3,2 | +1,0 K | 15 kg |
-| Schirm-Jurte Ø 2,7 m, Filz 2 × 10 mm | 16,0 | 5,7 | +1,2 K | 67 kg |
-| Schirm-Jurte Ø 2,7 m, Vlies 100 mm | 16,0 | 5,7 | +2,6 K | 42 kg |
+| Schirm-Jurte Ø 2,8 m, Filz 2 × 10 mm | 16,8 | 6,2 | +1,2 K | 70 kg |
+| Schirm-Jurte Ø 2,8 m, Vlies 100 mm | 16,8 | 6,2 | +2,4 K | 43 kg |
 | Origami-Tonne 1,8 × 2,2 × 1,6 m, PIR 25 mm | 15,5 | 4,0 | +2,2 K | 68 kg |
 | Origami-Tonne, PIR 45 mm | 15,5 | 4,0 | +3,1 K | 107 kg |
 | Kokon innen 0,60 m, Vlies 60 mm | 3,9 | 1,2 | +10,7 K | 11 kg |
 | Kokon innen 0,60 m, Vlies 100 mm | 4,1 | 1,2 | +14,2 K | 13 kg |
 | Fünfeck-Kiste PIR 45 mm (Vergleich) | 4,1 | 1,5 | +15,7 K | 27 kg |
-| **Kokon 60 mm in der Jurte 100 mm** | | | **+13,3 K** (obere Grenze) | 53 kg |
+| **Kokon 60 mm in der Jurte 100 mm** | | | **+13,1 K** (obere Grenze) | 54 kg |
 
 Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
 
 | Fall | Leistung | Energie je Nacht |
 |---|---|---|
 | Kokon allein | 87 W | 0,87 kWh |
-| Kokon in der Jurte | 57 W | 0,57 kWh |
-| ganzer Wohnraum (Jurte) | 565 W | 5,65 kWh, nicht machbar ohne Flamme |
+| Kokon in der Jurte | 59 W | 0,59 kWh |
+| ganzer Wohnraum (Jurte) | 602 W | 6,02 kWh, nicht machbar ohne Flamme |
 
 ## Korrekturen durch den Maschinenbau-Kritiker (26.10.)
 
 | Nr | Befund | Umgesetzt |
 |---|---|---|
-| 1 | Bei Ø 2,2 m stand der Mast im Bett, Stehhöhe gab es nur über dem Bett | Jurte Ø 2,7 m, Mast neben dem Anhänger, Wohnseite frei (3D-Modell C) |
+| 1 | Bei Ø 2,2 m stand der Mast im Bett, Stehhöhe gab es nur über dem Bett | Jurte Ø 2,8 m, Mast 12 cm neben dem Anhänger, Wohnseite frei (3D-Modell C) |
 | 2 | Kippen bei Wind schon bei Bft 6, Böen bis 20 m/s ergeben 580 Nm gegen 220 Nm | Ballast 25–30 kg (Wassersäcke) an der Wand, Abspannung, ab Bft 6 abbauen |
 | 3 | Mast Alu Ø 40 × 2 erreicht bei Wind die Fließgrenze | Mast mindestens Ø 50 × 2,5, abgespannt |
 | 4 | Dampf aus dem Kokon gefriert im Jurtenvlies, 2,8 kg Eis pro Woche | Lüfter des Kokons nach außen führen, Innenhaut der Jurte als Dampfsperre, Vlies in Kammern |
@@ -76,7 +76,7 @@ Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
     - Mast Ø 50 mm neben dem Anhänger, Krone (Toono) oben.
     - 12 Rippen spannen sich über Streben auf, wenn ein Läufer am Mast hochgeschoben wird.
     - Danach hängt die Wand aus Vlies mit Tür. Ein Zugring hält die Rippenfüße zusammen.
-  - Im Wohnraum: 2,7 m Durchmesser, 5,7 m² Boden, davon etwa 4 m² neben dem Anhänger frei. Stehhöhe gibt es nur im Ring um den Mast.
+  - Im Wohnraum: 2,8 m Durchmesser, 6,2 m² Boden, davon etwa 4,5 m² neben dem Anhänger frei. Stehhöhe gibt es nur im Ring um den Mast.
   - Tagsüber ist das Verdeck des Kokons zurückgeschoben, und der Kokon wird zur Bank.
   - Für die Fahrt passen Rippen (1,36 m), Mast (geteilt) und Wand als Bündel neben den Kokon.
   - Die Bewährung kommt von der Jurte: Bauform und Abdeckung sind seit Jahrhunderten erprobt. Neu sind hier nur der Schirm-Läufer und der kleine Maßstab.
@@ -84,6 +84,13 @@ Kleine Heizung bei −10 °C außen für +15 °C, Nacht von 10 h:
   - 6 Bügel aus GFK schieben sich zum Kopfende zusammen wie eine Lkw-Schiebeplane.
   - Am Tag ist der Kokon eine Bank, nachts die Schlafhülle.
   - Er hat 0,74 m Außenbreite und wiegt 11–13 kg statt 27 kg wie die Kiste.
+  - **Absenkbare Seitenwand (Simon, 26.10.):**
+    - Die Wand zur Wohnseite ist aus PIR und 0,33 m hoch. Sie läuft in Schienen und senkt sich senkrecht außen am Boden vorbei ab, wie die Seite eines Kinderbetts. Ein Schwenk über ein Scharnier würde in der Jurte durch den Mast fahren (QS 26.10.).
+    - Im Tagmodus fährt erst das Verdeck zurück, dann senkt sich die Wand ab. Die Bettkante liegt frei in etwa 0,55 m Höhe, ein Stuhl hat 0,45 m. Mit 10 cm weniger Bodenfreiheit oder einer Fußstufe passt sie.
+    - In der Jurte ergibt das zwei Sitzplätze links und rechts vom Mast.
+    - Kosten:
+      - Die Fuge an der Wand ist 2 m lang. Sie braucht eine umlaufende Dichtung und 3–4 Spanner wie am Auszug.
+      - Nachts muss die Wand zuerst hoch, sonst liegt das Verdeck nicht auf.
 - **E, Kiste mit Eisfischerzelt als Vorraum:**
   - Das Zelt steht in 30–90 s, ist aber nur Windschutz (+1 K).
   - Es ist die billigste Möglichkeit, einen Wohnraum zu bekommen. Man kann es fertig kaufen, für 150–300 €.

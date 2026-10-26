@@ -68,9 +68,9 @@ def konzepte(a):
     return [
         ("Eisfischerzelt 1,8 m, 90 g/m²", "jurte", hub_wuerfel(1.8, 1.8), 90 * VLIES_MM_JE_G / 1000, vl,
          u_wert(0.02, 0.035), 0.55, 6),
-        ("Schirm-Jurte Ø 2,7 m, Filz 2 × 10 mm", "jurte", zylinder_kegel(2.7, 1.1, 1.9), 0.02, LAMBDA_FILZ,
+        ("Schirm-Jurte Ø 2,8 m, Filz 2 × 10 mm", "jurte", zylinder_kegel(2.8, 1.1, 1.9), 0.02, LAMBDA_FILZ,
          u_wert(0.02, 0.035), 3.2, 16),
-        ("Schirm-Jurte Ø 2,7 m, Vlies 100 mm", "jurte", zylinder_kegel(2.7, 1.1, 1.9), 0.10, vl,
+        ("Schirm-Jurte Ø 2,8 m, Vlies 100 mm", "jurte", zylinder_kegel(2.8, 1.1, 1.9), 0.10, vl,
          u_wert(0.02, 0.035), 1.6, 16),
         ("Origami-Tonne 1,8 × 2,2 × 1,6 m, PIR 25 mm", "jurte", origami_tonne(1.8, 1.6, 2.2), 0.025,
          LAMBDA_PIR, u_wert(0.02, 0.035), 4.0, 6),
@@ -97,7 +97,7 @@ def rechne(a):
         h[name] = hges
         print(f"{name} | {huelle:.2f} | {boden:.2f} | {u_wert(dicke, lam):.2f} | {hges:.2f} | "
               f"{KOERPER_W / hges:+.1f} | {huelle * kg_m2 + gestell:.0f}")
-    hj, hk = h["Schirm-Jurte Ø 2,7 m, Vlies 100 mm"], h["Kokon, innen 0,60 m, Vlies 60 mm"]
+    hj, hk = h["Schirm-Jurte Ø 2,8 m, Vlies 100 mm"], h["Kokon, innen 0,60 m, Vlies 60 mm"]
     # Haus im Haus: Kokon steht in der Jurte. Derselbe Wärmestrom geht durch beide Hüllen.
     # Der Kokonboden liegt auf dem Anhänger; ohne Schürze darunter gibt er nach außen ab.
     k_reihe = KOERPER_W / hk + KOERPER_W / hj

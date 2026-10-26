@@ -311,7 +311,7 @@ const menschen = [];
 })();
 
 // --- Stufe 3: textile Hüllen (Befund 26.10.) ---------------------------------
-const JURTE = { r: 1.35, wand: 1.1, first: 1.9, krone: 0.25 };   // Ø 2,7 m, damit der Anhänger hineinpasst
+const JURTE = { r: 1.40, wand: 1.1, first: 1.9, krone: 0.25 };   // Ø 2,8 m, damit der Anhänger neben dem Mast hineinpasst
 const glas = (c, o = 0.35) => mat(c, { transparent: true, opacity: o, side: THREE.DoubleSide, depthWrite: false });
 
 // Stab von a nach b (Zylinder der Höhe 1, wird gestreckt)
@@ -330,13 +330,20 @@ function kokon(laenge) {
   const g = new THREE.Group();
   // innen 0,60 m breit, 0,58 m hoch (Kritik 26.10.); Vlies 60 mm + Haut: außen 0,74 m
   const hs = 0.28, r = 0.37, y0 = BODEN + T + hs, n = 6;
+  // Wanne: Boden und linke Wand fest; die rechte Seitenwand (Wohnseite) senkt sich
+  // senkrecht am Boden vorbei ab wie beim Kinderbett, dann ist die Bettkante zum
+  // Sitzen frei (Simon 26.10.). Kein Schwenk: sie überstreicht nichts daneben.
   const s = new THREE.Shape();
-  s.moveTo(-B / 2, 0); s.lineTo(B / 2, 0); s.lineTo(B / 2, T + hs);
-  s.lineTo(B / 2 - T, T + hs); s.lineTo(B / 2 - T, T); s.lineTo(-B / 2 + T, T);
+  s.moveTo(-B / 2, 0); s.lineTo(B / 2 - T, 0); s.lineTo(B / 2 - T, T); s.lineTo(-B / 2 + T, T);
   s.lineTo(-B / 2 + T, T + hs); s.lineTo(-B / 2, T + hs); s.closePath();
   const wg = new THREE.ExtrudeGeometry(s, { depth: laenge, bevelEnabled: false });
   wg.translate(0, BODEN, -laenge / 2);
   g.add(new THREE.Mesh(wg, mat(F.huelle)));
+  const seite = new THREE.Mesh(new THREE.BoxGeometry(T, T + hs, laenge - 0.02), mat(F.klappe));
+  const yZu = BODEN + (T + hs) / 2;
+  seite.position.set(B / 2 - T / 2, yZu, 0);
+  g.add(seite);
+  g.userData.seite = w => { seite.position.y = yZu - hs * Math.min(Math.max(w, 0), 1); };   // 0 oben, 1 unten
   // Kopfende fest (Halbscheibe auf der Wanne), daran klappt nichts
   const kopf = new THREE.Mesh(new THREE.CircleGeometry(r, 24, 0, Math.PI), mat(F.fuss, { side: THREE.DoubleSide }));
   kopf.position.set(0, y0, -laenge / 2 + 0.01);
@@ -369,7 +376,7 @@ function kokon(laenge) {
 
 // Schirm-Jurte: Mittelmast, Krone, 12 Rippen mit Streben zum Läufer; die Wand
 // hängt erst, wenn der Schirm offen ist. Mitte im Ursprung der Gruppe.
-function schirmJurte() {
+function schirmJurte(xTuer) {
   const g = new THREE.Group(), J = JURTE, n = 12;
   const lr = Math.hypot(J.r - J.krone, J.first - J.wand);
   const phiAuf = Math.atan2(J.r - J.krone, J.first - J.wand), phiZu = 0.08;
@@ -383,14 +390,21 @@ function schirmJurte() {
   const rippen = [], streben = [];
   for (let i = 0; i < n; i++) { const a = stab(0.012, F.rahmen), b = stab(0.008, F.griff); rippen.push(a); streben.push(b); g.add(a, b); }
   const dach = new THREE.Mesh(new THREE.BufferGeometry(), glas(F.dach, 0.45)); g.add(dach);
-  // Wand mit Tür (Lücke 0,8 m) auf der Wohnseite +x
+  // Wand mit Tür (Lücke 0,8 m) am Fußende des Anhängers (bei x = xTuer, +z):
+  // durch sie wird der 0,78 m breite Anhänger der Länge nach hineingeschoben
   const tuerWinkel = 0.8 / J.r;
-  const wandGeo = new THREE.CylinderGeometry(J.r, J.r, J.wand, 48, 1, true, Math.PI / 2 + tuerWinkel / 2, 2 * Math.PI - tuerWinkel);
+  const td = Math.atan2(xTuer, Math.sqrt(J.r * J.r - xTuer * xTuer));   // Zylinder: x = r·sin θ, z = r·cos θ
+  const wandGeo = new THREE.CylinderGeometry(J.r, J.r, J.wand, 48, 1, true, td + tuerWinkel / 2, 2 * Math.PI - tuerWinkel);
   const wand = new THREE.Mesh(wandGeo, glas(F.huelle, 0.3)); wand.position.y = J.wand / 2; g.add(wand);
+  const e1 = [J.r * Math.sin(td - tuerWinkel / 2), J.r * Math.cos(td - tuerWinkel / 2)];
+  const e2 = [J.r * Math.sin(td + tuerWinkel / 2), J.r * Math.cos(td + tuerWinkel / 2)];
+  const tuerGrund = Math.atan2(-(e2[1] - e1[1]), e2[0] - e1[0]);
+  const sehne = Math.hypot(e2[0] - e1[0], e2[1] - e1[1]);
   const tuer = new THREE.Group();
-  const tb = new THREE.Mesh(new THREE.PlaneGeometry(0.78, J.wand - 0.05), glas(F.klappe, 0.55));
-  tb.rotation.y = Math.PI / 2; tb.position.set(0, 0, 0.39); tuer.add(tb);
-  tuer.position.set(J.r * Math.cos(tuerWinkel / 2), J.wand / 2, -0.39);
+  const tb = new THREE.Mesh(new THREE.PlaneGeometry(sehne, J.wand - 0.05), glas(F.klappe, 0.55));
+  tb.position.x = sehne / 2; tuer.add(tb);
+  tuer.position.set(e1[0], J.wand / 2, e1[1]); tuer.rotation.y = tuerGrund;
+  tuer.userData.grund = tuerGrund;
   g.add(tuer);
   // Drei flexible Solarmodule auf der Südseite des Dachs
   const module3 = new THREE.Group();
@@ -418,7 +432,7 @@ function schirmJurte() {
     dach.geometry.dispose();
     dach.geometry = new THREE.CylinderGeometry(J.krone, ende[0], J.first - ende[1], 48, 1, true);
     dach.position.y = (J.first + ende[1]) / 2;
-    const steht = auf > 0.97;
+    const steht = auf > 0.999;
     wand.visible = tuer.visible = module3.visible = steht;
   };
   g.userData.tuer = tuer;
@@ -486,20 +500,39 @@ function origamiTonne(spann = 1.8, hoehe = 1.5, laenge = 1.8, ringe = 9, m = 8) 
   return g;
 }
 
+// Tagstellung des Kokons: erst das Verdeck zurück, dann die Seitenwand herunter
+function tagBank(k, d) {
+  k.userData.setze(Math.min(1, d / 0.6));
+  k.userData.seite(Math.max(0, (d - 0.6) / 0.4));
+}
+
 (function variante_c() {
   const g = new THREE.Group();
-  const j = schirmJurte(); g.add(j);
-  // Anhänger mit Kokon neben dem Mast, Wohnseite (+x) bleibt frei
+  // Anhänger mit Kokon 12 cm neben dem Mast (Streben frei), Wohnseite (+x) bleibt
+  // frei; je ein Sitz links und rechts vom Mast
+  const xWagen = -(B / 2 + 0.12);
+  const j = schirmJurte(xWagen); g.add(j);
   const wagen = new THREE.Group();
   const k = kokon(L_A); wagen.add(k, fahrwerk(L_A, L_A / 2 + 0.5), mensch(-L_A / 2 + 0.2, 1));
-  wagen.position.x = -(B / 2 + 0.04);
+  wagen.position.x = xWagen;
   wagen.children[1].userData.deichsel.visible = false;
   g.add(wagen);
+  // Regler: bis 0,8 spannt sich der Schirm auf, danach rollt der Anhänger der Länge
+  // nach durch die Tür hinein (vorher stünden die hängenden Rippen im Kokon)
+  let rein = 1;
   varianten.C = {
-    gruppe: g, deckel: [], klappen: [], regler: 'Schirm öffnen',
-    setzeRegler: v => j.userData.setze(v),
-    animiere(d, kl) { k.userData.setze(d); j.userData.tuer.rotation.y = kl * 1.4; },
-    text: 'Variante C: Schirm-Jurte Ø 2,7 m als Wohnraum, darin der Kokon auf dem Anhänger (Haus im Haus)',
+    gruppe: g, deckel: [], klappen: [], regler: 'Aufbau: Schirm, dann Anhänger',
+    setzeRegler: v => {
+      j.userData.setze(Math.min(1, v / 0.8));
+      rein = Math.min(1, Math.max(0, (v - 0.8) / 0.2));
+      wagen.position.z = (1 - rein) * 2.7;
+    },
+    animiere(d, kl) {
+      tagBank(k, d);
+      const t = j.userData.tuer;
+      t.rotation.y = t.userData.grund + (rein < 1 ? 1 : kl) * 1.4;   // offen, solange der Anhänger hereinrollt
+    },
+    text: 'Variante C: Schirm-Jurte Ø 2,8 m als Wohnraum, darin der Kokon auf dem Anhänger (Haus im Haus); erst den Schirm aufspannen, dann den Anhänger durch die 0,8 m breite Tür hineinschieben',
   };
 })();
 
@@ -509,8 +542,8 @@ function origamiTonne(spann = 1.8, hoehe = 1.5, laenge = 1.8, ringe = 9, m = 8) 
   g.add(k, fahrwerk(L_A, L_A / 2 + 0.5), mensch(-L_A / 2 + 0.2, 1));
   varianten.D = {
     gruppe: g, deckel: [], klappen: [],
-    animiere(d) { k.userData.setze(d); },
-    text: 'Variante D: Kokon mit Faltverdeck (Bügel schieben sich zum Kopfende), 0,78 m breit',
+    animiere(d) { tagBank(k, d); },
+    text: 'Variante D: Kokon mit Faltverdeck (Bügel schieben sich zum Kopfende) und absenkbarer Seitenwand: am Tag Bank mit Bettkante, 0,78 m breit',
   };
 })();
 
@@ -556,7 +589,7 @@ const zustand = { variante: 'A', deckelAuf: false, klappeAuf: false, mensch: tru
 const ziel = { deckel: 0, klappe: 0 };
 const KNOPF = {   // Beschriftung der zwei Schalter je Variante; null = Schalter ausblenden
   A: ['Deckel als Vordach', 'Stirnklappe'], B: ['Deckel als Vordach', 'Stirnklappe'],
-  C: ['Verdeck zurück', 'Jurtentür'], D: ['Verdeck zurück', null], E: ['Deckel als Vordach', 'Stirnklappe'],
+  C: ['Tag: Bank mit Bettkante', 'Jurtentür'], D: ['Tag: Bank mit Bettkante', null], E: ['Deckel als Vordach', 'Stirnklappe'],
   F: ['Deckel als Vordach', 'Stirnklappe'],
 };
 
